@@ -1,6 +1,67 @@
-.venv/
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Jupyter
 .ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+profile_default/
+ipython_config.py
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Modelos entrenados y checkpoints
+results_distilbert/
 notebooks/results_distilbert/
+**/checkpoint-*/
+runs/
+logs/
+wandb/
+
+# Artefactos serializados
+*.pkl
+*.pickle
+*.joblib
+*.h5
 *.pt
+*.pth
+*.bin
 *.safetensors
+*.onnx
+
+# Datos duplicados
+notebooks/data/
+
+# OneDrive placeholders
+.tmp.driveupload/
+.tmp.drivedownload/
+
+# Outputs sueltos
+output.png
+*.log
