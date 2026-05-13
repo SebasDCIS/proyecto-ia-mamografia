@@ -1,0 +1,24 @@
+{
+  "modelo": "dccuchile/distilbert-base-spanish-uncased",
+  "estrategia": "fine-tuning + augmentacion textual",
+  "hiperparametros": {
+    "max_length": 256,
+    "batch_size": 8,
+    "learning_rate": 2e-05,
+    "num_epochs": 3
+  },
+  "tamano_train_augmentado": 4647,
+  "tamano_test": 872,
+  "metricas": {
+    "eval_loss": 0.07890771329402924,
+    "eval_accuracy": 0.981651376146789,
+    "eval_macro_f1": 0.9386248591812939,
+    "eval_weighted_f1": 0.9821532464648979,
+    "eval_runtime": 4.6633,
+    "eval_samples_per_second": 186.99,
+    "eval_steps_per_second": 23.374,
+    "epoch": 3.0
+  },
+  "tiempo_entrenamiento_min": 4.73,
+  "tiempo_total_min": 15.43
+}

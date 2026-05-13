@@ -39,6 +39,9 @@ ipython_config.py
 # Modelos entrenados y checkpoints
 results_distilbert/
 notebooks/results_distilbert/
+results_distilbeto/
+notebooks/results_distilbeto/
+notebooks/results_*/
 **/checkpoint-*/
 runs/
 logs/
