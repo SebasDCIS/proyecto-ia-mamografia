@@ -1,0 +1,14 @@
+{
+  "total_informes": 4357,
+  "extraidos": 4357,
+  "no_extraidos": 0,
+  "tasa_extraccion": 100.0,
+  "coincide_etiqueta": 4354,
+  "diverge_etiqueta": 3,
+  "tasa_coincidencia": 99.93,
+  "por_confianza": {
+    "alta": 4225,
+    "baja": 130,
+    "media": 2
+  }
+}

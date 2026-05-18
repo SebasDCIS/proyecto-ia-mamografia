@@ -1,0 +1,111 @@
+EJEMPLOS DE RECOMENDACIONES REALES POR BI-RADS
+================================================================================
+
+
+################################################################################
+# BI-RADS 0  (mostrando 3 de 963 disponibles)
+################################################################################
+
+[Ejemplo 1] (índice 2528)
+  Recommendations:
+  - Se sugiere ecografía mamaria para posterior recategorización.
+
+[Ejemplo 2] (índice 1618)
+  Recommendations:
+  - Se sugiere ecografía mamaria para posterior recategorización.
+
+[Ejemplo 3] (índice 1667)
+  Recommendations:
+  - Se sugiere ecografía mamaria para posterior recategorización.
+
+
+################################################################################
+# BI-RADS 1  (mostrando 3 de 596 disponibles)
+################################################################################
+
+[Ejemplo 1] (índice 1571)
+  Recommendations:
+  - Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.
+
+[Ejemplo 2] (índice 2054)
+  Recommendations:
+  - Se sugiere control mamográfico anual.
+
+[Ejemplo 3] (índice 3499)
+  Recommendations:
+  - Se sugiere correlación con ecografía mamaria y control mamográfico anual.
+
+
+################################################################################
+# BI-RADS 2  (mostrando 3 de 2633 disponibles)
+################################################################################
+
+[Ejemplo 1] (índice 2121)
+  Recommendations:
+  - Se sugiere control anual.
+
+[Ejemplo 2] (índice 2294)
+  Recommendations:
+  - Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.
+
+[Ejemplo 3] (índice 4114)
+  Recommendations:
+  - Se sugiere control anual.
+
+
+################################################################################
+# BI-RADS 3  (mostrando 3 de 87 disponibles)
+################################################################################
+
+[Ejemplo 1] (índice 3997)
+  Recommendations:
+  - Se sugiere control semestral.
+
+[Ejemplo 2] (índice 270)
+  Recommendations:
+  - SUEGERIMOS CORRELACIÓN CON ECOGRAFÍA MAMARIA ACTUALIZADA Y CONTROLES SEGÚN CRITERIO DEL MÉDICO TRATANTE.
+
+[Ejemplo 3] (índice 1860)
+  Recommendations:
+  - Se sugiere correlación con ecografía mamaria actualizada y controles según criterio del médico tratante.
+
+
+################################################################################
+# BI-RADS 4  (mostrando 3 de 52 disponibles)
+################################################################################
+
+[Ejemplo 1] (índice 983)
+  Recommendations:
+  - SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA ACTUALIZADA Y CONTROLES SEGÚN CRITERIO DEL MÉDICO TRATANTE.
+
+[Ejemplo 2] (índice 3148)
+  Recommendations:
+  - Se sugiere correlación con ecografía mamaria actualizada para posterior recategorización y decidir conducta.
+
+[Ejemplo 3] (índice 3721)
+  Recommendations:
+  - SE SUGIERE ECOGRAFÍA MAMARIA Y CARACTERIZACIÓN HISTOLÓGICA DE LA LESIÓN.
+
+
+################################################################################
+# BI-RADS 5  (mostrando 3 de 16 disponibles)
+################################################################################
+
+[Ejemplo 1] (índice 272)
+  Recommendations:
+  - SE SUGIERE ECOGRAFÍA MAMARIA Y CARACTERIZACIÓN HISTOLÓGICA.
+
+[Ejemplo 2] (índice 702)
+  Recommendations:
+  - SE SUGIERE ECOGRAFÍA MAMARIA Y CARACTERIZACIÓN HISTOLÓGICA
+
+[Ejemplo 3] (índice 1901)
+  Recommendations:
+  - Se sugiere ecografía mamaria y caracterización histológica de la lesión.
+
+
+################################################################################
+# BI-RADS 6  (mostrando 0 de 0 disponibles)
+################################################################################
+
+  (sin ejemplos con recomendación poblada)
