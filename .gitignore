@@ -68,3 +68,6 @@ notebooks/data/
 # Outputs sueltos
 output.png
 *.log
+
+# Audit logs generados por src/cotejo_acr.py (outputs regenerables del nb07)
+notebooks/anexos/audit_logs/*.json
