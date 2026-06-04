@@ -1,0 +1,51 @@
+{
+  "total_con_recomendacion": 4347,
+  "total_sin_recomendacion": 10,
+  "cobertura_regex_pct": 100.0,
+  "casos_sin_clasificar": 0,
+  "categorias_definidas": [
+    "estudio_complementario_imagen",
+    "correlacion_ecografica",
+    "comparacion_estudios_previos",
+    "control_anual",
+    "control_corto_plazo",
+    "biopsia_histologia",
+    "criterio_medico",
+    "derivacion_oncologica"
+  ],
+  "jerarquia_clinica": [
+    "biopsia_histologia",
+    "derivacion_oncologica",
+    "estudio_complementario_imagen",
+    "correlacion_ecografica",
+    "comparacion_estudios_previos",
+    "control_corto_plazo",
+    "control_anual",
+    "criterio_medico"
+  ],
+  "typos_corregidos": [
+    "ecografia",
+    "sugerimos",
+    "sugerimos",
+    "mamografico",
+    "recategorizacion",
+    "anual",
+    "anual",
+    "tratante",
+    "control"
+  ],
+  "distribucion_categorias": {
+    "estudio_complementario_imagen": 2346,
+    "control_anual": 2019,
+    "correlacion_ecografica": 2007,
+    "criterio_medico": 396,
+    "biopsia_histologia": 58,
+    "control_corto_plazo": 47,
+    "comparacion_estudios_previos": 23
+  },
+  "distribucion_num_categorias": {
+    "1": 2300,
+    "2": 1545,
+    "3": 502
+  }
+}
