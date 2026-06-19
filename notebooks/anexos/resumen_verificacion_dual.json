@@ -1,0 +1,13 @@
+{
+  "total_procesados": 4357,
+  "logica_aplicada": "v2.1 - regex prioritaria cuando confianza alta",
+  "distribucion_estados": {
+    "confirmado": 4201,
+    "confirmado_doble": 129,
+    "ml_no_confirma": 24,
+    "discrepante_real": 3
+  },
+  "tasa_coincidencia_regex_ml": 0.9938030755106725,
+  "confianza_ml_promedio": 0.9890764287353686,
+  "casos_que_requieren_revision_manual": 3
+}
