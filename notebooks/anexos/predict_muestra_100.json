@@ -1,0 +1,3821 @@
+[
+  {
+    "informe_id": "informe_1721",
+    "timestamp": "2026-06-20T00:42:36.123963",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1393",
+    "timestamp": "2026-06-20T00:42:36.130012",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1609",
+    "timestamp": "2026-06-20T00:42:36.135684",
+    "birads": {
+      "valor": 4,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 4,
+      "confianza_ml": 0.5638,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_2_regex_alta_ml_modera",
+      "mensaje": "Regex (confianza alta) extrajo BI-RADS 4. ML coincide con confianza moderada (0.56). Se confía en la extracción regex."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria actualizada y estudio histológico según hallazgo encontrado.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria actualizada y estudio histologico segun hallazgo encontrado.",
+      "categoria_principal": "biopsia_histologia",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "biopsia_histologia"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "biopsia_histologia",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 4."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1309",
+    "timestamp": "2026-06-20T00:42:36.141437",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2772",
+    "timestamp": "2026-06-20T00:42:36.147117",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9174,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.92) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_con_precaucion",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_4_principal_mas_urgente",
+      "mensaje": "Coherente con precaución: el radiólogo optó por una conducta más conservadora ('correlacion_ecografica') que la mínima esperada por ACR para BI-RADS 1 ('control_anual')."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1361",
+    "timestamp": "2026-06-20T00:42:36.152425",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0175",
+    "timestamp": "2026-06-20T00:42:36.157429",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9973,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.-",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.-",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0911",
+    "timestamp": "2026-06-20T00:42:36.162396",
+    "birads": {
+      "valor": 4,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 4,
+      "confianza_ml": 0.4839,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_2_regex_alta_ml_modera",
+      "mensaje": "Regex (confianza alta) extrajo BI-RADS 4. ML coincide con confianza moderada (0.48). Se confía en la extracción regex."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA Y CARACTERIZACIÓN HISTOLÓGICA.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria y caracterizacion histologica.",
+      "categoria_principal": "biopsia_histologia",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "biopsia_histologia"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "biopsia_histologia",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 4."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0838",
+    "timestamp": "2026-06-20T00:42:36.171119",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9983,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROLES SEGÚN CRITERIO DEL MÉDICO TRATANTE.",
+      "texto_normalizado": "- se sugiere controles segun criterio del medico tratante.",
+      "categoria_principal": "criterio_medico",
+      "categorias_detectadas": [
+        "criterio_medico"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "incoherente",
+      "alerta": true,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "ninguna",
+      "mensaje": "BI-RADS 0 indica que el estudio está incompleto y requiere completarse con imágenes adicionales o búsqueda de exámenes previos. La recomendación detectada no apunta a resolver el estudio incompleto a corto plazo."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1356",
+    "timestamp": "2026-06-20T00:42:36.175996",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANULA.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0720",
+    "timestamp": "2026-06-20T00:42:36.179884",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2636",
+    "timestamp": "2026-06-20T00:42:36.184510",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9988,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0151",
+    "timestamp": "2026-06-20T00:42:36.188885",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9978,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA O COMPARACIÓN CON ESTUDIOS ANTERIORES.",
+      "texto_normalizado": "- se sugiere ecografia mamaria o comparacion con estudios anteriores.",
+      "categoria_principal": "comparacion_estudios_previos",
+      "categorias_detectadas": [
+        "comparacion_estudios_previos"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3573",
+    "timestamp": "2026-06-20T00:42:36.192658",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2342",
+    "timestamp": "2026-06-20T00:42:36.198338",
+    "birads": {
+      "valor": 4,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "ml_no_confirma",
+      "birads_ml": 2,
+      "confianza_ml": 0.2644,
+      "coincide_con_regex": false,
+      "regla_aplicada": "regla_3_regex_alta_ml_disiente",
+      "mensaje": "Regex (confianza alta) extrajo BI-RADS 4. ML predijo BI-RADS 2 con confianza 0.26. Se prioriza la extracción regex (literal del informe). El ML puede haber confundido un patrón estadístico. Sin alerta clínica."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "incoherente",
+      "alerta": true,
+      "severidad": "alta",
+      "recomendacion_esperada": "biopsia_histologia",
+      "regla_aplicada": "ninguna",
+      "mensaje": "BI-RADS 4 (sospecha de malignidad) requiere confirmación histológica mediante biopsia. La recomendación detectada no contempla la biopsia ni derivación a especialista."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3360",
+    "timestamp": "2026-06-20T00:42:36.203780",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9986,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico y ecográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico y ecografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3662",
+    "timestamp": "2026-06-20T00:42:36.208064",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9974,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0668",
+    "timestamp": "2026-06-20T00:42:36.211703",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3829",
+    "timestamp": "2026-06-20T00:42:36.214964",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9985,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_4036",
+    "timestamp": "2026-06-20T00:42:36.218632",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9991,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control anual.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3652",
+    "timestamp": "2026-06-20T00:42:36.221956",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1867",
+    "timestamp": "2026-06-20T00:42:36.225777",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0017",
+    "timestamp": "2026-06-20T00:42:36.229778",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9967,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA EN PRIMER TÉRMINO Y OTROS ESTUDIOS SEGÚN CRITERIO DEL MÉDICO TRATANTE.",
+      "texto_normalizado": "- se sugiere ecografia mamaria en primer termino y otros estudios segun criterio del medico tratante.",
+      "categoria_principal": "criterio_medico",
+      "categorias_detectadas": [
+        "criterio_medico"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "incoherente",
+      "alerta": true,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "ninguna",
+      "mensaje": "BI-RADS 0 indica que el estudio está incompleto y requiere completarse con imágenes adicionales o búsqueda de exámenes previos. La recomendación detectada no apunta a resolver el estudio incompleto a corto plazo."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2194",
+    "timestamp": "2026-06-20T00:42:36.234853",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9979,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1938",
+    "timestamp": "2026-06-20T00:42:36.238359",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9988,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria y controles según criterio del médico tratante.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria y controles segun criterio del medico tratante.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "criterio_medico"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2298",
+    "timestamp": "2026-06-20T00:42:36.242276",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9918,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control anual.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 1."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0511",
+    "timestamp": "2026-06-20T00:42:36.245497",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL ANTECEDENTE DE LA PACIENTE Y CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al antecedente de la paciente y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1769",
+    "timestamp": "2026-06-20T00:42:36.248581",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1407",
+    "timestamp": "2026-06-20T00:42:36.252628",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2186",
+    "timestamp": "2026-06-20T00:42:36.256078",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.999,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control anual.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3417",
+    "timestamp": "2026-06-20T00:42:36.259405",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9918,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria y control mamográfico anual.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 1."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0530",
+    "timestamp": "2026-06-20T00:42:36.262701",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_4124",
+    "timestamp": "2026-06-20T00:42:36.266879",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2354",
+    "timestamp": "2026-06-20T00:42:36.270161",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9988,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3406",
+    "timestamp": "2026-06-20T00:42:36.276845",
+    "birads": {
+      "valor": 5,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESIÓN DIAGNÓSTICA",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 5,
+      "confianza_ml": 0.6741,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_2_regex_alta_ml_modera",
+      "mensaje": "Regex (confianza alta) extrajo BI-RADS 5. ML coincide con confianza moderada (0.67). Se confía en la extracción regex."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere caracterización histológica de la lesión.",
+      "texto_normalizado": "- se sugiere caracterizacion histologica de la lesion.",
+      "categoria_principal": "biopsia_histologia",
+      "categorias_detectadas": [
+        "biopsia_histologia"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "critica",
+      "recomendacion_esperada": "biopsia_histologia",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 5."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3114",
+    "timestamp": "2026-06-20T00:42:36.281477",
+    "birads": {
+      "valor": 3,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 3,
+      "confianza_ml": 0.9604,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.96) coinciden en BI-RADS 3. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere controles según criterio del médico tratante.",
+      "texto_normalizado": "- se sugiere controles segun criterio del medico tratante.",
+      "categoria_principal": "criterio_medico",
+      "categorias_detectadas": [
+        "criterio_medico"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "incoherente",
+      "alerta": true,
+      "severidad": "media",
+      "recomendacion_esperada": "control_corto_plazo",
+      "regla_aplicada": "ninguna",
+      "mensaje": "BI-RADS 3 (probablemente benigno) requiere vigilancia activa con control a corto plazo. La recomendación detectada no implica el seguimiento estrecho que esta categoría exige."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1413",
+    "timestamp": "2026-06-20T00:42:36.285331",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3521",
+    "timestamp": "2026-06-20T00:42:36.288951",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_con_precaucion",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_4_principal_mas_urgente",
+      "mensaje": "Coherente con precaución: el radiólogo optó por una conducta más conservadora ('estudio_complementario_imagen') que la mínima esperada por ACR para BI-RADS 2 ('control_anual')."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0308",
+    "timestamp": "2026-06-20T00:42:36.292252",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL ANUAL.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3517",
+    "timestamp": "2026-06-20T00:42:36.296209",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.-",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.-",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3926",
+    "timestamp": "2026-06-20T00:42:36.300389",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1835",
+    "timestamp": "2026-06-20T00:42:36.304121",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9968,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1800",
+    "timestamp": "2026-06-20T00:42:36.308030",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9911,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico y control mamográfico anual.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 1."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1174",
+    "timestamp": "2026-06-20T00:42:36.311454",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9972,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1261",
+    "timestamp": "2026-06-20T00:42:36.314772",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2440",
+    "timestamp": "2026-06-20T00:42:36.318104",
+    "birads": {
+      "valor": 5,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "Impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 5,
+      "confianza_ml": 0.6379,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_2_regex_alta_ml_modera",
+      "mensaje": "Regex (confianza alta) extrajo BI-RADS 5. ML coincide con confianza moderada (0.64). Se confía en la extracción regex."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere ecografía mamaria y caracterización histológica de la lesión.",
+      "texto_normalizado": "- se sugiere ecografia mamaria y caracterizacion histologica de la lesion.",
+      "categoria_principal": "biopsia_histologia",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen",
+        "biopsia_histologia"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "critica",
+      "recomendacion_esperada": "biopsia_histologia",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 5."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0937",
+    "timestamp": "2026-06-20T00:42:36.321441",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9975,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1057",
+    "timestamp": "2026-06-20T00:42:36.324736",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9975,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2063",
+    "timestamp": "2026-06-20T00:42:36.327803",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9991,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1777",
+    "timestamp": "2026-06-20T00:42:36.331394",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria y control mamográfico anual.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2053",
+    "timestamp": "2026-06-20T00:42:36.335279",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9978,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3855",
+    "timestamp": "2026-06-20T00:42:36.338812",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9969,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3559",
+    "timestamp": "2026-06-20T00:42:36.342139",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO Y CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_4116",
+    "timestamp": "2026-06-20T00:42:36.345527",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9988,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2276",
+    "timestamp": "2026-06-20T00:42:36.348642",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1146",
+    "timestamp": "2026-06-20T00:42:36.352224",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1832",
+    "timestamp": "2026-06-20T00:42:36.355492",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3451",
+    "timestamp": "2026-06-20T00:42:36.358817",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9918,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control anual.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 1."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1192",
+    "timestamp": "2026-06-20T00:42:36.362170",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9889,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA Y CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 1."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3749",
+    "timestamp": "2026-06-20T00:42:36.365360",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2830",
+    "timestamp": "2026-06-20T00:42:36.369235",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9935,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0584",
+    "timestamp": "2026-06-20T00:42:36.373243",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2392",
+    "timestamp": "2026-06-20T00:42:36.381162",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9918,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 1."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1752",
+    "timestamp": "2026-06-20T00:42:36.384726",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico y controles según criterio del médico tratante.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico y controles segun criterio del medico tratante.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "criterio_medico"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1921",
+    "timestamp": "2026-06-20T00:42:36.388114",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico y control mamográfico anual.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0676",
+    "timestamp": "2026-06-20T00:42:36.391944",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9991,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3225",
+    "timestamp": "2026-06-20T00:42:36.395858",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESIÓN DIAGNÓSTICA",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9933,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 1."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0179",
+    "timestamp": "2026-06-20T00:42:36.399791",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9975,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA Y COMPARACIÓN CON ESTUDIOS ANTERIORES.",
+      "texto_normalizado": "- se sugiere ecografia mamaria y comparacion con estudios anteriores.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen",
+        "comparacion_estudios_previos"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1474",
+    "timestamp": "2026-06-20T00:42:36.403239",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1691",
+    "timestamp": "2026-06-20T00:42:36.406711",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1429",
+    "timestamp": "2026-06-20T00:42:36.410072",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO Y CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0969",
+    "timestamp": "2026-06-20T00:42:36.413308",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO Y CONTROLES SEGÚN CRITERIO DEL MÉDICO TRATANTE.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico y controles segun criterio del medico tratante.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "criterio_medico"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0239",
+    "timestamp": "2026-06-20T00:42:36.417324",
+    "birads": {
+      "valor": 1,
+      "confianza": "baja",
+      "fuente": "fallback_texto_completo",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "discrepante_real",
+      "birads_ml": 2,
+      "confianza_ml": 0.8709,
+      "coincide_con_regex": false,
+      "regla_aplicada": "regla_6_discrepancia_real",
+      "mensaje": "Texto del informe presenta formato atípico o ambigüedad. Regex (confianza baja) extrajo BI-RADS 1. ML predijo BI-RADS 2 con alta confianza (0.87). Se recomienda revisión manual para confirmar la extracción."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_con_precaucion",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_4_principal_mas_urgente",
+      "mensaje": "Coherente con precaución: el radiólogo optó por una conducta más conservadora ('estudio_complementario_imagen') que la mínima esperada por ACR para BI-RADS 1 ('control_anual')."
+    },
+    "confiabilidad_tecnica_global": "baja"
+  },
+  {
+    "informe_id": "informe_0414",
+    "timestamp": "2026-06-20T00:42:36.420731",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_con_precaucion",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_4_principal_mas_urgente",
+      "mensaje": "Coherente con precaución: el radiólogo optó por una conducta más conservadora ('estudio_complementario_imagen') que la mínima esperada por ACR para BI-RADS 2 ('control_anual')."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2749",
+    "timestamp": "2026-06-20T00:42:36.424105",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9987,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control anual.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2067",
+    "timestamp": "2026-06-20T00:42:36.427326",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.999,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control anual.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1966",
+    "timestamp": "2026-06-20T00:42:36.431140",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9957,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2819",
+    "timestamp": "2026-06-20T00:42:36.435118",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9987,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1263",
+    "timestamp": "2026-06-20T00:42:36.438608",
+    "birads": {
+      "valor": 1,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 1,
+      "confianza_ml": 0.9911,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 0.99) coinciden en BI-RADS 1. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_con_precaucion",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_4_principal_mas_urgente",
+      "mensaje": "Coherente con precaución: el radiólogo optó por una conducta más conservadora ('correlacion_ecografica') que la mínima esperada por ACR para BI-RADS 1 ('control_anual')."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2452",
+    "timestamp": "2026-06-20T00:42:36.442044",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9976,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2208",
+    "timestamp": "2026-06-20T00:42:36.445404",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9982,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control anual.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0751",
+    "timestamp": "2026-06-20T00:42:36.449180",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO Y CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0371",
+    "timestamp": "2026-06-20T00:42:36.452424",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA Y CONTROLES HABITUALES.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria y controles habituales.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "criterio_medico"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2585",
+    "timestamp": "2026-06-20T00:42:36.455693",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9987,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1438",
+    "timestamp": "2026-06-20T00:42:36.459023",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2623",
+    "timestamp": "2026-06-20T00:42:36.462230",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9976,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control ecográfico en un año y control mamográfico según criterio del médico tratante.",
+      "texto_normalizado": "- se sugiere control ecografico en un ano y control mamografico segun criterio del medico tratante.",
+      "categoria_principal": "criterio_medico",
+      "categorias_detectadas": [
+        "criterio_medico"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1270",
+    "timestamp": "2026-06-20T00:42:36.465519",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2825",
+    "timestamp": "2026-06-20T00:42:36.468929",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "impresion",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.9972,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria para posterior recategorización.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2763",
+    "timestamp": "2026-06-20T00:42:36.472042",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.999,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3431",
+    "timestamp": "2026-06-20T00:42:36.475058",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESIÓN DIAGNÓSTICA",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.999,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0109",
+    "timestamp": "2026-06-20T00:42:36.478198",
+    "birads": {
+      "valor": 0,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESION",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 0,
+      "confianza_ml": 0.997,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 0. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE ECOGRAFÍA MAMARIA PARA POSTERIOR RECATEGORIZACIÓN.",
+      "texto_normalizado": "- se sugiere ecografia mamaria para posterior recategorizacion.",
+      "categoria_principal": "estudio_complementario_imagen",
+      "categorias_detectadas": [
+        "estudio_complementario_imagen"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "alta",
+      "recomendacion_esperada": "estudio_complementario_imagen",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 0."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2716",
+    "timestamp": "2026-06-20T00:42:36.481294",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9987,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere control mamográfico anual.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_1513",
+    "timestamp": "2026-06-20T00:42:36.484416",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9991,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SUGERIMOS CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO Y CONTROL MAMOGRÁFICO ANUAL.",
+      "texto_normalizado": "- sugerimos correlacion con ecografia mamaria debido al patron mamografico y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3917",
+    "timestamp": "2026-06-20T00:42:36.487482",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_4341",
+    "timestamp": "2026-06-20T00:42:36.490550",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9988,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico y al antecedente de la paciente.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico y al antecedente de la paciente.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_2646",
+    "timestamp": "2026-06-20T00:42:36.493546",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9988,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria debido al patrón mamográfico.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3282",
+    "timestamp": "2026-06-20T00:42:36.496823",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "IMPRESIÓN DIAGNÓSTICA",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9982,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- Se sugiere correlación con ecografía mamaria y control mamográfico anual.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria y control mamografico anual.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica",
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0315",
+    "timestamp": "2026-06-20T00:42:36.499932",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL ANUAL.",
+      "texto_normalizado": "- se sugiere control anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_3801",
+    "timestamp": "2026-06-20T00:42:36.503171",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9993,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CORRELACIÓN CON ECOGRAFÍA MAMARIA DEBIDO AL PATRÓN MAMOGRÁFICO.",
+      "texto_normalizado": "- se sugiere correlacion con ecografia mamaria debido al patron mamografico.",
+      "categoria_principal": "correlacion_ecografica",
+      "categorias_detectadas": [
+        "correlacion_ecografica"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente_equivalente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_2_equivalente_aceptable",
+      "mensaje": "Coherente: la recomendación detectada incluye una alternativa clínicamente aceptable a la esperada para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  },
+  {
+    "informe_id": "informe_0438",
+    "timestamp": "2026-06-20T00:42:36.506157",
+    "birads": {
+      "valor": 2,
+      "confianza": "alta",
+      "fuente": "bloque_conclusion_estricto",
+      "encabezado_detectado": "CONCLUSIÓN",
+      "menciones_adicionales": []
+    },
+    "verificacion_ml": {
+      "estado": "confirmado",
+      "birads_ml": 2,
+      "confianza_ml": 0.9992,
+      "coincide_con_regex": true,
+      "regla_aplicada": "regla_1_doble_confirmacion_alta",
+      "mensaje": "Regex (confianza alta) y ML (confianza alta 1.00) coinciden en BI-RADS 2. Extracción validada."
+    },
+    "recomendacion": {
+      "texto_original": "- SE SUGIERE CONTROL MAMOGRÁFICO MANUAL.",
+      "texto_normalizado": "- se sugiere control mamografico anual.",
+      "categoria_principal": "control_anual",
+      "categorias_detectadas": [
+        "control_anual"
+      ],
+      "confianza": "alta",
+      "metodo": "regex"
+    },
+    "cotejo_acr": {
+      "estado": "coherente",
+      "alerta": false,
+      "severidad": "baja",
+      "recomendacion_esperada": "control_anual",
+      "regla_aplicada": "regla_1_esperada_presente",
+      "mensaje": "Recomendación coherente con norma ACR para BI-RADS 2."
+    },
+    "confiabilidad_tecnica_global": "alta"
+  }
+]
