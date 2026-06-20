@@ -1,0 +1,30 @@
+{
+  "total_procesados": 4357,
+  "comparacion_v1_v2": {
+    "estados_cambiados": 0,
+    "confiabilidades_cambiadas": 2,
+    "distribucion_confiabilidad_v1": {
+      "alta": 4225,
+      "baja": 130,
+      "media": 2
+    },
+    "distribucion_confiabilidad_v2": {
+      "alta": 4227,
+      "baja": 130
+    }
+  },
+  "alertas_v2": 58,
+  "tasa_alertas_pct_v2": 1.33,
+  "por_estado": {
+    "coherente": 2798,
+    "coherente_equivalente": 1166,
+    "incoherente": 58,
+    "coherente_con_precaucion": 335
+  },
+  "por_severidad": {
+    "alta": 1019,
+    "baja": 3230,
+    "media": 92,
+    "critica": 16
+  }
+}

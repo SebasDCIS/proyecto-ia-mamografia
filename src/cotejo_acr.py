@@ -8,6 +8,11 @@ Recibe los resultados estructurados de los dos extractores anteriores
 coherencia clínica entre la categoría BI-RADS declarada y la
 recomendación emitida, según la norma ACR.
 
+Opcionalmente integra el resultado del verificador ML (verificador_birads_ml)
+para ajustar la confiabilidad técnica del procesamiento. Cuando el ML detecta
+una discrepancia real (regex de baja confianza vs ML de alta confianza), la
+confiabilidad técnica del cotejo se ajusta a la baja.
+
 Genera alertas con trazabilidad completa y reportes en tres formatos:
 - Detallado: para revisión caso por caso (vista detalle del dashboard)
 - Compacto: para listas/tablas (vista resumen del dashboard)
@@ -61,13 +66,24 @@ from src.recursos.tabla_acr import (
 def _calcular_confiabilidad_tecnica(
     resultado_birads: Dict[str, Any],
     resultado_recomendacion: Dict[str, Any],
+    verificacion_ml: Optional[Dict[str, Any]] = None,
 ) -> str:
     """Determina el nivel de confiabilidad técnica del procesamiento.
 
-    Reglas:
+    Reglas base (sin ML):
         - 'alta':  todas las extracciones con regla estricta, sin fallback
         - 'media': alguna extracción con confianza media o usó TF-IDF
         - 'baja':  alguna extracción con confianza baja
+
+    Ajustes por verificación ML (si verificacion_ml está presente):
+        - estado 'discrepante_real': fuerza confiabilidad a 'baja'
+          (el ML detectó que la regex de confianza media/baja probablemente
+          extrajo mal el BI-RADS)
+        - estado 'confirmado_doble': si la base era 'media', sube a 'alta'
+          (validación cruzada exitosa)
+        - estado 'ml_no_confirma': sin cambio (la regex es alta confianza y
+          el ML disiente, pero se prioriza la regex)
+        - resto de estados: sin cambio
 
     Esta confiabilidad refleja la calidad técnica del procesamiento, NO
     la probabilidad clínica de que la alerta sea correcta.
@@ -76,14 +92,33 @@ def _calcular_confiabilidad_tecnica(
     confianza_rec = resultado_recomendacion.get("confianza", "no_clasificada")
     metodo_rec = resultado_recomendacion.get("metodo")
 
+    # Cálculo base (lógica original)
     if confianza_birads == "baja" or confianza_rec == "baja":
-        return "baja"
-    if confianza_birads == "media" or confianza_rec == "media":
-        return "media"
-    if metodo_rec == "tf_idf_similitud":
-        return "media"
+        nivel_base = "baja"
+    elif confianza_birads == "media" or confianza_rec == "media":
+        nivel_base = "media"
+    elif metodo_rec == "tf_idf_similitud":
+        nivel_base = "media"
+    else:
+        nivel_base = "alta"
 
-    return "alta"
+    # Ajuste por verificación ML (si está disponible)
+    if verificacion_ml is None:
+        return nivel_base
+
+    estado_ml = verificacion_ml.get("estado_verificacion")
+
+    if estado_ml == "discrepante_real":
+        # El ML detecta inconsistencia técnica real → bajar confiabilidad
+        return "baja"
+
+    if estado_ml == "confirmado_doble" and nivel_base == "media":
+        # Validación cruzada exitosa sobre extracción dudosa → subir
+        return "alta"
+
+    # Estados que no modifican: confirmado, ml_no_confirma, ml_inseguro,
+    # no_verificable
+    return nivel_base
 
 
 def _es_mas_urgente(categoria_a: str, categoria_b: str) -> bool:
@@ -206,6 +241,7 @@ def _aplicar_reglas_cotejo(
 def cotejar_birads_vs_recomendacion(
     resultado_birads: Dict[str, Any],
     resultado_recomendacion: Dict[str, Any],
+    verificacion_ml: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """Coteja BI-RADS declarado vs recomendación detectada según norma ACR.
 
@@ -221,15 +257,26 @@ def cotejar_birads_vs_recomendacion(
     Si ninguna regla aplica, se genera una alerta real con la severidad
     definida en la tabla ACR para ese BI-RADS.
 
+    Opcionalmente recibe el resultado del verificador ML (verificacion_ml)
+    para ajustar la confiabilidad técnica:
+        - Si el ML detecta 'discrepante_real' → confiabilidad técnica 'baja'
+        - Si el ML detecta 'confirmado_doble' sobre regex media → 'alta'
+        - Resto de estados: sin cambio
+
     Args:
         resultado_birads: dict del extractor_birads. Debe tener al menos:
             'birads_conclusion', 'confianza', 'menciones_adicionales'.
         resultado_recomendacion: dict del extractor_recomendacion. Debe
             tener al menos: 'categorias_detectadas', 'categoria_principal',
             'confianza', 'metodo'.
+        verificacion_ml: dict opcional del verificador_birads_ml. Si se pasa,
+            debe tener al menos: 'estado_verificacion', 'birads_predicho_ml',
+            'confianza_ml'.
 
     Returns:
-        Dict con la decisión clínica y trazabilidad completa.
+        Dict con la decisión clínica y trazabilidad completa. Incluye el
+        campo 'verificacion_ml' que refleja la información del verificador
+        ML (None si no fue provista).
     """
     birads = resultado_birads.get("birads_conclusion")
     categorias = resultado_recomendacion.get("categorias_detectadas", [])
@@ -248,6 +295,7 @@ def cotejar_birads_vs_recomendacion(
             "categorias_detectadas": categorias,
             "menciones_adicionales_birads": menciones_adicionales,
             "confiabilidad_tecnica": "no_aplicable",
+            "verificacion_ml": verificacion_ml,
             "mensaje": (
                 "No se pudo procesar el cotejo: el extractor de BI-RADS no "
                 "detectó una categoría declarada en la conclusión del informe."
@@ -260,9 +308,9 @@ def cotejar_birads_vs_recomendacion(
     # Aplicar reglas de cotejo
     resultado_reglas = _aplicar_reglas_cotejo(birads, categorias)
 
-    # Calcular confiabilidad técnica
+    # Calcular confiabilidad técnica (ahora considerando verificacion_ml)
     confiabilidad = _calcular_confiabilidad_tecnica(
-        resultado_birads, resultado_recomendacion
+        resultado_birads, resultado_recomendacion, verificacion_ml
     )
 
     # Determinar si requiere alerta
@@ -307,6 +355,7 @@ def cotejar_birads_vs_recomendacion(
         "categorias_detectadas": categorias,
         "menciones_adicionales_birads": menciones_adicionales,
         "confiabilidad_tecnica": confiabilidad,
+        "verificacion_ml": verificacion_ml,
         "mensaje": mensaje,
         "trazabilidad": {
             "regla_aplicada": resultado_reglas["regla_aplicada"],
@@ -329,6 +378,16 @@ def cotejar_birads_vs_recomendacion(
                 "confianza": resultado_recomendacion.get("confianza"),
                 "metodo": resultado_recomendacion.get("metodo"),
             },
+            "verificacion_ml_resumen": (
+                {
+                    "estado": verificacion_ml.get("estado_verificacion"),
+                    "birads_ml": verificacion_ml.get("birads_predicho_ml"),
+                    "confianza_ml": verificacion_ml.get("confianza_ml"),
+                    "regla_ml": verificacion_ml.get("regla_aplicada"),
+                }
+                if verificacion_ml
+                else None
+            ),
         },
     }
 
@@ -414,6 +473,25 @@ def generar_reporte_alerta_detallado(
         "  Esta confiabilidad NO es una probabilidad clínica.\n"
         "  Toda alerta requiere validación humana."
     )
+
+    # Sección: Verificación ML (si está presente)
+    verif_ml = resultado_cotejo.get("verificacion_ml")
+    if verif_ml:
+        lineas.append(f"\n{sublinea}")
+        lineas.append("VERIFICACIÓN DUAL DE EXTRACCIÓN (regex + ML)")
+        lineas.append(sublinea)
+        estado_ml = verif_ml.get("estado_verificacion", "desconocido")
+        birads_ml = verif_ml.get("birads_predicho_ml")
+        conf_ml = verif_ml.get("confianza_ml")
+        lineas.append(f"  Estado:        {estado_ml}")
+        lineas.append(f"  BI-RADS regex: {resultado_cotejo['birads']}")
+        if birads_ml is not None:
+            lineas.append(
+                f"  BI-RADS ML:    {birads_ml} (confianza {conf_ml:.2f})"
+            )
+        if verif_ml.get("mensaje"):
+            lineas.append("")
+            lineas.append(f"  {verif_ml['mensaje']}")
 
     # Sección: Extracciones realizadas
     lineas.append(f"\n{sublinea}")
@@ -545,6 +623,7 @@ def resumen_para_dataframe(
         )
         trz = resultado.get("trazabilidad", {})
         ex_re = trz.get("extraccion_recomendacion", {})
+        verif_ml = resultado.get("verificacion_ml")
 
         filas.append({
             "informe_id": informe_id,
@@ -559,6 +638,12 @@ def resumen_para_dataframe(
             ),
             "categorias_detectadas": str(resultado.get("categorias_detectadas")),
             "texto_recomendacion": ex_re.get("texto_original", "")[:200],
+            "verificacion_ml_estado": (
+                verif_ml.get("estado_verificacion") if verif_ml else None
+            ),
+            "verificacion_ml_birads": (
+                verif_ml.get("birads_predicho_ml") if verif_ml else None
+            ),
             "mensaje": resultado.get("mensaje", "")[:300],
         })
     return filas
@@ -855,6 +940,93 @@ def _ejecutar_tests() -> None:
         "nombre": "C10: BI-RADS no detectado → no procesable",
         "resultado": cotejar_birads_vs_recomendacion(r_birads, r_rec),
         "esperado": {"estado": "no_procesable", "requiere_alerta": False},
+    })
+
+    # =========================================================================
+    # NUEVOS TESTS: Integración con verificador ML
+    # =========================================================================
+
+    # Caso 11: BI-RADS 2 + verificacion_ml=None → comportamiento idéntico a C1
+    r_birads = {"birads_conclusion": 2, "confianza": "alta",
+                "fuente": "bloque_conclusion_estricto", "menciones_adicionales": []}
+    r_rec = {
+        "categorias_detectadas": ["control_anual"],
+        "categoria_principal": "control_anual",
+        "confianza": "alta", "metodo": "regex",
+        "trazabilidad": {
+            "texto_original": "- Se sugiere control mamográfico anual.",
+            "texto_normalizado": "- se sugiere control mamografico anual.",
+        },
+    }
+    casos.append({
+        "nombre": "C11: verificacion_ml=None → comportamiento sin cambios",
+        "resultado": cotejar_birads_vs_recomendacion(r_birads, r_rec, verificacion_ml=None),
+        "esperado": {
+            "estado": "coherente",
+            "confiabilidad_tecnica": "alta",
+            "verificacion_ml": None,
+        },
+    })
+
+    # Caso 12: ML confirma → confiabilidad sin cambio
+    verif_ml_confirma = {
+        "estado_verificacion": "confirmado",
+        "birads_predicho_ml": 2,
+        "confianza_ml": 0.98,
+        "regla_aplicada": "regla_1_doble_confirmacion_alta",
+        "mensaje": "Regex y ML coinciden.",
+    }
+    casos.append({
+        "nombre": "C12: ML confirma (alta) → confiabilidad sin cambio",
+        "resultado": cotejar_birads_vs_recomendacion(
+            r_birads, r_rec, verificacion_ml=verif_ml_confirma
+        ),
+        "esperado": {"confiabilidad_tecnica": "alta"},
+    })
+
+    # Caso 13: ML detecta discrepante_real → confiabilidad baja
+    r_birads_baja = {"birads_conclusion": 4, "confianza": "baja",
+                     "fuente": "bloque_conclusion_typos", "menciones_adicionales": []}
+    verif_ml_discrep = {
+        "estado_verificacion": "discrepante_real",
+        "birads_predicho_ml": 0,
+        "confianza_ml": 0.66,
+        "regla_aplicada": "regla_6_discrepancia_real",
+        "mensaje": "Texto atípico, revisar manualmente.",
+    }
+    casos.append({
+        "nombre": "C13: ML discrepante_real → confiabilidad fuerza a baja",
+        "resultado": cotejar_birads_vs_recomendacion(
+            r_birads_baja, r_rec, verificacion_ml=verif_ml_discrep
+        ),
+        "esperado": {"confiabilidad_tecnica": "baja"},
+    })
+
+    # Caso 14: ML confirmado_doble sobre regex media → confiabilidad sube a alta
+    r_birads_media = {"birads_conclusion": 0, "confianza": "media",
+                      "fuente": "bloque_conclusion_typos", "menciones_adicionales": []}
+    r_rec_estudio = {
+        "categorias_detectadas": ["estudio_complementario_imagen"],
+        "categoria_principal": "estudio_complementario_imagen",
+        "confianza": "alta", "metodo": "regex",
+        "trazabilidad": {
+            "texto_original": "- Se sugiere ecografía complementaria.",
+            "texto_normalizado": "- se sugiere ecografia complementaria.",
+        },
+    }
+    verif_ml_doble = {
+        "estado_verificacion": "confirmado_doble",
+        "birads_predicho_ml": 0,
+        "confianza_ml": 0.998,
+        "regla_aplicada": "regla_5_validacion_cruzada",
+        "mensaje": "Validación cruzada exitosa.",
+    }
+    casos.append({
+        "nombre": "C14: ML confirmado_doble sobre regex media → confiabilidad sube a alta",
+        "resultado": cotejar_birads_vs_recomendacion(
+            r_birads_media, r_rec_estudio, verificacion_ml=verif_ml_doble
+        ),
+        "esperado": {"confiabilidad_tecnica": "alta"},
     })
 
     # Ejecutar verificaciones

@@ -1,0 +1,217 @@
+%==============================================================================
+% INFORME PARCIAL BME513 v8
+% Sistema local de auditoría técnica de informes mamográficos en español mediante NLP
+% Autor: Sebastián Inostroza Hurtado · Dr. Alejandro Veloz Baeza
+% Universidad de Valparaíso, Junio 2026
+%
+% Plantilla basada en el formato de manuscrito para la Jornada de Ciencia de Datos
+% de la Universidad de Valparaíso, 2026.
+%==============================================================================
+
+\documentclass[10pt,journal,a4paper]{IEEEtran}
+
+% --- Codificación e idioma ---------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla,es-noindentfirst]{babel}
+\usepackage{microtype}
+
+% --- Paquetes adicionales ---------------------------------------------------
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{listings}
+\usepackage{textcomp}
+
+% --- Hyperref configuración ---------------------------------------------------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=blue,
+    urlcolor=blue,
+    pdftitle={Sistema local de auditoría técnica de informes mamográficos en español mediante NLP},
+    pdfauthor={Sebastián Inostroza, Alejandro Veloz}
+}
+
+% --- Comandos personalizados -------------------------------------------------
+\newcommand{\birads}[1]{BI-RADS~#1}
+\newcommand{\codename}[1]{\texttt{#1}}
+
+% --- Información del manuscrito ----------------------------------------------
+\title{Sistema local de auditor\'ia t\'ecnica de informes mamogr\'aficos en espa\~nol mediante NLP: verificaci\'on dual de coherencia entre BI-RADS y recomendaci\'on cl\'inica}
+
+\author{
+    Sebasti\'an Inostroza Hurtado\textsuperscript{1}, y Alejandro Veloz Baeza\textsuperscript{2}
+    \thanks{\textsuperscript{1}Doctorado en Ciencias e Ingenier\'ia para la Salud, Universidad de Valpara\'iso, Valpara\'iso, Chile. (e-mail: sebastian.inostroza@postgrado.uv.cl)}
+    \thanks{\textsuperscript{2}Profesor responsable del curso BME513 - Inteligencia Artificial en Salud, Universidad de Valpara\'iso, Valpara\'iso, Chile. (e-mail: alejandro.veloz@uv.cl)}
+}
+
+\markboth{Jornada de Ciencia de Datos 2026, Universidad de Valpara\'iso}{Inostroza et al.: Auditor\'ia t\'ecnica de informes mamogr\'aficos}
+
+\begin{document}
+
+\maketitle
+
+%==============================================================================
+% ABSTRACT
+%==============================================================================
+\begin{abstract}
+El c\'ancer de mama es la principal causa de mortalidad oncol\'ogica femenina en Chile. La informaci\'on cr\'itica de los informes mamogr\'aficos --categor\'ia BI-RADS y recomendaci\'on cl\'inica-- queda habitualmente atrapada como texto libre, dificultando su explotaci\'on por sistemas administrativos y la detecci\'on autom\'atica de inconsistencias entre el diagn\'ostico y la conducta sugerida. Este trabajo presenta un sistema de procesamiento de lenguaje natural ejecutable localmente que audita t\'ecnicamente la coherencia interna de los informes mamogr\'aficos en espa\~nol, contrastando la categor\'ia BI-RADS declarada por el radi\'ologo con la recomendaci\'on cl\'inica emitida bajo el est\'andar BI-RADS/ACR. El pipeline integra cuatro m\'odulos: (i) un extractor regex de categor\'ia BI-RADS con tolerancia a variaciones tipogr\'aficas, (ii) un extractor de recomendaciones con tres capas de procesamiento (normalizaci\'on, reglas cl\'inicas, similitud sem\'antica TF-IDF), (iii) un motor de cotejo contra la tabla normativa ACR adaptada al lenguaje cl\'inico chileno, y (iv) un verificador secundario basado en DistilBETO que valida cruzadamente la extracci\'on. Evaluado sobre 4\,357 informes en espa\~nol, el sistema alcanz\'o Macro F1 de 0,9995 en extracci\'on BI-RADS y gener\'o solo 1,3\% de alertas cl\'inicas, evidenciando bajo nivel de fatiga de alertas. La ejecuci\'on local garantiza el cumplimiento de la Ley N.\textsuperscript{o}~19.628 sobre protecci\'on de datos personales. El sistema aporta una herramienta interpretable y auditable de control de calidad para programas de tamizaje mamogr\'afico.
+\end{abstract}
+
+\begin{IEEEkeywords}
+NLP cl\'inico, BI-RADS, informes mamogr\'aficos, auditor\'ia t\'ecnica, DistilBETO, espa\~nol cl\'inico, salud digital.
+\end{IEEEkeywords}
+
+%==============================================================================
+% I. INTRODUCCIÓN
+%==============================================================================
+\section{Introducci\'on}
+\IEEEPARstart{E}{l} c\'ancer de mama es la primera causa de mortalidad por tumores malignos en mujeres en Chile, con tasas que han mostrado un crecimiento sostenido en la \'ultima d\'ecada \cite{deis2024}. El tamizaje mamogr\'afico constituye la principal estrategia poblacional de detecci\'on temprana, y la calidad del informe radiol\'ogico --particularmente la categor\'ia BI-RADS asignada y la recomendaci\'on cl\'inica emitida-- determina directamente la conducta de seguimiento. Garantizar la coherencia interna entre estos dos elementos es, por tanto, una preocupaci\'on cl\'inica de primer orden.
+
+En la pr\'actica asistencial, los informes mamogr\'aficos se generan como texto libre estructurado en bloques (hallazgos, conclusi\'on, recomendaciones), donde la categor\'ia BI-RADS y la recomendaci\'on cl\'inica quedan atrapadas en lenguaje natural. Esto dificulta su explotaci\'on por sistemas administrativos del centro asistencial y, m\'as relevante, imposibilita la auditor\'ia autom\'atica de coherencia entre lo que el radi\'ologo concluy\'o y lo que recomend\'o. Un BI-RADS 4 (sospechoso) acompa\~nado de una recomendaci\'on de \emph{control anual} ilustra el tipo de inconsistencia que un sistema de validaci\'on t\'ecnica podr\'ia detectar, y que actualmente solo se identifica mediante revisi\'on manual.
+
+El procesamiento de lenguaje natural (NLP) aplicado a informes radiol\'ogicos ha sido investigado principalmente en ingl\'es. Sippo et al. \cite{sippo2013} demostraron la viabilidad de la extracci\'on regex de categor\'ias BI-RADS con recall del 100\% y precisi\'on del 96,6\%; Kuling et al. \cite{kuling2022} desarrollaron BI-RADS BERT con segmentaci\'on de secciones logrando 98\% de acierto en clasificaci\'on de secciones. En espa\~nol, L\'opez-\'Ubeda et al. \cite{lopez2024} reportaron Macro F1 de 0,74 utilizando BETO sobre corpus espa\~nol peninsular para clasificaci\'on de BI-RADS. Sin embargo, la mayor\'ia de los trabajos publicados abordan la \emph{predicci\'on} de la categor\'ia BI-RADS desde el texto, no la \emph{auditor\'ia} de su coherencia con la conducta cl\'inica recomendada.
+
+El problema espec\'ifico que motiva este trabajo es distinto: dado un informe ya emitido por un radi\'ologo, verificar autom\'aticamente si la categor\'ia BI-RADS declarada y la recomendaci\'on cl\'inica son coherentes seg\'un el est\'andar BI-RADS/ACR \cite{acr2013}. Esto se enmarca dentro de un programa m\'as amplio de auditor\'ia de informes mamogr\'aficos; en una l\'inea complementaria, el autor desarrolla en paralelo, dentro de otro curso, trabajo sobre auditor\'ia de coherencia diagn\'ostica, que aborda problemas relacionados desde otra perspectiva metodol\'ogica.
+
+Este art\'iculo presenta el dise\~no, implementaci\'on y validaci\'on de un sistema local de auditor\'ia t\'ecnica de informes mamogr\'aficos en espa\~nol. La propuesta integra cuatro m\'odulos: (i) un extractor de categor\'ia BI-RADS basado en reglas robusto a variaciones tipogr\'aficas, (ii) un extractor de recomendaciones que combina normalizaci\'on, reglas cl\'inicas y similitud sem\'antica, (iii) un motor de cotejo contra una tabla normativa BI-RADS/ACR adaptada al lenguaje cl\'inico chileno, y (iv) un verificador secundario basado en DistilBETO fine-tuneado que valida cruzadamente la extracci\'on. Toda la ejecuci\'on es local, garantizando cumplimiento de la Ley N.\textsuperscript{o}~19.628 sobre protecci\'on de datos personales \cite{ley19628}.
+
+Las contribuciones principales son: (i) la formalizaci\'on computacional de una tabla normativa BI-RADS/ACR adaptada al lenguaje cl\'inico chileno; (ii) una arquitectura h\'ibrida regex-ML interpretable que reduce la fatiga de alertas (1,3\% del corpus genera alerta cl\'inica) sin sacrificar sensibilidad; (iii) un verificador dual basado en regex priorit\'aria y DistilBETO secundario, que reduce las discrepancias t\'ecnicas espurias en un 82\%; y (iv) la evaluaci\'on emp\'irica sobre un corpus p\'ublico de 4\,357 informes en espa\~nol \cite{vazquez2025}.
+
+El resto del art\'iculo se estructura como sigue. La Secci\'on II describe el dataset y la metodolog\'ia. La Secci\'on III presenta los resultados experimentales y su discusi\'on. La Secci\'on IV resume las conclusiones y delinea el trabajo futuro.
+
+%==============================================================================
+% II. MATERIALES Y MÉTODOS
+%==============================================================================
+\section{Materiales y M\'etodos}
+
+\subsection{Materiales}
+
+\subsubsection{Dataset}
+Se utiliz\'o el corpus p\'ublico \emph{Mammography reporting dataset with BI-RADS system} \cite{vazquez2025}, disponible en Zenodo (DOI 10.5281/zenodo.14827680). El corpus contiene 4\,357 informes mamogr\'aficos reales en espa\~nol, anonimizados, con etiqueta BI-RADS 0--6 y campo \texttt{Recommendations} con la conducta cl\'inica sugerida.
+
+La distribuci\'on de etiquetas est\'a marcadamente desbalanceada: BI-RADS 2 concentra 2\,635 informes (60,5\%), seguido de BI-RADS 0 (967, 22,2\%) y BI-RADS 1 (596, 13,7\%). Las clases cl\'inicamente cr\'iticas son minoritarias: BI-RADS 4 (52 informes, 1,2\%), BI-RADS 3 (87, 2,0\%), BI-RADS 5 (16, 0,4\%) y BI-RADS 6 (5, 0,1\%). Este desbalance motiv\'o el uso de Macro F1 como m\'etrica principal y la aplicaci\'on de aumentaci\'on textual durante el entrenamiento del modelo Transformer.
+
+\subsubsection{Modelo Transformer}
+Se utiliz\'o DistilBETO (\texttt{dccuchile/distilbert-base-spanish-uncased}) \cite{canete2020} como modelo base, fine-tuneado sobre el corpus de entrenamiento con tres \'epocas, batch size 8, learning rate $2\times10^{-5}$, y aumentaci\'on textual sobre clases minoritarias mediante diccionarios de sin\'onimos cl\'inicos. El modelo seleccionado correspondi\'o al \emph{best model checkpoint} (step 1\,743) identificado autom\'aticamente por HuggingFace Trainer seg\'un Macro F1 de validaci\'on, alcanzando F1 macro de 0,9386 sobre el conjunto de prueba estratificado (872 informes).
+
+\subsubsection{Tabla normativa BI-RADS/ACR}
+Se construy\'o una formalizaci\'on computacional del Atlas BI-RADS de la American College of Radiology \cite{acr2013} adaptada al lenguaje cl\'inico chileno. La tabla mapea cada categor\'ia BI-RADS (0--6) a una jerarqu\'ia de recomendaciones esperadas, equivalentes aceptables, y subcategor\'ias de notificaci\'on suave. Por ejemplo, BI-RADS 4 acepta como recomendaci\'on esperada \emph{biopsia hist\'ologica}, con \emph{derivaci\'on oncol\'ogica} como equivalente cl\'inicamente aceptable. La construcci\'on de esta tabla fue validada cl\'inicamente por el autor.
+
+\subsection{M\'etodos}
+El sistema se organiza como un pipeline secuencial de cuatro m\'odulos independientes y auditables, dise\~nados bajo una filosof\'ia de \emph{Human-on-the-Loop}: el sistema detecta inconsistencias pero no decide la conducta cl\'inica.
+
+\subsubsection{M\'odulo 1: Extractor de BI-RADS (\codename{extractor\_birads.py})}
+Implementa una jerarqu\'ia de tres patrones regex sobre el bloque de conclusi\'on del informe: (i) patr\'on estricto para formato can\'onico \emph{BI-RADS X}; (ii) patr\'on con tolerancia a tipograf\'ias (\emph{BR-X, Categor\'ia X, BI-RADS$^\circledR$ X}, n\'umeros romanos, palabras); (iii) fallback de menciones adicionales en el cuerpo del informe. Cada extracci\'on se etiqueta con un nivel de confianza (alta/media/baja) seg\'un la fuente y el patr\'on utilizado, permitiendo a m\'odulos posteriores ponderar la informaci\'on.
+
+\subsubsection{M\'odulo 2: Extractor de recomendaciones (\codename{extractor\_recomendacion.py})}
+Aplica una arquitectura de tres capas: (i) \emph{normalizador} que segmenta el bloque de recomendaciones y elimina ruido tipogr\'afico; (ii) \emph{clasificador por reglas cl\'inicas} basado en un vocabulario validado de ocho categor\'ias cl\'inicamente jerarquizadas (biopsia hist\'ologica $\rightarrow$ derivaci\'on oncol\'ogica $\rightarrow$ estudio complementario imagen $\rightarrow$ correlaci\'on ecogr\'afica $\rightarrow$ comparaci\'on con estudios previos $\rightarrow$ control a corto plazo $\rightarrow$ control anual $\rightarrow$ criterio m\'edico); (iii) \emph{fallback sem\'antico} basado en similitud TF-IDF con umbral 0,55 para casos no cubiertos por las reglas. Esta arquitectura logra cobertura completa del corpus.
+
+\subsubsection{M\'odulo 3: Motor de cotejo BI-RADS/ACR (\codename{cotejo\_acr.py})}
+Contrasta la categor\'ia BI-RADS extra\'ida y la recomendaci\'on clasificada contra la tabla normativa. El motor distingue tres tipos de resultado: (i) \emph{coherente}, cuando la recomendaci\'on coincide con la esperada o con un equivalente aceptable; (ii) \emph{coherente con precauci\'on}, cuando se detecta una notificaci\'on suave (por ejemplo, BI-RADS 2 con control a corto plazo); (iii) \emph{alerta cr\'itica}, cuando la recomendaci\'on contradice el est\'andar (por ejemplo, BI-RADS 5 con control anual). Cada salida incluye trazabilidad expl\'icita de la regla aplicada, garantizando auditabilidad cl\'inica.
+
+\subsubsection{M\'odulo 4: Verificador secundario ML (\codename{verificador\_birads\_ml.py})}
+Implementa una segunda se\~nal independiente para validar la calidad t\'ecnica de la extracci\'on regex del m\'odulo 1. DistilBETO se aplica \emph{solo sobre el bloque de conclusi\'on} (no sobre el informe completo) para garantizar especificidad: el modelo y la regex evaluan el mismo texto, de modo que cualquier discrepancia es atribuible a la extracci\'on y no al razonamiento cl\'inico.
+
+La l\'ogica de verificaci\'on implementa una jerarqu\'ia de fuentes que prioriza la regex cuando es de alta confianza (asumiendo que el radi\'ologo es la autoridad cl\'inica), reservando la voz del ML para casos donde la regex no est\'a segura. Cinco estados de verificaci\'on son posibles:
+\begin{itemize}
+    \item \texttt{confirmado}: regex alta y ML coincide.
+    \item \texttt{confirmado\_doble}: regex media/baja y ML confirma (validaci\'on cruzada).
+    \item \texttt{ml\_no\_confirma}: regex alta y ML discrepa (se prioriza regex sin alerta).
+    \item \texttt{discrepante\_real}: regex media/baja y ML discrepa con alta confianza (revisi\'on manual).
+    \item \texttt{ml\_inseguro}: ML sin confianza suficiente.
+\end{itemize}
+Esta jerarqu\'ia reduce sustancialmente las alertas espurias de discrepancia respecto de un esquema sim\'etrico que tratase ambas fuentes como equivalentes.
+
+\subsection{Arquitectura del pipeline}
+La Figura~1 (referenciada al final del documento) ilustra el flujo del sistema. Un informe textual ingresa al pipeline, atraviesa los cuatro m\'odulos en secuencia, y produce una salida estructurada con campos: \texttt{birads\_extraido}, \texttt{confianza\_extraccion}, \texttt{recomendacion\_clasificada}, \texttt{recomendacion\_esperada}, \texttt{estado\_cotejo}, \texttt{verificacion\_ml}, \texttt{mensaje\_explicativo}, y \texttt{regla\_aplicada}. Cada uno de estos campos es accesible para auditor\'ia, en cumplimiento de la filosof\'ia de Human-on-the-Loop.
+
+\subsection{M\'etricas de evaluaci\'on}
+La evaluaci\'on se realiz\'o sobre el corpus completo (4\,357 informes) utilizando: (i) \emph{accuracy} y \emph{Macro F1} para la extracci\'on de BI-RADS y para la predicci\'on del modelo ML; (ii) \emph{cobertura} (\% de informes con recomendaci\'on clasificada) para el m\'odulo 2; (iii) \emph{tasa de alertas cl\'inicas} (\% del corpus que genera alerta) como indicador de fatiga de alertas; (iv) \emph{tasa de coincidencia regex-ML} como m\'etrica de robustez de la extracci\'on; (v) \emph{distribuci\'on de estados de verificaci\'on} del m\'odulo 4.
+
+\subsection{Implementaci\'on}
+El sistema se implement\'o en Python 3.9, con \texttt{transformers 4.57.6}, \texttt{torch 2.8.0}, y \texttt{scikit-learn 1.6.1}. La aceleraci\'on por hardware utiliz\'o Metal Performance Shaders (MPS) de Apple Silicon. El c\'odigo es p\'ublico bajo el repositorio \texttt{proyecto-ia-mamografia}\footnote{\url{https://github.com/SebasDCIS/proyecto-ia-mamografia}}, organizado en m\'odulos \texttt{src/} con tests inline y notebooks de exploraci\'on \texttt{notebooks/05} a \texttt{08}. La reproducibilidad est\'a garantizada mediante \texttt{requirements.txt} y semillas fijas en los splits estratificados.
+
+%==============================================================================
+% III. RESULTADOS Y DISCUSIÓN
+%==============================================================================
+\section{Resultados y Discusi\'on}
+
+\subsection{M\'etricas de desempe\~no}
+[PENDIENTE: completar en pr\'oxima sesi\'on con los resultados detallados de los cuatro m\'odulos: extracci\'on BI-RADS Macro F1 0,9995; clasificaci\'on de recomendaciones cobertura completa; cotejo ACR con 1,3\% de alertas cl\'inicas; verificaci\'on dual con 96,4\% confirmados, 3,0\% confirmaci\'on cruzada, 0,6\% sin confirmaci\'on de ML, 0,07\% discrepancias reales.]
+
+\subsection{Estudio descriptivo de los datos}
+[PENDIENTE: completar con las tres figuras del an\'alisis exploratorio: distribuci\'on de etiquetas BI-RADS, ranking de modelos por Macro F1, matriz de confusi\'on de DistilBETO.]
+
+\subsection{An\'alisis de resultados del pipeline}
+[PENDIENTE: completar con tabla de distribuci\'on de estados de verificaci\'on, an\'alisis de los 17 casos discrepantes, y discusi\'on del trade-off de aplicar DistilBETO solo sobre la conclusi\'on (F1 cae de 0,9386 a 0,8987).]
+
+%==============================================================================
+% IV. CONCLUSIONES
+%==============================================================================
+\section{Conclusiones}
+[PENDIENTE: completar en pr\'oxima sesi\'on con las principales conclusiones del trabajo, enfatizando: (i) la viabilidad del enfoque h\'ibrido regex+ML para auditor\'ia t\'ecnica de informes cl\'inicos; (ii) el aporte de la tabla normativa BI-RADS/ACR formalizada; (iii) la baja tasa de alertas espurias (0,07\% requieren revisi\'on manual); (iv) las limitaciones del verificador ML sobre clases minoritarias; (v) el cumplimiento de Ley 19.628 mediante ejecuci\'on local; y (vi) los trabajos futuros: validaci\'on cl\'inica formal con radi\'ologos, generalizaci\'on a otros corpus, integraci\'on con sistemas RIS/PACS, extensi\'on a ecograf\'ia mamaria.]
+
+%==============================================================================
+% REFERENCIAS
+%==============================================================================
+\begin{thebibliography}{99}
+
+\bibitem{deis2024}
+DEIS --- Ministerio de Salud de Chile,
+\emph{Defunciones por tumores malignos seg\'un sexo, Chile}, 2024.
+
+\bibitem{sippo2013}
+D. A. Sippo, G. I. Warden, K. P. Andriole, R. Lacson, I. Ikuta, R. L. Birdwell, y R. Khorasani,
+``Automated Extraction of BI-RADS Final Assessment Categories from Radiology Reports with Natural Language Processing,''
+\emph{Journal of Digital Imaging}, vol. 26, no. 5, pp. 989--994, 2013.
+DOI: 10.1007/s10278-013-9616-5.
+
+\bibitem{kuling2022}
+G. Kuling, B. Curpen, y A. L. Martel,
+``BI-RADS BERT and Using Section Segmentation to Understand Radiology Reports,''
+\emph{Journal of Imaging}, vol. 8, no. 5, pp. 131, 2022.
+DOI: 10.3390/jimaging8050131.
+
+\bibitem{lopez2024}
+P. L\'opez-\'Ubeda, T. Mart\'in-Noguerol, y A. Luna,
+``Automatic classification and prioritisation of actionable BI-RADS categories using natural language processing models,''
+\emph{Clinical Radiology}, vol. 79, pp. e1--e7, 2024.
+DOI: 10.1016/j.crad.2023.09.009.
+
+\bibitem{vazquez2025}
+J. L. V\'azquez Noguera, A. Torres-Hurtado, H. G\'omez-Adorno, J. C. Mello-Rom\'an, E. J. Fleitas-Alvarez, F. F. E. Schulze, M. Garcia-Torres, C. D. M. Gaona, P. E. G. Sotomayor, S. V. Noguera, N. E. Z. Amarilla, y O. W. G. Esquivel,
+``Mammography reporting dataset with BI-RADS system for natural language processing applications: Addressing public data gaps in Spanish,''
+\emph{Data in Brief}, vol. 61, pp. 111761, 2025.
+DOI: 10.1016/j.dib.2025.111761.
+
+\bibitem{canete2020}
+J. Ca\~nete, G. Chaperon, R. Fuentes, J. H. Ho, H. Kang, y J. P\'erez,
+``Spanish Pre-Trained BERT Model and Evaluation Data,''
+\emph{PML4DC at ICLR 2020}.
+
+\bibitem{acr2013}
+American College of Radiology,
+\emph{BI-RADS\textsuperscript{\textregistered} Atlas --- Breast Imaging Reporting and Data System},
+5\textsuperscript{a} ed., 2013.
+
+\bibitem{ley19628}
+Congreso Nacional de Chile,
+\emph{Ley N.\textsuperscript{o} 19.628 sobre Protecci\'on de la Vida Privada},
+1999.
+
+\bibitem{sanh2019}
+V. Sanh, L. Debut, J. Chaumond, y T. Wolf,
+``DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter,''
+\emph{arXiv preprint arXiv:1910.01108}, 2019.
+
+\end{thebibliography}
+
+\end{document}

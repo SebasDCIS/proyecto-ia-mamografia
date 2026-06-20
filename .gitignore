@@ -71,3 +71,9 @@ output.png
 
 # Audit logs generados por src/cotejo_acr.py (outputs regenerables del nb07)
 notebooks/anexos/audit_logs/*.json
+
+# Backups locales del proyecto
+src/cotejo_acr_backup_*.py
+
+# Archivos comprimidos del informe (solo para Overleaf)
+informe_v8/*.zip
