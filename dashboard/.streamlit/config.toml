@@ -1,0 +1,17 @@
+[browser]
+# Desactivar telemetría anónima de Streamlit por privacidad
+# Apropiado para herramienta médica que procesa datos clínicos
+gatherUsageStats = false
+
+[server]
+# Permitir que el dashboard sea accesible desde la red local
+headless = false
+
+[theme]
+# Tema claro (más legible para informes clínicos)
+base = "light"
+primaryColor = "#185FA5"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F8F9FA"
+textColor = "#262730"
+font = "sans serif"
