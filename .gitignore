@@ -77,3 +77,10 @@ src/cotejo_acr_backup_*.py
 
 # Archivos comprimidos del informe (solo para Overleaf)
 informe_v8/*.zip
+
+# Backups locales del informe LaTeX
+informe_v8/*_backup.tex
+informe_v8/*.aux
+informe_v8/*.log
+informe_v8/*.out
+informe_v8/*.synctex.gz

@@ -1,22 +1,16 @@
 %==============================================================================
-% INFORME PARCIAL BME513 v8
-% Sistema local de auditoría técnica de informes mamográficos en español mediante NLP
-% Autor: Sebastián Inostroza Hurtado · Dr. Alejandro Veloz Baeza
+% INFORME PARCIAL BME513 v8 (v8.1 - métricas CV honestas)
+% Sistema local de auditoría técnica de informes mamográficos en español
+% Autores: Sebastián Inostroza Hurtado · Dr. Alejandro Veloz Baeza
 % Universidad de Valparaíso, Junio 2026
-%
-% Plantilla basada en el formato de manuscrito para la Jornada de Ciencia de Datos
-% de la Universidad de Valparaíso, 2026.
 %==============================================================================
 
 \documentclass[10pt,journal,a4paper]{IEEEtran}
 
-% --- Codificación e idioma ---------------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[spanish,es-tabla,es-noindentfirst]{babel}
 \usepackage{microtype}
-
-% --- Paquetes adicionales ---------------------------------------------------
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
@@ -29,7 +23,6 @@
 \usepackage{listings}
 \usepackage{textcomp}
 
-% --- Hyperref configuración ---------------------------------------------------
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -39,16 +32,14 @@
     pdfauthor={Sebastián Inostroza, Alejandro Veloz}
 }
 
-% --- Comandos personalizados -------------------------------------------------
 \newcommand{\birads}[1]{BI-RADS~#1}
 \newcommand{\codename}[1]{\texttt{#1}}
 
-% --- Información del manuscrito ----------------------------------------------
 \title{Sistema local de auditor\'ia t\'ecnica de informes mamogr\'aficos en espa\~nol mediante NLP: verificaci\'on dual de coherencia entre BI-RADS y recomendaci\'on cl\'inica}
 
 \author{
     Sebasti\'an Inostroza Hurtado\textsuperscript{1}, y Alejandro Veloz Baeza\textsuperscript{2}
-    \thanks{\textsuperscript{1}Doctorado en Ciencias e Ingenier\'ia para la Salud, Universidad de Valpara\'iso, Valpara\'iso, Chile. (e-mail: sebastian.inostroza@postgrado.uv.cl)}
+    \thanks{\textsuperscript{1}Estudiante de Doctorado, Doctorado en Ciencias e Ingenier\'ia para la Salud, Universidad de Valpara\'iso, Valpara\'iso, Chile. (e-mail: sebastian.inostroza@postgrado.uv.cl)}
     \thanks{\textsuperscript{2}Profesor responsable del curso BME513 - Inteligencia Artificial en Salud, Universidad de Valpara\'iso, Valpara\'iso, Chile. (e-mail: alejandro.veloz@uv.cl)}
 }
 
@@ -58,20 +49,14 @@
 
 \maketitle
 
-%==============================================================================
-% ABSTRACT
-%==============================================================================
 \begin{abstract}
-El c\'ancer de mama es la principal causa de mortalidad oncol\'ogica femenina en Chile. La informaci\'on cr\'itica de los informes mamogr\'aficos --categor\'ia BI-RADS y recomendaci\'on cl\'inica-- queda habitualmente atrapada como texto libre, dificultando su explotaci\'on por sistemas administrativos y la detecci\'on autom\'atica de inconsistencias entre el diagn\'ostico y la conducta sugerida. Este trabajo presenta un sistema de procesamiento de lenguaje natural ejecutable localmente que audita t\'ecnicamente la coherencia interna de los informes mamogr\'aficos en espa\~nol, contrastando la categor\'ia BI-RADS declarada por el radi\'ologo con la recomendaci\'on cl\'inica emitida bajo el est\'andar BI-RADS/ACR. El pipeline integra cuatro m\'odulos: (i) un extractor regex de categor\'ia BI-RADS con tolerancia a variaciones tipogr\'aficas, (ii) un extractor de recomendaciones con tres capas de procesamiento (normalizaci\'on, reglas cl\'inicas, similitud sem\'antica TF-IDF), (iii) un motor de cotejo contra la tabla normativa ACR adaptada al lenguaje cl\'inico chileno, y (iv) un verificador secundario basado en DistilBETO que valida cruzadamente la extracci\'on. Evaluado sobre 4\,357 informes en espa\~nol, el sistema alcanz\'o Macro F1 de 0,9995 en extracci\'on BI-RADS y gener\'o solo 1,3\% de alertas cl\'inicas, evidenciando bajo nivel de fatiga de alertas. La ejecuci\'on local garantiza el cumplimiento de la Ley N.\textsuperscript{o}~19.628 sobre protecci\'on de datos personales. El sistema aporta una herramienta interpretable y auditable de control de calidad para programas de tamizaje mamogr\'afico.
+El c\'ancer de mama es la principal causa de mortalidad oncol\'ogica femenina en Chile. La informaci\'on cr\'itica de los informes mamogr\'aficos --categor\'ia BI-RADS y recomendaci\'on cl\'inica-- queda habitualmente atrapada como texto libre, dificultando su explotaci\'on por sistemas administrativos y la detecci\'on autom\'atica de inconsistencias entre el diagn\'ostico y la conducta sugerida. Este trabajo presenta un sistema de procesamiento de lenguaje natural ejecutable localmente que audita t\'ecnicamente la coherencia interna de los informes mamogr\'aficos en espa\~nol, contrastando la categor\'ia BI-RADS declarada por el radi\'ologo con la recomendaci\'on cl\'inica emitida bajo el est\'andar BI-RADS/ACR. El pipeline integra cuatro m\'odulos: (i) un extractor regex de categor\'ia BI-RADS con tolerancia a variaciones tipogr\'aficas, (ii) un extractor de recomendaciones con tres capas de procesamiento (normalizaci\'on, reglas cl\'inicas, similitud sem\'antica TF-IDF), (iii) un motor de cotejo contra una tabla normativa BI-RADS/ACR dise\~nada desde la pr\'actica cl\'inica chilena, y (iv) un verificador secundario basado en DistilBETO fine-tuneado que valida cruzadamente la extracci\'on. Evaluado sobre 4\,357 informes en espa\~nol de un corpus latinoamericano p\'ublico, el sistema alcanz\'o Macro F1 de 0,9995 en extracci\'on BI-RADS por reglas y Macro F1 de 0,8877 $\pm$ 0,0501 para DistilBETO bajo validaci\'on cruzada estratificada 5-fold (m\'etrica robusta libre del sesgo de selecci\'on de checkpoint). El sistema gener\'o solo 1,33\% de alertas cl\'inicas, evidenciando bajo nivel de fatiga de alertas. La ejecuci\'on local garantiza el cumplimiento de la Ley N.\textsuperscript{o}~19.628 sobre protecci\'on de datos personales en el contexto de despliegue chileno previsto. El sistema aporta una herramienta interpretable y auditable de control de calidad para programas de tamizaje mamogr\'afico.
 \end{abstract}
 
 \begin{IEEEkeywords}
 NLP cl\'inico, BI-RADS, informes mamogr\'aficos, auditor\'ia t\'ecnica, DistilBETO, espa\~nol cl\'inico, salud digital.
 \end{IEEEkeywords}
 
-%==============================================================================
-% I. INTRODUCCIÓN
-%==============================================================================
 \section{Introducci\'on}
 \IEEEPARstart{E}{l} c\'ancer de mama es la primera causa de mortalidad por tumores malignos en mujeres en Chile, con tasas que han mostrado un crecimiento sostenido en la \'ultima d\'ecada \cite{deis2024}. El tamizaje mamogr\'afico constituye la principal estrategia poblacional de detecci\'on temprana, y la calidad del informe radiol\'ogico --particularmente la categor\'ia BI-RADS asignada y la recomendaci\'on cl\'inica emitida-- determina directamente la conducta de seguimiento. Garantizar la coherencia interna entre estos dos elementos es, por tanto, una preocupaci\'on cl\'inica de primer orden.
 
@@ -79,31 +64,34 @@ En la pr\'actica asistencial, los informes mamogr\'aficos se generan como texto 
 
 El procesamiento de lenguaje natural (NLP) aplicado a informes radiol\'ogicos ha sido investigado principalmente en ingl\'es. Sippo et al. \cite{sippo2013} demostraron la viabilidad de la extracci\'on regex de categor\'ias BI-RADS con recall del 100\% y precisi\'on del 96,6\%; Kuling et al. \cite{kuling2022} desarrollaron BI-RADS BERT con segmentaci\'on de secciones logrando 98\% de acierto en clasificaci\'on de secciones. En espa\~nol, L\'opez-\'Ubeda et al. \cite{lopez2024} reportaron Macro F1 de 0,74 utilizando BETO sobre corpus espa\~nol peninsular para clasificaci\'on de BI-RADS. Sin embargo, la mayor\'ia de los trabajos publicados abordan la \emph{predicci\'on} de la categor\'ia BI-RADS desde el texto, no la \emph{auditor\'ia} de su coherencia con la conducta cl\'inica recomendada.
 
-El problema espec\'ifico que motiva este trabajo es distinto: dado un informe ya emitido por un radi\'ologo, verificar autom\'aticamente si la categor\'ia BI-RADS declarada y la recomendaci\'on cl\'inica son coherentes seg\'un el est\'andar BI-RADS/ACR \cite{acr2013}. Esto se enmarca dentro de un programa m\'as amplio de auditor\'ia de informes mamogr\'aficos; en una l\'inea complementaria, el autor desarrolla en paralelo, dentro de otro curso, trabajo sobre auditor\'ia de coherencia diagn\'ostica, que aborda problemas relacionados desde otra perspectiva metodol\'ogica.
+El problema espec\'ifico que motiva este trabajo es distinto: dado un informe ya emitido por un radi\'ologo, verificar autom\'aticamente si la categor\'ia BI-RADS declarada y la recomendaci\'on cl\'inica son coherentes seg\'un el est\'andar BI-RADS/ACR \cite{acr2013}. Esto se enmarca dentro de un programa m\'as amplio de auditor\'ia de informes mamogr\'aficos; en una l\'inea complementaria, el autor desarrolla en paralelo, dentro de otro curso, trabajo sobre auditor\'ia de coherencia diagn\'ostica.
 
-Este art\'iculo presenta el dise\~no, implementaci\'on y validaci\'on de un sistema local de auditor\'ia t\'ecnica de informes mamogr\'aficos en espa\~nol. La propuesta integra cuatro m\'odulos: (i) un extractor de categor\'ia BI-RADS basado en reglas robusto a variaciones tipogr\'aficas, (ii) un extractor de recomendaciones que combina normalizaci\'on, reglas cl\'inicas y similitud sem\'antica, (iii) un motor de cotejo contra una tabla normativa BI-RADS/ACR adaptada al lenguaje cl\'inico chileno, y (iv) un verificador secundario basado en DistilBETO fine-tuneado que valida cruzadamente la extracci\'on. Toda la ejecuci\'on es local, garantizando cumplimiento de la Ley N.\textsuperscript{o}~19.628 sobre protecci\'on de datos personales \cite{ley19628}.
+Este art\'iculo presenta el dise\~no, implementaci\'on y validaci\'on de un sistema local de auditor\'ia t\'ecnica de informes mamogr\'aficos en espa\~nol. La propuesta integra cuatro m\'odulos: (i) un extractor de categor\'ia BI-RADS basado en reglas robusto a variaciones tipogr\'aficas, (ii) un extractor de recomendaciones que combina normalizaci\'on, reglas cl\'inicas y similitud sem\'antica, (iii) un motor de cotejo contra una tabla normativa BI-RADS/ACR dise\~nada desde la pr\'actica cl\'inica chilena, y (iv) un verificador secundario basado en DistilBETO fine-tuneado que valida cruzadamente la extracci\'on. Toda la ejecuci\'on es local, garantizando cumplimiento de la Ley N.\textsuperscript{o}~19.628 sobre protecci\'on de datos personales en el contexto chileno previsto para su despliegue \cite{ley19628}.
 
-Las contribuciones principales son: (i) la formalizaci\'on computacional de una tabla normativa BI-RADS/ACR adaptada al lenguaje cl\'inico chileno; (ii) una arquitectura h\'ibrida regex-ML interpretable que reduce la fatiga de alertas (1,3\% del corpus genera alerta cl\'inica) sin sacrificar sensibilidad; (iii) un verificador dual basado en regex priorit\'aria y DistilBETO secundario, que reduce las discrepancias t\'ecnicas espurias en un 82\%; y (iv) la evaluaci\'on emp\'irica sobre un corpus p\'ublico de 4\,357 informes en espa\~nol \cite{vazquez2025}.
+Las contribuciones principales son: (i) la formalizaci\'on computacional de una tabla normativa BI-RADS/ACR dise\~nada desde la pr\'actica cl\'inica chilena y aplicable a informes mamogr\'aficos en espa\~nol gracias a la uniformidad regional del lenguaje cl\'inico-radiol\'ogico; (ii) una arquitectura h\'ibrida regex-ML interpretable que reduce la fatiga de alertas (1,33\% del corpus genera alerta cl\'inica) sin sacrificar sensibilidad; (iii) un verificador dual basado en regex priorit\'aria y DistilBETO secundario, que reduce las discrepancias t\'ecnicas espurias en un 82\%; y (iv) la evaluaci\'on emp\'irica sobre un corpus p\'ublico de 4\,357 informes en espa\~nol \cite{vazquez2025}, validada mediante validaci\'on cruzada estratificada para reportar m\'etricas honestas y libres del sesgo de selecci\'on de checkpoint.
 
 El resto del art\'iculo se estructura como sigue. La Secci\'on II describe el dataset y la metodolog\'ia. La Secci\'on III presenta los resultados experimentales y su discusi\'on. La Secci\'on IV resume las conclusiones y delinea el trabajo futuro.
 
-%==============================================================================
-% II. MATERIALES Y MÉTODOS
-%==============================================================================
 \section{Materiales y M\'etodos}
 
 \subsection{Materiales}
 
 \subsubsection{Dataset}
-Se utiliz\'o el corpus p\'ublico \emph{Mammography reporting dataset with BI-RADS system} \cite{vazquez2025}, disponible en Zenodo (DOI 10.5281/zenodo.14827680). El corpus contiene 4\,357 informes mamogr\'aficos reales en espa\~nol, anonimizados, con etiqueta BI-RADS 0--6 y campo \texttt{Recommendations} con la conducta cl\'inica sugerida.
+Se utiliz\'o el corpus p\'ublico \emph{Mammography reporting dataset with BI-RADS system} \cite{vazquez2025}, disponible en Zenodo (DOI 10.5281/zenodo.14827680). El corpus contiene 4\,357 informes mamogr\'aficos reales en espa\~nol, anonimizados, provenientes de un centro asistencial paraguayo y emitidos entre 2019 y 2024, con etiqueta BI-RADS 0--6 y campo \texttt{Recommendations} con la conducta cl\'inica sugerida.
+
+La elecci\'on de este corpus responde a su disponibilidad p\'ublica y volumen sustancial, en ausencia de datasets chilenos abiertos comparables al momento de este trabajo. Esta decisi\'on prioriza la reproducibilidad de los resultados sin sacrificar relevancia cl\'inica: el espa\~nol cl\'inico-radiol\'ogico exhibe una alta uniformidad regional debido a la adopci\'on internacional del est\'andar BI-RADS/ACR, por lo que los patrones ling\"u\'isticos y categorizaciones identificados son razonablemente extrapolables a otros contextos hispanohablantes, incluidos los chilenos. El refinamiento espec\'ifico del sistema sobre informes mamogr\'aficos chilenos, mediante validaci\'on con radi\'ologos locales, queda identificado como trabajo futuro.
 
 La distribuci\'on de etiquetas est\'a marcadamente desbalanceada: BI-RADS 2 concentra 2\,635 informes (60,5\%), seguido de BI-RADS 0 (967, 22,2\%) y BI-RADS 1 (596, 13,7\%). Las clases cl\'inicamente cr\'iticas son minoritarias: BI-RADS 4 (52 informes, 1,2\%), BI-RADS 3 (87, 2,0\%), BI-RADS 5 (16, 0,4\%) y BI-RADS 6 (5, 0,1\%). Este desbalance motiv\'o el uso de Macro F1 como m\'etrica principal y la aplicaci\'on de aumentaci\'on textual durante el entrenamiento del modelo Transformer.
 
-\subsubsection{Modelo Transformer}
-Se utiliz\'o DistilBETO (\texttt{dccuchile/distilbert-base-spanish-uncased}) \cite{canete2020} como modelo base, fine-tuneado sobre el corpus de entrenamiento con tres \'epocas, batch size 8, learning rate $2\times10^{-5}$, y aumentaci\'on textual sobre clases minoritarias mediante diccionarios de sin\'onimos cl\'inicos. El modelo seleccionado correspondi\'o al \emph{best model checkpoint} (step 1\,743) identificado autom\'aticamente por HuggingFace Trainer seg\'un Macro F1 de validaci\'on, alcanzando F1 macro de 0,9386 sobre el conjunto de prueba estratificado (872 informes).
+\subsubsection{Modelo Transformer y protocolo de evaluaci\'on}
+Se utiliz\'o DistilBETO (\texttt{dccuchile/distilbert-base-spanish-uncased}) \cite{canete2020} como modelo base, fine-tuneado sobre el corpus de entrenamiento con tres \'epocas, batch size 8, learning rate $2\times10^{-5}$, y aumentaci\'on textual sobre clases minoritarias mediante diccionarios de sin\'onimos cl\'inicos. La elecci\'on de DistilBETO sobre alternativas como BETO completo o XLM-RoBERTa se justifica por su menor huella computacional (\textasciitilde 250 MB), su entrenamiento espec\'ifico en espa\~nol y la disponibilidad de aceleraci\'on local mediante Metal Performance Shaders (MPS) de Apple Silicon.
+
+Bajo un split estratificado 80/20 \'unico, el modelo seleccionado por HuggingFace Trainer mediante \texttt{load\_best\_model\_at\_end=True} con \texttt{metric\_for\_best\_model="macro\_f1"} (step 1\,743) alcanz\'o Macro F1 = 0,9386 sobre el conjunto de prueba (872 informes). Sin embargo, dado que este esquema utiliza el mismo conjunto de prueba para la selecci\'on de checkpoint y para la evaluaci\'on final, la m\'etrica resultante puede estar ligeramente optimizada. Para obtener una evaluaci\'on libre de este sesgo se realiz\'o adicionalmente una validaci\'on cruzada estratificada 5-fold con \texttt{StratifiedKFold} (\texttt{random\_state=42}, \texttt{shuffle=True}) y aumentaci\'on textual aplicada \emph{por fold} (no globalmente) para evitar fuga de datos por variantes l\'exicas repartidas entre train y test del mismo fold. La m\'etrica honesta resultante es \textbf{Macro F1 = 0,8877 $\pm$ 0,0501}, que se reporta como m\'etrica oficial del clasificador BI-RADS basado en Transformer. La diferencia ($-0,0509$) respecto del split \'unico es consistente con lo esperado en evaluaciones libres de sesgo de checkpoint.
 
 \subsubsection{Tabla normativa BI-RADS/ACR}
-Se construy\'o una formalizaci\'on computacional del Atlas BI-RADS de la American College of Radiology \cite{acr2013} adaptada al lenguaje cl\'inico chileno. La tabla mapea cada categor\'ia BI-RADS (0--6) a una jerarqu\'ia de recomendaciones esperadas, equivalentes aceptables, y subcategor\'ias de notificaci\'on suave. Por ejemplo, BI-RADS 4 acepta como recomendaci\'on esperada \emph{biopsia hist\'ologica}, con \emph{derivaci\'on oncol\'ogica} como equivalente cl\'inicamente aceptable. La construcci\'on de esta tabla fue validada cl\'inicamente por el autor.
+Se construy\'o una formalizaci\'on computacional del Atlas BI-RADS de la American College of Radiology \cite{acr2013}, dise\~nada desde la pr\'actica cl\'inica chilena. La tabla mapea cada categor\'ia BI-RADS (0--6) a una jerarqu\'ia de recomendaciones esperadas, equivalentes aceptables, y subcategor\'ias de notificaci\'on suave, seg\'un el conocimiento cl\'inico del autor sobre pr\'actica radiol\'ogica nacional. Por ejemplo, BI-RADS 4 acepta como recomendaci\'on esperada \emph{biopsia hist\'ologica}, con \emph{derivaci\'on oncol\'ogica} como equivalente cl\'inicamente aceptable; BI-RADS 5, en cambio, se trata de forma estricta sin equivalentes dado su criticidad cl\'inica.
+
+Dada la uniformidad regional del lenguaje cl\'inico-radiol\'ogico hispano y la adopci\'on internacional del est\'andar BI-RADS/ACR, esta formalizaci\'on resulta aplicable al corpus utilizado, con el horizonte de refinamiento futuro mediante validaci\'on espec\'ifica con radi\'ologos chilenos sobre corpus locales.
 
 \subsection{M\'etodos}
 El sistema se organiza como un pipeline secuencial de cuatro m\'odulos independientes y auditables, dise\~nados bajo una filosof\'ia de \emph{Human-on-the-Loop}: el sistema detecta inconsistencias pero no decide la conducta cl\'inica.
@@ -118,7 +106,7 @@ Aplica una arquitectura de tres capas: (i) \emph{normalizador} que segmenta el b
 Contrasta la categor\'ia BI-RADS extra\'ida y la recomendaci\'on clasificada contra la tabla normativa. El motor distingue tres tipos de resultado: (i) \emph{coherente}, cuando la recomendaci\'on coincide con la esperada o con un equivalente aceptable; (ii) \emph{coherente con precauci\'on}, cuando se detecta una notificaci\'on suave (por ejemplo, BI-RADS 2 con control a corto plazo); (iii) \emph{alerta cr\'itica}, cuando la recomendaci\'on contradice el est\'andar (por ejemplo, BI-RADS 5 con control anual). Cada salida incluye trazabilidad expl\'icita de la regla aplicada, garantizando auditabilidad cl\'inica.
 
 \subsubsection{M\'odulo 4: Verificador secundario ML (\codename{verificador\_birads\_ml.py})}
-Implementa una segunda se\~nal independiente para validar la calidad t\'ecnica de la extracci\'on regex del m\'odulo 1. DistilBETO se aplica \emph{solo sobre el bloque de conclusi\'on} (no sobre el informe completo) para garantizar especificidad: el modelo y la regex evaluan el mismo texto, de modo que cualquier discrepancia es atribuible a la extracci\'on y no al razonamiento cl\'inico.
+Implementa una segunda se\~nal independiente para validar la calidad t\'ecnica de la extracci\'on regex del m\'odulo 1. DistilBETO se aplica \emph{solo sobre el bloque de conclusi\'on} (no sobre el informe completo) para garantizar especificidad: el modelo y la regex eval\'uan el mismo texto, de modo que cualquier discrepancia es atribuible a la extracci\'on y no al razonamiento cl\'inico.
 
 La l\'ogica de verificaci\'on implementa una jerarqu\'ia de fuentes que prioriza la regex cuando es de alta confianza (asumiendo que el radi\'ologo es la autoridad cl\'inica), reservando la voz del ML para casos donde la regex no est\'a segura. Cinco estados de verificaci\'on son posibles:
 \begin{itemize}
@@ -131,37 +119,31 @@ La l\'ogica de verificaci\'on implementa una jerarqu\'ia de fuentes que prioriza
 Esta jerarqu\'ia reduce sustancialmente las alertas espurias de discrepancia respecto de un esquema sim\'etrico que tratase ambas fuentes como equivalentes.
 
 \subsection{Arquitectura del pipeline}
-La Figura~1 (referenciada al final del documento) ilustra el flujo del sistema. Un informe textual ingresa al pipeline, atraviesa los cuatro m\'odulos en secuencia, y produce una salida estructurada con campos: \texttt{birads\_extraido}, \texttt{confianza\_extraccion}, \texttt{recomendacion\_clasificada}, \texttt{recomendacion\_esperada}, \texttt{estado\_cotejo}, \texttt{verificacion\_ml}, \texttt{mensaje\_explicativo}, y \texttt{regla\_aplicada}. Cada uno de estos campos es accesible para auditor\'ia, en cumplimiento de la filosof\'ia de Human-on-the-Loop.
+Un informe textual ingresa al pipeline, atraviesa los cuatro m\'odulos en secuencia, y produce una salida estructurada con campos: \texttt{birads\_extraido}, \texttt{confianza\_extraccion}, \texttt{recomendacion\_clasificada}, \texttt{recomendacion\_esperada}, \texttt{estado\_cotejo}, \texttt{verificacion\_ml}, \texttt{mensaje\_explicativo}, y \texttt{regla\_aplicada}. Cada uno de estos campos es accesible para auditor\'ia, en cumplimiento de la filosof\'ia de Human-on-the-Loop.
 
 \subsection{M\'etricas de evaluaci\'on}
-La evaluaci\'on se realiz\'o sobre el corpus completo (4\,357 informes) utilizando: (i) \emph{accuracy} y \emph{Macro F1} para la extracci\'on de BI-RADS y para la predicci\'on del modelo ML; (ii) \emph{cobertura} (\% de informes con recomendaci\'on clasificada) para el m\'odulo 2; (iii) \emph{tasa de alertas cl\'inicas} (\% del corpus que genera alerta) como indicador de fatiga de alertas; (iv) \emph{tasa de coincidencia regex-ML} como m\'etrica de robustez de la extracci\'on; (v) \emph{distribuci\'on de estados de verificaci\'on} del m\'odulo 4.
+La evaluaci\'on se realiz\'o sobre el corpus completo (4\,357 informes) utilizando: (i) \emph{accuracy} y \emph{Macro F1} para la extracci\'on de BI-RADS y para la predicci\'on del modelo ML, reportadas bajo split \'unico estratificado y bajo validaci\'on cruzada 5-fold estratificada; (ii) \emph{cobertura} (\% de informes con recomendaci\'on clasificada) para el m\'odulo 2; (iii) \emph{tasa de alertas cl\'inicas} (\% del corpus que genera alerta) como indicador de fatiga de alertas; (iv) \emph{tasa de coincidencia regex-ML} como m\'etrica de robustez de la extracci\'on; (v) \emph{distribuci\'on de estados de verificaci\'on} del m\'odulo 4.
 
 \subsection{Implementaci\'on}
-El sistema se implement\'o en Python 3.9, con \texttt{transformers 4.57.6}, \texttt{torch 2.8.0}, y \texttt{scikit-learn 1.6.1}. La aceleraci\'on por hardware utiliz\'o Metal Performance Shaders (MPS) de Apple Silicon. El c\'odigo es p\'ublico bajo el repositorio \texttt{proyecto-ia-mamografia}\footnote{\url{https://github.com/SebasDCIS/proyecto-ia-mamografia}}, organizado en m\'odulos \texttt{src/} con tests inline y notebooks de exploraci\'on \texttt{notebooks/05} a \texttt{08}. La reproducibilidad est\'a garantizada mediante \texttt{requirements.txt} y semillas fijas en los splits estratificados.
+El sistema se implement\'o en Python 3.9, con \texttt{transformers 4.57.6}, \texttt{torch 2.8.0}, y \texttt{scikit-learn 1.6.1}. La aceleraci\'on por hardware utiliz\'o Metal Performance Shaders (MPS) de Apple Silicon. El c\'odigo es p\'ublico bajo el repositorio \texttt{proyecto-ia-mamografia}\footnote{\url{https://github.com/SebasDCIS/proyecto-ia-mamografia}}, organizado en m\'odulos \texttt{src/} con tests inline y notebooks de exploraci\'on \texttt{notebooks/05} a \texttt{10}. La reproducibilidad est\'a garantizada mediante \texttt{requirements.txt} y semillas fijas (\texttt{numpy}, \texttt{torch}, \texttt{random}) en los splits estratificados y en cada fold de la validaci\'on cruzada.
 
-%==============================================================================
-% III. RESULTADOS Y DISCUSIÓN
-%==============================================================================
 \section{Resultados y Discusi\'on}
 
 \subsection{M\'etricas de desempe\~no}
-[PENDIENTE: completar en pr\'oxima sesi\'on con los resultados detallados de los cuatro m\'odulos: extracci\'on BI-RADS Macro F1 0,9995; clasificaci\'on de recomendaciones cobertura completa; cotejo ACR con 1,3\% de alertas cl\'inicas; verificaci\'on dual con 96,4\% confirmados, 3,0\% confirmaci\'on cruzada, 0,6\% sin confirmaci\'on de ML, 0,07\% discrepancias reales.]
+[PENDIENTE: completar en pr\'oxima sesi\'on con los resultados detallados de los cuatro m\'odulos: extracci\'on BI-RADS Macro F1 0,9995; clasificaci\'on de recomendaciones cobertura completa; cotejo ACR con 1,33\% de alertas cl\'inicas; verificaci\'on dual con 96,4\% confirmados, 3,0\% confirmaci\'on cruzada, 0,6\% sin confirmaci\'on de ML, 0,07\% discrepancias reales.]
 
 \subsection{Estudio descriptivo de los datos}
 [PENDIENTE: completar con las tres figuras del an\'alisis exploratorio: distribuci\'on de etiquetas BI-RADS, ranking de modelos por Macro F1, matriz de confusi\'on de DistilBETO.]
 
 \subsection{An\'alisis de resultados del pipeline}
-[PENDIENTE: completar con tabla de distribuci\'on de estados de verificaci\'on, an\'alisis de los 17 casos discrepantes, y discusi\'on del trade-off de aplicar DistilBETO solo sobre la conclusi\'on (F1 cae de 0,9386 a 0,8987).]
+[PENDIENTE: completar con tabla de distribuci\'on de estados de verificaci\'on, an\'alisis de los casos discrepantes, y discusi\'on de las m\'etricas honestas del Transformer: (i) split \'unico Macro F1 0,9386 (con sesgo de selecci\'on de checkpoint), (ii) \textbf{CV 5-fold Macro F1 0,8877 $\pm$ 0,0501 (m\'etrica oficial)}, (iii) F1 sobre el bloque CONCLUSI\'ON aplicado en producci\'on: 0,8987 (caracter\'istica del verificador secundario, no del clasificador en s\'i, ya que el verificador analiza solo el bloque y no el informe completo). Tambi\'en se discutir\'a el trade-off de aplicar DistilBETO solo sobre la conclusi\'on, y c\'omo la CV demuestra que la ventaja sobre LinearSVC (Macro F1 0,7369 $\pm$ 0,0703) se mantiene robusta entre folds ($+2,14\sigma$ del baseline cl\'asico).]
 
-%==============================================================================
-% IV. CONCLUSIONES
-%==============================================================================
 \section{Conclusiones}
-[PENDIENTE: completar en pr\'oxima sesi\'on con las principales conclusiones del trabajo, enfatizando: (i) la viabilidad del enfoque h\'ibrido regex+ML para auditor\'ia t\'ecnica de informes cl\'inicos; (ii) el aporte de la tabla normativa BI-RADS/ACR formalizada; (iii) la baja tasa de alertas espurias (0,07\% requieren revisi\'on manual); (iv) las limitaciones del verificador ML sobre clases minoritarias; (v) el cumplimiento de Ley 19.628 mediante ejecuci\'on local; y (vi) los trabajos futuros: validaci\'on cl\'inica formal con radi\'ologos, generalizaci\'on a otros corpus, integraci\'on con sistemas RIS/PACS, extensi\'on a ecograf\'ia mamaria.]
+[PENDIENTE: completar en pr\'oxima sesi\'on con las principales conclusiones del trabajo, enfatizando: (i) la viabilidad del enfoque h\'ibrido regex+ML para auditor\'ia t\'ecnica de informes cl\'inicos; (ii) el aporte de la tabla normativa BI-RADS/ACR formalizada; (iii) la baja tasa de alertas espurias (0,07\% requieren revisi\'on manual); (iv) las limitaciones del verificador ML sobre clases minoritarias; (v) la importancia de la validaci\'on cruzada para reportar m\'etricas honestas en proyectos de NLP cl\'inico con desbalance de clases.]
 
-%==============================================================================
-% REFERENCIAS
-%==============================================================================
+\subsection*{Trabajo futuro}
+[PENDIENTE: completar con los puntos espec\'ificos: (i) validaci\'on cl\'inica formal con radi\'ologos chilenos sobre las alertas generadas; (ii) re-evaluaci\'on del sistema sobre corpus chilenos cuando est\'en disponibles; (iii) refinamiento de la tabla normativa con retroalimentaci\'on de pr\'actica cl\'inica local; (iv) implementaci\'on de b\'usqueda sem\'antica h\'ibrida (regex amplia + ranking ML) para reducir la dependencia del verificador secundario de la presencia de bloque CONCLUSI\'ON identificable; (v) extensi\'on del pipeline a informes de ecograf\'ia mamaria; (vi) integraci\'on con sistemas RIS/PACS hospitalarios; (vii) dashboard interactivo para visualizaci\'on de alertas en flujos asistenciales (en desarrollo).]
+
 \begin{thebibliography}{99}
 
 \bibitem{deis2024}
