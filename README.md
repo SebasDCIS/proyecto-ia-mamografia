@@ -24,20 +24,27 @@ deriva a revisión (filosofía *human-on-the-loop*).
 
 ## Arquitectura
 
-Pipeline híbrido: reglas transparentes como vía primaria, IA como respaldo.
+Pipeline de reglas transparentes, con IA solo en el módulo donde la evidencia
+respalda su uso.
 
 ```
-Informe → M0 Limpieza → M1 BI-RADS (regex+híbrido) → M2 Recomendación (reglas+sinónimos)
+Informe → M0 Limpieza → M1 BI-RADS (solo reglas) → M2 Recomendación (reglas+sinónimos)
                               │                              │
-                          Apoyo ML                      Respaldo NER
-                        (DistilBETO)                   (DistilBETO)
+                        Sin IA: el ML                   Respaldo NER
+                       no aportó (medido)               (DistilBETO)
                               └──────────────┬───────────────┘
                                     M3 Cotejo ACR → coherente / alerta / revisión
 ```
 
+El **M1 opera solo con reglas** (búsqueda híbrida en 4 fases, Macro F1 = 0,9995).
+Se entrenó un verificador DistilBETO para contrastarlo y se retiró tras medir que
+no aporta; el detalle está más abajo y en [`docs/BITACORA.md`](docs/BITACORA.md).
+
 Tres capas de flexibilidad léxica, cada una en su rol:
 
-- **Typos** (Damerau-Levenshtein): errores de tipeo en los verbos gatillo.
+- **Typos** (Damerau-Levenshtein): errores de tipeo en los verbos gatillo del M2,
+  y en el token `birads` del M1. Nunca sobre los dígitos: `BI-RADS 2` y `BI-RADS 5`
+  están a distancia 1 y significan cosas opuestas.
 - **Sinónimos clínicos**: términos equivalentes (ultrasonido≈ecografía,
   seguimiento≈control, BACAF≈biopsia) normalizados antes de clasificar.
 - **NER** (DistilBETO): localiza la recomendación en redacciones no vistas
@@ -47,24 +54,31 @@ Tres capas de flexibilidad léxica, cada una en su rol:
 
 ```
 src/
-  extractor_birads.py         Extracción de la categoría BI-RADS
-  buscador_birads.py          Búsqueda híbrida (informes sin encabezado)
-  extractor_recomendacion.py  Extracción y clasificación por reglas
-  extractor_ner.py            Extractor NER de respaldo (DistilBETO)
-  cotejo_acr.py               Motor de cotejo BI-RADS/ACR
-  buscador_birads.py          Búsqueda híbrida del BI-RADS en 4 fases (la vía en uso)
-  proto_typos_birads.py       Tolerancia a errores de tipeo en el token BI-RADS
-  verificador_birads_ml.py    Verificador DistilBETO. DESACTIVADO: se midió que no
-                              aporta sobre la vía reglada (ver docs/BITACORA.md)
+  buscador_birads.py          M1: búsqueda híbrida del BI-RADS en 4 fases (la vía en uso)
+  extractor_birads.py         M1: versión previa, dependía del encabezado CONCLUSIÓN
+  proto_typos_birads.py       M1: tolerancia a typos en el token BI-RADS (prototipo)
+  extractor_recomendacion.py  M2: extracción y clasificación por reglas (TF-IDF)
+  extractor_ner.py            M2: extractor NER de respaldo (DistilBETO)
+  cotejo_acr.py               M3: motor de cotejo BI-RADS/ACR
+  verificador_birads_ml.py    M4: DESACTIVADO. Se midió que no aporta sobre la vía
+                              reglada; se conserva con su evaluación (ver BITACORA)
   predict.py                  Orquestación del pipeline end-to-end
   recursos/
     vocabulario_clinico.py    Categorías, patrones, typos, sinónimos
-    limpieza_informe.py       Limpieza de descargo/firma/datos del paciente
+    limpieza_informe.py       M0: limpieza de descargo/firma/datos del paciente
     tabla_acr.py              Tabla normativa BI-RADS/ACR
 dashboard/                    Interfaz Streamlit
-notebooks/                    Entrenamiento y evaluación del NER y del verificador
+notebooks/                    Exploración, entrenamiento y evaluación (19 notebooks)
+  04c_cv_ventana_local        CV del verificador sobre su ventana real de producción
+  11_extractor_ner            Entrenamiento del NER
+  11b_ablacion_ner            Ablación: ¿el NER lee el encabezado o el contenido?
+  11c_estres_ner              Prueba de estrés: redacciones no anticipadas
+  *_Colab                     Experimentos en GPU (embeddings, predicción BI-RADS)
 report/                       Informe LaTeX + figuras + PDF
-docs/                         Defensa, validación clínica, guía teórica
+docs/
+  BITACORA.md                 Cronología del proyecto y las mediciones que lo guiaron
+  Presentacion_BME513         Presentación de defensa
+  Guia_Fundamentos_IA         Guía de conceptos de IA aplicados al proyecto
 ```
 
 ## Uso
@@ -116,8 +130,61 @@ regla seleccionó, así que ambas leen la misma cadena. No es una segunda opini�
 sino una relectura. Leer una categoría declarada no admite discrepancia
 informativa.
 
-El Módulo 2 (recomendación) **sí** usa IA, porque su variación es semántica:
-los formatos de un número se pueden enumerar en una tabla; las redacciones de
-una recomendación clínica, no.
+### El NER se sometió al mismo estándar
 
-La cronología completa está en [`docs/BITACORA.md`](docs/BITACORA.md).
+Descartar un modelo con la ablación obliga a aplicarle esa misma prueba al otro.
+
+Primero, la parte incómoda: **dentro del corpus el NER tampoco aporta.** Una
+expresión regular que localiza el último verbo gatillo y marca hasta el final
+alcanza F1 = 0,9991 frente al 1,0000 del NER. El corpus es homogéneo: el 98,1 %
+de las recomendaciones empieza con la misma fórmula y todas ocupan la posición
+final.
+
+La diferencia está en el **rol**. El verificador actuaba dentro del corpus, así
+que la métrica del corpus era la relevante y mostró que no servía. El NER es un
+respaldo para casos **fuera** del corpus, de modo que esa métrica no evalúa su
+función. Como la evidencia real eran tres informes chilenos, se simuló la brecha
+sobre los 565 informes de prueba: se quitó el encabezado y se reemplazó el verbo
+gatillo por formas verificadas como ausentes de la lista cerrada del módulo.
+
+| Condición del informe | Regla | NER |
+|---|---|---|
+| Control | 1,0000 | 1,0000 |
+| Sin encabezado `RECOMENDACIONES` | 0,9460 | 1,0000 |
+| Verbo fuera de la lista de reglas | 1,0000 | 0,9929 |
+| **Sin encabezado y verbo nuevo** | **0,5314** | **0,9956** |
+
+La regla dispone de dos señales y se sostiene mientras conserve una: sin
+encabezado la salva el verbo, con un verbo desconocido la salva el encabezado.
+Al retirar ambas queda en 0,5314. El NER no depende de ninguna.
+
+El contraste bajo la misma prueba resume la decisión de diseño:
+
+| Modelo | Al quitarle su señal | |
+|---|---|---|
+| Verificador BI-RADS | 0,939 → **0,544** | colapsa · se retiró |
+| NER de recomendación | 1,000 → **0,9956** | aguanta · se conservó |
+
+El experimento es **sintético**: opera sobre el corpus paraguayo perturbado, no
+sobre informes chilenos reales. Mide el rol que el componente cumple, no su
+desempeño en Chile.
+
+## Resultados
+
+| Componente | Métrica | Valor |
+|---|---|---|
+| M1 · Extracción BI-RADS | Macro F1 | **0,9995** |
+| M1 · Confianza alta | % del corpus | 98,58 % |
+| M2 · Cobertura de recomendación | % del corpus | 99,82 % |
+| M2 · NER | F1 de span (test deduplicado) | **0,9991** |
+| M3 · Alertas de incoherencia | sobre 4 357 informes | 50 (1,15 %), 19 críticas |
+
+Sobre las decisiones de modelado: el idioma del preentrenamiento explica una
+brecha de 0,471 (DistilBERT en inglés) a 0,939 (DistilBETO en español) en la
+misma tarea. La validación cruzada reveló una fuga por aumentar antes de
+particionar, que corrigió el desempeño de 0,9386 a 0,8877. Predecir el BI-RADS
+desde los hallazgos alcanza Macro F1 = 0,624 fuera de fold, insuficiente en las
+clases críticas: el BI-RADS 6 tiene cinco ejemplos en todo el corpus.
+
+La cronología completa, con las mediciones que guiaron cada decisión, está en
+[`docs/BITACORA.md`](docs/BITACORA.md).
