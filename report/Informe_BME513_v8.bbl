@@ -21,6 +21,12 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{ancker2017effects}
+J.~S. Ancker, A.~Edwards, S.~Nosal, D.~Hauser, E.~Mauer, and R.~Kaushal,
+  ``Effects of workload, work complexity, and repeated alerts on alert fatigue
+  in a clinical decision support system,'' \emph{BMC Medical Informatics and
+  Decision Making}, vol.~17, no.~1, p.~36, 2017.
+
 \bibitem{deis2024}
 {DEIS --- Ministerio de Salud de Chile}, ``Defunciones por tumores malignos
   seg\'un sexo, chile,'' Departamento de Estad\'isticas e Informaci\'on de
@@ -79,14 +85,50 @@ J.~L. V\'azquez~Noguera, A.~Torres-Hurtado, H.~G\'omez-Adorno, J.~C.
   processing applications: Addressing public data gaps in {Spanish},''
   \emph{Data in Brief}, vol.~61, p. 111761, 2025.
 
+\bibitem{sokolova2009systematic}
+M.~Sokolova and G.~Lapalme, ``A systematic analysis of performance measures for
+  classification tasks,'' \emph{Information Processing \& Management}, vol.~45,
+  no.~4, pp. 427--437, 2009.
+
 \bibitem{canete2020}
 J.~Ca\~nete, G.~Chaperon, R.~Fuentes, J.-H. Ho, H.~Kang, and J.~P\'erez,
   ``Spanish pre-trained {BERT} model and evaluation data,'' in \emph{PML4DC at
   ICLR 2020}, 2020.
 
+\bibitem{devlin2019bert}
+J.~Devlin, M.-W. Chang, K.~Lee, and K.~Toutanova, ``{BERT}: Pre-training of
+  deep bidirectional transformers for language understanding,'' in
+  \emph{Proceedings of NAACL-HLT 2019}, 2019, pp. 4171--4186.
+
+\bibitem{vaswani2017attention}
+A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez,
+  L.~Kaiser, and I.~Polosukhin, ``Attention is all you need,'' in
+  \emph{Advances in Neural Information Processing Systems 30 (NeurIPS)}, 2017,
+  pp. 5998--6008.
+
 \bibitem{sanh2019}
 V.~Sanh, L.~Debut, J.~Chaumond, and T.~Wolf, ``{DistilBERT}, a distilled
   version of {BERT}: smaller, faster, cheaper and lighter,'' \emph{arXiv
   preprint arXiv:1910.01108}, 2019.
+
+\bibitem{kohavi1995study}
+R.~Kohavi, ``A study of cross-validation and bootstrap for accuracy estimation
+  and model selection,'' \emph{Proceedings of IJCAI}, vol.~14, no.~2, pp.
+  1137--1145, 1995.
+
+\bibitem{levenshtein1966binary}
+V.~I. Levenshtein, ``Binary codes capable of correcting deletions, insertions
+  and reversals,'' \emph{Soviet Physics Doklady}, vol.~10, no.~8, pp. 707--710,
+  1966.
+
+\bibitem{ramshaw1995text}
+L.~A. Ramshaw and M.~P. Marcus, ``Text chunking using transformation-based
+  learning,'' in \emph{Proceedings of the Third Workshop on Very Large
+  Corpora}, 1995, pp. 82--94.
+
+\bibitem{kaufman2012leakage}
+S.~Kaufman, S.~Rosset, C.~Perlich, and O.~Stitelman, ``Leakage in data mining:
+  Formulation, detection, and avoidance,'' \emph{ACM Transactions on Knowledge
+  Discovery from Data}, vol.~6, no.~4, pp. 1--21, 2012.
 
 \end{thebibliography}

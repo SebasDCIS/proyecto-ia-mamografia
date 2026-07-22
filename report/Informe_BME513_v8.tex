@@ -21,6 +21,11 @@
 \usepackage{url}
 \usepackage{cite}
 \usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\floatname{algorithm}{Algoritmo}
+\renewcommand{\algorithmicrequire}{\textbf{Entrada:}}
+\renewcommand{\algorithmicensure}{\textbf{Salida:}}
 \usepackage{textcomp}
 
 \hypersetup{
@@ -49,7 +54,7 @@
 \maketitle
 
 \begin{abstract}
-El c\'ancer de mama es la principal causa de mortalidad oncol\'ogica femenina en Am\'erica Latina. La informaci\'on cr\'itica de los informes mamogr\'aficos (la categor\'ia BI-RADS y la recomendaci\'on cl\'inica) queda habitualmente atrapada como texto libre, lo que dificulta su explotaci\'on por sistemas administrativos y la detecci\'on autom\'atica de inconsistencias entre el diagn\'ostico y la conducta sugerida. Este trabajo presenta un sistema de procesamiento de lenguaje natural ejecutable localmente que audita t\'ecnicamente la coherencia interna de los informes mamogr\'aficos en espa\~nol, contrastando la categor\'ia BI-RADS declarada por el radi\'ologo con la recomendaci\'on cl\'inica emitida bajo el est\'andar BI-RADS/ACR. El objetivo es una herramienta aplicable a la sem\'antica cl\'inico-radiol\'ogica latinoamericana, con Chile como contexto de despliegue previsto, apoy\'andose en la uniformidad regional que induce la adopci\'on del est\'andar BI-RADS/ACR. El pipeline integra cuatro m\'odulos: un extractor de categor\'ia BI-RADS por reglas con tolerancia a variaciones tipogr\'aficas; un extractor de recomendaciones con tres capas de procesamiento (normalizaci\'on, reglas cl\'inicas y similitud sem\'antica TF-IDF); un motor de cotejo contra una tabla que formaliza el est\'andar BI-RADS/ACR; y un extractor NER basado en DistilBETO que localiza la recomendaci\'on en redacciones no anticipadas por las reglas. Evaluado sobre 4\,357 informes en espa\~nol de un corpus p\'ublico paraguayo, el sistema alcanz\'o Macro F1 de 0,9995 en la extracci\'on de BI-RADS por reglas y F1 de span de 0,9991 en la localizaci\'on neuronal de la recomendaci\'on. Un verificador Transformer entrenado para contrastar la extracci\'on reglada (Macro F1 = 0,8877 $\pm$ 0,0501 bajo validaci\'on cruzada de 5 particiones) se retir\'o del pipeline tras medir por cuatro v\'ias que no aporta sobre las reglas, resultado que se reporta por su valor metodol\'ogico. El sistema gener\'o alertas cl\'inicas en el 1,15\,\% de los informes, un nivel bajo de fatiga de alertas. La ejecuci\'on local facilita el cumplimiento de normativas de protecci\'on de datos como la Ley N.\textsuperscript{o}~19.628 en Chile. Como limitaci\'on, el corpus es de origen paraguayo y no chileno, por lo que la validaci\'on sobre informes locales queda como trabajo futuro. El resultado es una herramienta interpretable y auditable de control de calidad para programas de tamizaje mamogr\'afico.
+El c\'ancer de mama es la principal causa de mortalidad oncol\'ogica femenina en Am\'erica Latina. La informaci\'on cr\'itica de los informes mamogr\'aficos (la categor\'ia BI-RADS y la recomendaci\'on cl\'inica) queda habitualmente atrapada como texto libre, lo que dificulta su explotaci\'on por sistemas administrativos y la detecci\'on autom\'atica de inconsistencias entre el diagn\'ostico y la conducta sugerida. Este trabajo presenta un sistema de procesamiento de lenguaje natural ejecutable localmente que audita t\'ecnicamente la coherencia interna de los informes mamogr\'aficos en espa\~nol, contrastando la categor\'ia BI-RADS declarada por el radi\'ologo con la recomendaci\'on cl\'inica emitida bajo el est\'andar BI-RADS/ACR. El objetivo es una herramienta aplicable a la sem\'antica cl\'inico-radiol\'ogica latinoamericana, con Chile como contexto de despliegue previsto, apoy\'andose en la uniformidad regional que induce la adopci\'on del est\'andar BI-RADS/ACR. El pipeline integra cuatro m\'odulos: un extractor de categor\'ia BI-RADS por reglas con tolerancia a variaciones tipogr\'aficas; un extractor de recomendaciones con tres capas de procesamiento (normalizaci\'on, reglas cl\'inicas y similitud sem\'antica TF-IDF); un motor de cotejo contra una tabla que formaliza el est\'andar BI-RADS/ACR; y un extractor NER basado en DistilBETO que localiza la recomendaci\'on en redacciones no anticipadas por las reglas. Evaluado sobre 4\,357 informes en espa\~nol de un corpus p\'ublico paraguayo, el sistema alcanz\'o Macro F1 de 0,9995 en la extracci\'on de BI-RADS por reglas y F1 de span de 0,9991 en la localizaci\'on neuronal de la recomendaci\'on. Un verificador Transformer entrenado para contrastar la extracci\'on reglada (Macro F1 = 0,8877 $\pm$ 0,0501 bajo validaci\'on cruzada de 5 particiones) se retir\'o del pipeline tras medir por cuatro v\'ias que no aporta sobre las reglas, resultado que se reporta por su valor metodol\'ogico. El sistema gener\'o alertas cl\'inicas en el 1,15\,\% de los informes, un nivel bajo de fatiga de alertas~\cite{ancker2017effects}. La ejecuci\'on local facilita el cumplimiento de normativas de protecci\'on de datos como la Ley N.\textsuperscript{o}~19.628 en Chile. Como limitaci\'on, el corpus es de origen paraguayo y no chileno, por lo que la validaci\'on sobre informes locales queda como trabajo futuro. El resultado es una herramienta interpretable y auditable de control de calidad para programas de tamizaje mamogr\'afico.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -82,12 +87,12 @@ Se utiliz\'o el corpus p\'ublico \emph{Mammography reporting dataset with BI-RAD
 
 La elecci\'on de este corpus responde a su disponibilidad p\'ublica y volumen sustancial, en ausencia de datasets chilenos abiertos comparables al momento de este trabajo. El objetivo del sistema es operar sobre la sem\'antica cl\'inico-radiol\'ogica latinoamericana en espa\~nol --incluido Chile como contexto de despliegue previsto--, apoy\'andose en la alta uniformidad regional que induce la adopci\'on internacional del est\'andar BI-RADS/ACR: los patrones ling\"u\'isticos y las categorizaciones identificadas son razonablemente extrapolables entre contextos hispanohablantes de la regi\'on. No obstante, se reconoce expl\'icitamente como \textbf{limitaci\'on} que el corpus es de origen \emph{paraguayo} y no chileno; por tanto, aunque el est\'andar compartido favorece la transferibilidad, las particularidades de redacci\'on de cada centro o pa\'is podr\'ian diferir. El refinamiento y la validaci\'on del sistema sobre informes mamogr\'aficos chilenos, con radi\'ologos locales, quedan identificados como trabajo futuro.
 
-La distribuci\'on de etiquetas est\'a marcadamente desbalanceada: BI-RADS 2 concentra 2\,635 informes (60,5\%), seguido de BI-RADS 0 (966, 22,2\%) y BI-RADS 1 (596, 13,7\%). Las clases cl\'inicamente cr\'iticas son minoritarias: BI-RADS 4 (52 informes, 1,2\%), BI-RADS 3 (87, 2,0\%), BI-RADS 5 (16, 0,4\%) y BI-RADS 6 (5, 0,1\%). Este desbalance motiv\'o el uso de Macro F1 como m\'etrica principal y la aplicaci\'on de aumentaci\'on textual durante el entrenamiento del modelo Transformer.
+La distribuci\'on de etiquetas est\'a marcadamente desbalanceada: BI-RADS 2 concentra 2\,635 informes (60,5\%), seguido de BI-RADS 0 (966, 22,2\%) y BI-RADS 1 (596, 13,7\%). Las clases cl\'inicamente cr\'iticas son minoritarias: BI-RADS 4 (52 informes, 1,2\%), BI-RADS 3 (87, 2,0\%), BI-RADS 5 (16, 0,4\%) y BI-RADS 6 (5, 0,1\%). Este desbalance motiv\'o el uso de Macro F1 como m\'etrica principal~\cite{sokolova2009systematic} y la aplicaci\'on de aumentaci\'on textual durante el entrenamiento del modelo Transformer.
 
 \subsubsection{Modelo Transformer y protocolo de evaluaci\'on}
-Se utiliz\'o DistilBETO (\texttt{dccuchile/distilbert-base-spanish-uncased}) \cite{canete2020}, una versi\'on destilada de BETO siguiendo el esquema DistilBERT \cite{sanh2019}, como modelo base, fine-tuneado sobre el corpus de entrenamiento con tres \'epocas, batch size 8, learning rate $2\times10^{-5}$, y aumentaci\'on textual sobre clases minoritarias mediante diccionarios de sin\'onimos cl\'inicos. La elecci\'on de DistilBETO sobre alternativas como BETO completo o XLM-RoBERTa se justifica por su menor huella computacional (\textasciitilde 250 MB), su entrenamiento espec\'ifico en espa\~nol y la disponibilidad de aceleraci\'on local mediante Metal Performance Shaders (MPS) de Apple Silicon.
+Se utiliz\'o DistilBETO (\texttt{dccuchile/distilbert-base-spanish-uncased}) \cite{canete2020}, una versi\'on destilada de BETO, que a su vez adapta la arquitectura BERT~\cite{devlin2019bert} basada en Transformers~\cite{vaswani2017attention}, siguiendo el esquema DistilBERT \cite{sanh2019}, como modelo base, fine-tuneado sobre el corpus de entrenamiento con tres \'epocas, batch size 8, learning rate $2\times10^{-5}$, y aumentaci\'on textual sobre clases minoritarias mediante diccionarios de sin\'onimos cl\'inicos. La elecci\'on de DistilBETO sobre alternativas como BETO completo o XLM-RoBERTa se justifica por su menor huella computacional (\textasciitilde 250 MB), su entrenamiento espec\'ifico en espa\~nol y la disponibilidad de aceleraci\'on local mediante Metal Performance Shaders (MPS) de Apple Silicon.
 
-Bajo un split estratificado 80/20 \'unico, el mejor modelo alcanz\'o Macro F1 = 0,9386 sobre el conjunto de prueba (872 informes). Este esquema, sin embargo, usa el mismo conjunto de prueba para seleccionar el punto de control y para la evaluaci\'on final, por lo que la m\'etrica resultante puede quedar algo optimizada. Para obtener una evaluaci\'on libre de ese sesgo se realiz\'o adem\'as una validaci\'on cruzada estratificada de 5 particiones (con semilla fija), aplicando la aumentaci\'on textual dentro de cada partici\'on y no de forma global, de modo que las variantes l\'exicas de un mismo informe no se repartieran entre entrenamiento y prueba. La m\'etrica honesta resultante es \textbf{Macro F1 = 0,8877 $\pm$ 0,0501}, que es la del clasificador finalmente descartado (Secci\'on~\ref{sec:verif}). La diferencia respecto del split \'unico ($-0,0509$) es la esperable al eliminar el sesgo de selecci\'on.
+Bajo un split estratificado 80/20 \'unico, el mejor modelo alcanz\'o Macro F1 = 0,9386 sobre el conjunto de prueba (872 informes). Este esquema, sin embargo, usa el mismo conjunto de prueba para seleccionar el punto de control y para la evaluaci\'on final, por lo que la m\'etrica resultante puede quedar algo optimizada. Para obtener una evaluaci\'on libre de ese sesgo se realiz\'o adem\'as una validaci\'on cruzada estratificada de 5 particiones~\cite{kohavi1995study} (con semilla fija), aplicando la aumentaci\'on textual dentro de cada partici\'on y no de forma global, de modo que las variantes l\'exicas de un mismo informe no se repartieran entre entrenamiento y prueba. La m\'etrica honesta resultante es \textbf{Macro F1 = 0,8877 $\pm$ 0,0501}, que es la del clasificador finalmente descartado. La Fig.~\ref{fig:folds} muestra el desempe\~no por partici\'on: la ca\'ida del fold~4 a 0,80 refleja la sensibilidad del Macro F1 a las clases minoritarias y es la raz\'on de reportar la validaci\'on cruzada en lugar de una partici\'on \'unica, cuyo resultado depender\'ia de qu\'e informes cayeron en el conjunto de prueba (Secci\'on~\ref{sec:verif}). La diferencia respecto del split \'unico ($-0,0509$) es la esperable al eliminar el sesgo de selecci\'on.
 
 \subsubsection{Tabla normativa BI-RADS/ACR}
 Se construy\'o una formalizaci\'on computacional de las recomendaciones de manejo del Atlas BI-RADS de la American College of Radiology \cite{acr2013}. La tabla mapea cada categor\'ia BI-RADS (0--6) a una recomendaci\'on esperada, un conjunto de equivalentes cl\'inicamente aceptables, subcategor\'ias de notificaci\'on suave y un nivel de severidad de alerta, a partir del est\'andar ACR y de la literatura cl\'inica. Por ejemplo, BI-RADS 4 acepta como recomendaci\'on esperada \emph{biopsia hist\'ologica}, con \emph{derivaci\'on oncol\'ogica} como equivalente cl\'inicamente aceptable; BI-RADS 5, en cambio, se trata de forma estricta sin equivalentes dada su criticidad cl\'inica. El esquema de equivalencias y de severidades constituye una propuesta del autor derivada del est\'andar, calibrada emp\'iricamente contra el corpus (tasa de alertas del 1,15\,\%) y \textbf{pendiente de validaci\'on cl\'inica formal por radi\'ologos}, la cual se identifica como trabajo futuro.
@@ -123,17 +128,53 @@ La tarea de este m\'odulo es encontrar, dentro del texto libre, la categor\'ia B
 
 La primera versi\'on (\codename{extractor\_birads.py}) localiza el bloque de conclusi\'on por su encabezado y busca la categor\'ia dentro de \'el, aplicando una jerarqu\'ia que va del formato can\'onico (\emph{BI-RADS X}) a variantes tipogr\'aficas frecuentes (\emph{BR-X}, \emph{Categor\'ia X}, \emph{BI-RADS$^\circledR$ X}, n\'umeros romanos o la categor\'ia escrita en palabras). Sobre el corpus paraguayo esa estrategia cubre el 100\,\% de los informes, porque todos traen encabezado expl\'icito (\emph{Conclusi\'on} en el 67,7\,\% y \emph{Valoraci\'on} en el 32,3\,\%). Los primeros informes chilenos revelaron el l\'imite: algunos usan \emph{Impresi\'on Diagn\'ostica}, otros carecen de encabezado, y varios mencionan la categor\'ia m\'as de una vez, con una referencia hist\'orica antes de la definitiva. La dependencia del encabezado era invisible dentro del corpus de entrenamiento.
 
-La versi\'on en uso (\codename{buscador\_birads.py}) elimina esa dependencia con una b\'usqueda en cuatro fases. La primera recorre el informe completo y recoge todas las menciones. La segunda descarta por contexto las hist\'oricas, las comparativas, las educacionales y las negadas, atendiendo a las palabras que las preceden. La tercera pondera las restantes por su posici\'on relativa: la categor\'ia definitiva aparece al final del informe, y sobre el corpus la \'ultima menci\'on se ubica en el percentil 0,85 del texto en el 100\,\% de los casos. La cuarta reserva un arbitraje para los empates, que sobre 4\,357 informes no llegan a producirse porque el 99,9\,\% declara una sola menci\'on.
+La versi\'on en uso (\codename{buscador\_birads.py}) elimina esa dependencia con una b\'usqueda en cuatro fases, resumida en el Algoritmo~\ref{alg:buscador}. La primera recorre el informe completo y recoge todas las menciones. La segunda descarta por contexto las hist\'oricas, las comparativas, las educacionales y las negadas, atendiendo a las palabras que las preceden. La tercera pondera las restantes por su posici\'on relativa: la categor\'ia definitiva aparece al final del informe, y sobre el corpus la \'ultima menci\'on se ubica en el percentil 0,85 del texto en el 100\,\% de los casos. La cuarta reserva un arbitraje para los empates, que sobre 4\,357 informes no llegan a producirse porque el 99,9\,\% declara una sola menci\'on.
 
 Cada extracci\'on queda etiquetada con un nivel de confianza (alta en el 98,58\,\% de los informes, baja en el 1,38\,\%) seg\'un el patr\'on que la produjo, de modo que los m\'odulos siguientes puedan ponderarla. Si el informe presenta hallazgos radiol\'ogicos o recomendaciones pero no declara ninguna categor\'ia, el m\'odulo genera una alerta de omisi\'on: un estudio con hallazgos deber\'ia concluir siempre en un BI-RADS, y su ausencia apunta a un problema de documentaci\'on que corresponde resolver a una persona y no a una imputaci\'on autom\'atica.
+
+\begin{algorithm}[!t]
+\caption{B\'usqueda h\'ibrida de la categor\'ia BI-RADS}
+\label{alg:buscador}
+\begin{algorithmic}[1]
+\Require Informe $T$ como texto plano
+\Ensure Categor\'ia $c$ con su nivel de confianza, o alerta
+\State $M \gets$ todas las menciones de BI-RADS en $T$ \Comment{Fase 1}
+\If{$M = \emptyset$}
+  \If{$T$ contiene hallazgos o recomendaciones}
+    \State \Return alerta de omisi\'on \Comment{no se imputa categor\'ia}
+  \Else
+    \State \Return sin categor\'ia
+  \EndIf
+\EndIf
+\ForAll{$m \in M$} \Comment{Fase 2: filtrado contextual}
+  \State $v \gets$ ventana previa a $m$
+  \If{$v$ indica menci\'on hist\'orica, comparativa, educacional o negada}
+    \State marcar $m$ como descartada
+  \EndIf
+\EndFor
+\State $M' \gets \{m \in M : m$ no descartada$\}$
+\If{$M' = \emptyset$}
+  \State $M' \gets M$ \Comment{repliegue: ninguna sobrevive al filtro}
+\EndIf
+\ForAll{$m \in M'$} \Comment{Fase 3: ponderaci\'on posicional}
+  \State $p(m) \gets \mathrm{pos}(m) / |T|$
+  \State $w(m) \gets \alpha \cdot p(m) + \beta \cdot \mathrm{especificidad}(m)$
+\EndFor
+\State $C \gets \arg\max_{m \in M'} w(m)$
+\If{$|C| > 1$} \Comment{Fase 4: arbitraje solo si hay empate}
+  \State $C \gets$ desempate por posici\'on m\'as tard\'ia
+\EndIf
+\State \Return categor\'ia de $C$ con confianza seg\'un el patr\'on que la produjo
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{M\'odulo 2: Extractor y clasificador de recomendaciones (\codename{extractor\_recomendacion.py})}
 Este m\'odulo cumple dos funciones encadenadas: primero localiza el texto de la recomendaci\'on dentro del informe y luego lo clasifica en una de ocho categor\'ias cl\'inicas, ordenadas de la m\'as urgente a la menos urgente (biopsia hist\'ologica, derivaci\'on oncol\'ogica, estudio complementario de imagen, correlaci\'on ecogr\'afica, comparaci\'on con estudios previos, control a corto plazo, control anual y criterio m\'edico). La localizaci\'on no depende de que exista un encabezado fijo de ``Recomendaciones'': si el informe no lo tiene, un mecanismo de respaldo recorre el texto en busca de frases gatillo de conducta (verbos como \emph{se sugiere}, \emph{amerita}, \emph{conviene} o \emph{derivar}), lo que permite operar sobre informes de estructura at\'ipica, un aspecto cr\'itico para su uso sobre datos externos.
 
-La clasificaci\'on se apoya en un vocabulario cl\'inico validado y en reglas que capturan la intenci\'on del texto. Incorpora varias defensas frente a la variabilidad de la redacci\'on real: tolerancia a errores ortogr\'aficos mediante distancia de edici\'on de Damerau-Levenshtein (con umbral $\leq 1$, restringida a los verbos gatillo y nunca a cifras, para no alterar plazos ni categor\'ias), reconocimiento de directivas expresadas como sustantivo de acci\'on sin verbo introductorio (por ejemplo, \emph{``control en 3 meses''}), y detecci\'on de negaci\'on al estilo NegEx para descartar menciones negadas. A esto se suma una capa de sin\'onimos cl\'inicos que normaliza t\'erminos equivalentes a una forma can\'onica antes de aplicar las reglas: variantes de una misma t\'ecnica (\emph{ultrasonido}, \emph{US} y \emph{ecotomograf\'ia} para ecograf\'ia; \emph{RMN} y \emph{MRI} para resonancia), abreviaturas de biopsia (\emph{BACAF}, \emph{PAAF}, \emph{core biopsy}) y equivalencias de conducta (\emph{seguimiento} por control, \emph{en un a\~no} por anual). Los sin\'onimos se anclaron con contexto para evitar reescrituras err\'oneas y se excluyeron deliberadamente t\'erminos cl\'inicamente ambiguos. Cuando ninguna regla clasifica el texto con confianza, la recomendaci\'on se marca como ambigua y se deriva a revisi\'on, en lugar de forzar una categor\'ia que podr\'ia ser err\'onea.
+La clasificaci\'on se apoya en un vocabulario cl\'inico validado y en reglas que capturan la intenci\'on del texto. Incorpora varias defensas frente a la variabilidad de la redacci\'on real: tolerancia a errores ortogr\'aficos mediante distancia de edici\'on~\cite{levenshtein1966binary} de Damerau-Levenshtein (con umbral $\leq 1$, restringida a los verbos gatillo y nunca a cifras, para no alterar plazos ni categor\'ias), reconocimiento de directivas expresadas como sustantivo de acci\'on sin verbo introductorio (por ejemplo, \emph{``control en 3 meses''}), y detecci\'on de negaci\'on al estilo NegEx para descartar menciones negadas. A esto se suma una capa de sin\'onimos cl\'inicos que normaliza t\'erminos equivalentes a una forma can\'onica antes de aplicar las reglas: variantes de una misma t\'ecnica (\emph{ultrasonido}, \emph{US} y \emph{ecotomograf\'ia} para ecograf\'ia; \emph{RMN} y \emph{MRI} para resonancia), abreviaturas de biopsia (\emph{BACAF}, \emph{PAAF}, \emph{core biopsy}) y equivalencias de conducta (\emph{seguimiento} por control, \emph{en un a\~no} por anual). Los sin\'onimos se anclaron con contexto para evitar reescrituras err\'oneas y se excluyeron deliberadamente t\'erminos cl\'inicamente ambiguos. Cuando ninguna regla clasifica el texto con confianza, la recomendaci\'on se marca como ambigua y se deriva a revisi\'on, en lugar de forzar una categor\'ia que podr\'ia ser err\'onea.
 
 \paragraph{Extractor NER de respaldo (\codename{extractor\_ner.py}).}
-La localizaci\'on por reglas es transparente y r\'apida, pero exige anticipar cada forma de redacci\'on. Para las redacciones no vistas se incorpor\'o un extractor neuronal que act\'ua como v\'ia de respaldo: un modelo DistilBETO afinado para reconocimiento de entidades (NER) que localiza el fragmento de recomendaci\'on dentro del informe. A diferencia de las reglas, el modelo aprende el contexto de lo que es una recomendaci\'on y generaliza a formas que no estaban en el vocabulario. Su entrenamiento no requiri\'o etiquetado manual: como la recomendaci\'on aparece textualmente dentro del informe, las etiquetas por token se derivaron autom\'aticamente alineando la columna de recomendaci\'on del corpus. La arquitectura resultante es h\'ibrida y sigue la misma l\'ogica que el m\'odulo de BI-RADS: las reglas son la v\'ia primaria y, cuando no localizan la recomendaci\'on, el NER la extrae; si ninguno lo logra con confianza, el caso se deriva a revisi\'on humana. Una salvaguarda de posprocesamiento toma \'unicamente el primer fragmento contiguo etiquetado, de modo que etiquetas dispersas ante elementos no vistos (firmas, encabezados) no contaminen la extracci\'on.
+La localizaci\'on por reglas es transparente y r\'apida, pero exige anticipar cada forma de redacci\'on. Para las redacciones no vistas se incorpor\'o un extractor neuronal que act\'ua como v\'ia de respaldo: un modelo DistilBETO afinado para reconocimiento de entidades (NER) que localiza el fragmento de recomendaci\'on dentro del informe. A diferencia de las reglas, el modelo aprende el contexto de lo que es una recomendaci\'on y generaliza a formas que no estaban en el vocabulario. El etiquetado sigue el esquema BIO~\cite{ramshaw1995text}, que marca el inicio, el interior y el exterior de cada entidad. Su entrenamiento no requiri\'o etiquetado manual: como la recomendaci\'on aparece textualmente dentro del informe, las etiquetas por token se derivaron autom\'aticamente alineando la columna de recomendaci\'on del corpus. La arquitectura resultante es h\'ibrida y sigue la misma l\'ogica que el m\'odulo de BI-RADS: las reglas son la v\'ia primaria y, cuando no localizan la recomendaci\'on, el NER la extrae; si ninguno lo logra con confianza, el caso se deriva a revisi\'on humana. Una salvaguarda de posprocesamiento toma \'unicamente el primer fragmento contiguo etiquetado, de modo que etiquetas dispersas ante elementos no vistos (firmas, encabezados) no contaminen la extracci\'on.
 
 \subsubsection{M\'odulo 3: Motor de cotejo BI-RADS/ACR (\codename{cotejo\_acr.py})}
 Este m\'odulo es el n\'ucleo de la auditor\'ia. Recibe la categor\'ia BI-RADS extra\'ida y la recomendaci\'on ya clasificada, y decide si ambas son coherentes seg\'un el est\'andar ACR. El m\'odulo no eval\'ua si el BI-RADS est\'a bien asignado ni juzga los hallazgos. Toma el BI-RADS tal como viene y verifica \'unicamente que la recomendaci\'on sea consistente con \'el. El BI-RADS funciona, entonces, como la vara contra la que se mide la recomendaci\'on, no como algo a medir.
@@ -160,7 +201,7 @@ Toda la l\'ogica cl\'inica reside en la tabla y no en el c\'odigo, de modo que u
 \end{figure*}
 
 \paragraph{Graduaci\'on de la alerta por impacto en salud}
-La auditor\'ia de coherencia es binaria: una recomendaci\'on es coherente o no lo es. Es coherente cuando coincide con la esperada, es un equivalente aceptable, o es m\'as cauta que la m\'inima esperada, ya que un exceso de precauci\'on --por ejemplo, biopsiar un BI-RADS 3-- es cl\'inicamente v\'alido. Es incoherente cuando la recomendaci\'on se queda corta frente a la norma. Toda incoherencia genera una alerta; lo que var\'ia es su severidad, no el hecho de constituir o no un problema. As\'i, la palabra alerta conserva su significado, y su gravedad, desde una incoherencia leve y sin riesgo hasta una cr\'itica, comunica cu\'anto importa.
+El Algoritmo~\ref{alg:cotejo} resume la l\'ogica completa. La auditor\'ia de coherencia es binaria: una recomendaci\'on es coherente o no lo es. Es coherente cuando coincide con la esperada, es un equivalente aceptable, o es m\'as cauta que la m\'inima esperada, ya que un exceso de precauci\'on --por ejemplo, biopsiar un BI-RADS 3-- es cl\'inicamente v\'alido. Es incoherente cuando la recomendaci\'on se queda corta frente a la norma. Toda incoherencia genera una alerta; lo que var\'ia es su severidad, no el hecho de constituir o no un problema. As\'i, la palabra alerta conserva su significado, y su gravedad, desde una incoherencia leve y sin riesgo hasta una cr\'itica, comunica cu\'anto importa.
 
 La severidad no proviene de casos particulares del corpus, sino de una regla general que combina dos factores medibles para cualquier informe: la criticidad del BI-RADS, que la norma ACR fija de antemano (BI-RADS 4 y 5 conllevan sospecha de malignidad; 0 y 6 son intermedios; 1, 2 y 3 son de bajo riesgo), y cu\'anto se aparta la recomendaci\'on de la conducta esperada dentro de la jerarqu\'ia de urgencia. La regla central, validada con criterio cl\'inico, es que una sospecha de malignidad (BI-RADS 4 o 5) cuya recomendaci\'on no incluya biopsia ni derivaci\'on se clasifica siempre como cr\'itica, pues cualquier conducta que no confirme el diagn\'ostico implica un riesgo de retraso. Una incoherencia leve, en cambio, corresponde a un desv\'io menor en una categor\'ia de bajo riesgo, sin consecuencias para la paciente. La Tabla~\ref{tab:niveles} resume los desenlaces y su distribuci\'on en el corpus.
 
@@ -186,6 +227,39 @@ Revisi\'on ext. & No se pudo extraer o clasificar la recomendaci\'on & 8 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{algorithm}[!t]
+\caption{Cotejo de coherencia BI-RADS/ACR}
+\label{alg:cotejo}
+\begin{algorithmic}[1]
+\Require Categor\'ia $b$, recomendaci\'on clasificada $r$, tabla normativa $\mathcal{T}$
+\Ensure Estado, severidad y regla aplicada
+\If{$r$ es nula o ambigua} \Comment{abstenci\'on: no se juzga coherencia}
+  \If{$b \in \{4,5,6\}$}
+    \State \Return \textsc{revisi\'on}, severidad \textbf{cr\'itica}
+    \Statex \hfill \emph{la norma exige conducta expl\'icita para estas categor\'ias}
+  \Else
+    \State \Return \textsc{revisi\'on}, severidad media
+  \EndIf
+\EndIf
+\State $e \gets \mathcal{T}[b].\text{esperada}$
+\If{$r = e$}
+  \State \Return \textsc{coherente}
+\ElsIf{$r \in \mathcal{T}[b].\text{equivalentes}$}
+  \State \Return \textsc{coherente\_equivalente}
+\ElsIf{$\mathrm{urgencia}(r) > \mathrm{urgencia}(e)$}
+  \State \Return \textsc{coherente\_con\_precauci\'on}
+  \Statex \hfill \emph{un exceso de cautela es cl\'inicamente v\'alido}
+\EndIf
+\State $d \gets \mathrm{urgencia}(e) - \mathrm{urgencia}(r)$ \Comment{desv\'io en la jerarqu\'ia}
+\If{$b \in \{4,5\}$ \textbf{y} $r \notin \{\text{biopsia}, \text{derivaci\'on}\}$}
+  \State \Return \textsc{incoherente}, severidad \textbf{cr\'itica}
+  \Statex \hfill \emph{sospecha sin acci\'on diagn\'ostica}
+\EndIf
+\State severidad $\gets$ funci\'on de $\mathrm{criticidad}(b)$ y de $d$
+\State \Return \textsc{incoherente}, severidad
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{M\'odulo 4: verificador del BI-RADS, dise\~nado y retirado (\codename{verificador\_birads\_ml.py})}
 Este m\'odulo se plante\'o para obtener la categor\'ia por dos v\'ias y contrastarlas: la extracci\'on por reglas del M\'odulo~1 y un DistilBETO que relee el mismo texto. Priorizaba la regla, bajo el supuesto de que la categor\'ia escrita por el radi\'ologo es la referencia, y reservaba la voz del modelo para los casos de baja confianza, distinguiendo cinco estados seg\'un el acuerdo entre ambas (Fig.~\ref{fig:estados}). El modelo lee una ventana local alrededor de la menci\'on candidata para que ambas v\'ias trabajen sobre el mismo fragmento.
@@ -225,14 +299,15 @@ Para el clasificador Transformer, la Tabla~\ref{tab:folds} detalla los resultado
 \label{tab:modulos}
 \centering
 \footnotesize
-\begin{tabular}{@{}lll@{}}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}p{2.7cm}p{2.5cm}r@{}}
 \toprule
 M\'odulo & M\'etrica & Valor \\
 \midrule
-Extracci\'on BI-RADS (regex) & Macro F1 / cobertura & 0,9995 / 100\% \\
-Clasificaci\'on recomendaci\'on & cobertura (reglas) & 99,82\% \\
-Extractor NER recomendaci\'on & F1 span (test dedup.) & 0,999 \\
-Cotejo BI-RADS/ACR & tasa de incoherencias & 1,15\% \\
+Extracci\'on BI-RADS (reglas) & Macro F1 / cobertura & 0,9995 / 100\,\% \\
+Clasificaci\'on de la recomendaci\'on & Cobertura & 99,82\,\% \\
+Extractor NER & F1 de span (test dedup.) & 0,9991 \\
+Cotejo BI-RADS/ACR & Tasa de incoherencias & 1,15\,\% \\
 Verificador DistilBETO \emph{(descartado)} & Macro F1 (CV 5-fold) & 0,8877 $\pm$ 0,0501 \\
 \bottomrule
 \end{tabular}
@@ -333,7 +408,7 @@ La Fig.~\ref{fig:estados} resume la salida que produc\'ia el verificador: el 96,
 \end{figure}
 
 \subsection{Extractor NER de recomendaciones: desempe\~no y generalizaci\'on}
-El extractor neuronal se entren\'o sobre el corpus con etiquetas derivadas autom\'aticamente, previa deduplicaci\'on robusta para evitar fuga de informaci\'on entre particiones. La Tabla~\ref{tab:hiperparametros} detalla los hiperpar\'ametros de este entrenamiento y los del verificador que se descart\'o, ambos afinados a partir de DistilBETO. Para el NER se cuid\'o especialmente evitar el sobreajuste y la fuga: el conjunto se separ\'o en entrenamiento, validaci\'on y prueba antes de tokenizar; se aplic\'o \emph{early stopping} guiado solo por la validaci\'on; y la longitud m\'axima de secuencia se fij\'o en 384 subtokens para no truncar la recomendaci\'on, que suele ubicarse al final del informe.
+El extractor neuronal se entren\'o sobre el corpus con etiquetas derivadas autom\'aticamente, previa deduplicaci\'on robusta para evitar fuga de informaci\'on entre particiones~\cite{kaufman2012leakage}. La Tabla~\ref{tab:hiperparametros} detalla los hiperpar\'ametros de este entrenamiento y los del verificador que se descart\'o, ambos afinados a partir de DistilBETO. Para el NER se cuid\'o especialmente evitar el sobreajuste y la fuga: el conjunto se separ\'o en entrenamiento, validaci\'on y prueba antes de tokenizar; se aplic\'o \emph{early stopping} guiado solo por la validaci\'on; y la longitud m\'axima de secuencia se fij\'o en 384 subtokens para no truncar la recomendaci\'on, que suele ubicarse al final del informe.
 
 En el conjunto de prueba deduplicado alcanz\'o un F1 a nivel de span de 0,999 (Fig.~\ref{fig:ner}). Esta cifra debe leerse con cautela. El corpus es muy homog\'eneo: la recomendaci\'on aparece siempre al final del informe y, tras normalizar el texto, existen apenas 221 recomendaciones distintas (la m\'as frecuente se repite 784 veces), de modo que el valor mide la facilidad del corpus y no la capacidad de generalizar. La evaluaci\'on relevante se hizo entonces sobre informes chilenos externos, de formato no visto. All\'i el modelo extrajo correctamente redacciones que las reglas no cubr\'ian, como \emph{``complementar examen con ecograf\'ia''}, y cuando el informe no tra\'ia recomendaci\'on expl\'icita no extrajo nada, sin inventar texto. El desempe\~no dentro del corpus y el comportamiento en datos externos difieren, y esa diferencia orienta la mejora de fondo hacia un corpus del contexto de despliegue. Mientras tanto, el NER cumple un rol acotado de respaldo, con las reglas transparentes como v\'ia primaria.
 
