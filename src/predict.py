@@ -526,7 +526,26 @@ def procesar_informe(
         regex_span = texto_regex.get("texto", "") if texto_regex["encontrado"] else ""
         if texto_regex["encontrado"] and ner_encontro:
             a, b = _norm_cmp(regex_span), _norm_cmp(ner_span)
-            concordancia_ext = "concuerdan" if (a in b or b in a or a == b) else "difieren"
+            # La contención de subcadena NO es concordancia por sí sola. Si una
+            # vía devuelve un span mucho más largo que la otra, está
+            # sobre-extrayendo aunque contenga el span correcto dentro.
+            #
+            # Caso real: el regex devolvió el título del examen más la
+            # recomendación, y como el span del NER quedaba contenido, el panel
+            # informaba "concuerdan". Eso oculta un fallo de extracción justo en
+            # el sitio donde el contraste debería revelarlo.
+            if a == b:
+                concordancia_ext = "concuerdan"
+            elif a in b or b in a:
+                largo_max = max(len(a), len(b))
+                largo_min = min(len(a), len(b))
+                # Se acepta como concordancia si la diferencia es marginal
+                # (p. ej. un punto final o un prefijo corto). Más allá de eso,
+                # una vía está tomando texto que no corresponde.
+                concordancia_ext = ("concuerdan" if largo_min >= 0.75 * largo_max
+                                    else "contenido_parcial")
+            else:
+                concordancia_ext = "difieren"
         elif texto_regex["encontrado"]:
             concordancia_ext = "solo_regex"
         elif ner_encontro:

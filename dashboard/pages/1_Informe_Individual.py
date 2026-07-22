@@ -22,6 +22,7 @@ if str(ROOT_DIR) not in sys.path:
 import streamlit as st
 
 from src.predict import procesar_informe, _leer_pdf
+from src.recursos.limpieza_informe import limpiar_informe
 from dashboard.utils.formato import (
     obtener_estilo_resultado,
     banner_resultado_html,
@@ -31,8 +32,6 @@ from dashboard.utils.formato import (
     etiqueta_estado,
     etiqueta_categoria,
     etiqueta_evidencia,
-    etiqueta_verificacion_ml,
-    formato_confianza_ml,
 )
 
 
@@ -106,8 +105,14 @@ elif modo == "📄 Archivo TXT":
         try:
             contenido = archivo_txt.read().decode("utf-8")
             texto_informe = contenido
-            with st.expander("Ver contenido del archivo cargado"):
-                st.text(contenido[:2000] + ("..." if len(contenido) > 2000 else ""))
+            with st.expander("Ver contenido del archivo cargado (anonimizado)"):
+                st.caption(
+                    "Se muestra el texto tras la capa de limpieza. Los datos "
+                    "identificatorios aparecen como [MEDICO], [RUT] o "
+                    "[DATO_PACIENTE]: la pantalla no debe exponerlos."
+                )
+                _prev, _, _ = limpiar_informe(contenido)
+                st.text(_prev[:2000] + ("..." if len(_prev) > 2000 else ""))
         except UnicodeDecodeError:
             st.error(
                 "El archivo no se pudo decodificar como UTF-8. "
@@ -137,8 +142,14 @@ elif modo == "📕 Archivo PDF":
             os.unlink(tmp_path)
             texto_informe = contenido
 
-            with st.expander("Ver texto extraído del PDF"):
-                st.text(contenido[:2000] + ("..." if len(contenido) > 2000 else ""))
+            with st.expander("Ver texto extraído del PDF (anonimizado)"):
+                st.caption(
+                    "Se muestra el texto tras la capa de limpieza. Los datos "
+                    "identificatorios aparecen como [MEDICO], [RUT] o "
+                    "[DATO_PACIENTE]: la pantalla no debe exponerlos."
+                )
+                _prev, _, _ = limpiar_informe(contenido)
+                st.text(_prev[:2000] + ("..." if len(_prev) > 2000 else ""))
         except ImportError:
             st.error(
                 "pdfplumber no está instalado. Ejecuta: pip install pdfplumber"
@@ -168,12 +179,15 @@ with col_opc1:
     )
 
 with col_opc2:
-    usar_ml = st.checkbox(
-        "Usar verificador ML (DistilBETO)",
-        value=True,
-        help="Si está activo, ejecuta la verificación dual de extracción. "
-             "Añade ~500ms de procesamiento.",
-    )
+    # El verificador ML del Módulo 4 no se ofrece en la interfaz clínica.
+    # Se midió por cuatro vías que no aporta sobre la extracción reglada: la
+    # ablación lo derrumba de 0,939 a 0,544 y un regex de una línea lo empata
+    # sobre su propia ventana. Mostrar su lectura sugeriría una confirmación
+    # independiente que no existe, porque lee la misma cadena que el regex ya
+    # extrajo. Para reproducir su evaluación: python -m src.predict --con-ml
+    # (ver docs/BITACORA.md).
+    usar_ml = False
+
     usar_ner = st.checkbox(
         "Usar extractor NER (respaldo IA)",
         value=True,
@@ -314,6 +328,7 @@ if st.session_state["resultado_actual"] is not None:
             _CONCORD = {
                 "concuerdan": "✅ Reglas y NER concuerdan",
                 "difieren":   "⚠️ Reglas y NER difieren",
+                "contenido_parcial": "⚠️ Una vía extrajo de más (revisar spans)",
                 "solo_regex": "📐 Solo las reglas la hallaron",
                 "solo_ner":   "🤖 Solo el NER la halló",
                 "ninguno":    "🔍 Ninguno la halló",
@@ -341,43 +356,46 @@ if st.session_state["resultado_actual"] is not None:
             elif fuente_usada == "regex":
                 st.caption("La recomendación usada fue la de las **reglas** (vía primaria).")
 
-        # ---------- Apoyo de lectura del BI-RADS (ML), si aplica ----------
-        if resultado["verificacion_ml"]["estado"] != "no_ejecutado":
-            st.markdown("#### Apoyo de lectura del BI-RADS (ML)")
-            st.caption(
-                "El ML es un apoyo de lectura: refuerza o cuestiona la extracción "
-                "literal, que es la autoridad. No emite juicio clínico."
-            )
-
-            col_v1, col_v2, col_v3 = st.columns(3)
-
-            with col_v1:
-                st.metric(
-                    "Lectura literal (regex)",
-                    f"BI-RADS {resultado['birads']['valor']}",
-                    delta=resultado["birads"]["confianza"],
-                    delta_color="off",
+            # Panel de depuración: permite verificar qué texto EXACTO se procesó
+            with st.expander("🔧 Depuración de extracción (verificar texto)"):
+                st.caption(
+                    "El NER solo puede devolver palabras presentes en el texto de "
+                    "entrada. Usa esto para confirmar qué se procesó realmente."
                 )
+                # IMPORTANTE: se muestra el texto YA LIMPIO, no el crudo. El
+                # panel mostraba la entrada original y por tanto exponía el
+                # nombre del radiólogo y el RUT que la capa de limpieza sí
+                # redacta. Lo que interesa depurar es lo que el pipeline
+                # realmente procesó.
+                _txt_proc, _hubo_limpieza, _elim = limpiar_informe(texto_informe)
+                st.markdown(f"**Largo del texto:** {len(texto_informe)} caracteres de entrada, "
+                            f"{len(_txt_proc)} tras la limpieza")
+                st.markdown("**Últimos 300 caracteres del informe YA PROCESADO** "
+                            "(anonimizado; aquí se ve si quedó pie de página o descargo):")
+                st.code(_txt_proc[-300:] if len(_txt_proc) > 300 else _txt_proc)
+                if _elim:
+                    with st.expander(f"Ver los {len(_elim)} fragmentos retirados por la capa de privacidad"):
+                        st.caption(
+                            "Se listan solo las ETIQUETAS de lo retirado, no su contenido, "
+                            "para no reintroducir el dato personal en pantalla."
+                        )
+                        _tipos = {}
+                        for _e in _elim:
+                            _k = ("RUT" if any(c.isdigit() for c in _e) and "-" in _e
+                                  else "nombre o firma" if len(_e.split()) <= 6
+                                  else "línea de ruido")
+                            _tipos[_k] = _tipos.get(_k, 0) + 1
+                        for _k, _v in _tipos.items():
+                            st.markdown(f"- {_k}: {_v}")
+                st.markdown(f"**Span extraído por reglas:** `{_dual.get('regex_span') or '—'}`")
+                st.markdown(f"**Span extraído por NER:** `{_dual.get('ner_span') or '—'}`")
+                _en_texto = (_dual.get("ner_span","").split()[0].lower() in _txt_proc.lower()
+                             if _dual.get("ner_span") else False)
+                st.markdown(f"**¿El span del NER está en el texto de entrada?:** "
+                            f"{'✅ Sí' if _en_texto else '❌ No — posible resultado en caché, reprocesa'}")
 
-            with col_v2:
-                ml_birads = resultado["verificacion_ml"]["birads_ml"]
-                ml_conf = resultado["verificacion_ml"].get("confianza_ml")
-                st.metric(
-                    "Lectura de apoyo (ML)",
-                    f"BI-RADS {ml_birads}" if ml_birads is not None else "—",
-                    delta=formato_confianza_ml(ml_conf),
-                    delta_color="off",
-                )
-
-            with col_v3:
-                # Concordancia como texto (st.metric trunca; usamos markdown)
-                estado_ml = resultado["verificacion_ml"]["estado"]
-                st.markdown("**Concordancia**")
-                st.markdown(etiqueta_verificacion_ml(estado_ml))
-
-            # Mensaje del apoyo de lectura
-            if resultado["verificacion_ml"].get("mensaje"):
-                st.caption(resultado["verificacion_ml"]["mensaje"])
+        # El panel del verificador ML se retiró de la interfaz clínica junto con
+        # el módulo. Ver el comentario en la sección de opciones.
 
     # ---------- Acciones ----------
     st.markdown("#### Acciones")
@@ -445,11 +463,13 @@ with st.sidebar:
         """
         Pipeline de 4 módulos validado sobre el corpus de Vázquez Noguera et al. (2025).
 
-        **Exactitud extracción BI-RADS:** 99.9%
-        **Lectura BI-RADS · apoyo ML (CV):** ≈0.89
-        **Tasa de incoherencias:** 1.1%
+        **Extracción BI-RADS (Macro F1):** 0.9995
+        **Localización de la recomendación · NER (F1 de span):** 0.9991
+        **Tasa de incoherencias:** 1.15% (50 de 4 357, 19 críticas)
 
-        La extracción por reglas es el lector primario. El apoyo ML es un segundo
-        canal de lectura independiente (mide lectura, no juicio clínico).
+        La extracción por reglas es la única autoridad del sistema. Se entrenó un
+        verificador DistilBETO para contrastarla y se retiró tras medir por cuatro
+        vías que no aporta: la ablación lo derrumba de 0.939 a 0.544, y un regex de
+        una línea lo empata sobre su propia ventana.
         """
     )

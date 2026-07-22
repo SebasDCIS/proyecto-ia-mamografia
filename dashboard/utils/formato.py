@@ -93,14 +93,18 @@ ETIQUETAS_CATEGORIAS = {
     "criterio_medico": "Criterio médico (no específica)",
 }
 
+# OBSOLETO. El verificador ML del Módulo 4 se retiró del sistema tras medir por
+# cuatro vías que no aporta sobre la extracción reglada (ver docs/BITACORA.md).
+# Estas etiquetas ya no se usan en la interfaz; se conservan por si se reproduce
+# su evaluación con `python -m src.predict --con-ml`.
 ETIQUETAS_VERIFICACION_ML = {
     "confirmado": "Lectura ML concuerda",
     "confirmado_doble": "Lectura ML recupera confianza",
     "ml_no_confirma": "Lectura ML difiere (prima la literal)",
     "discrepante_real": "Lectura incierta (revisar)",
     "ml_inseguro": "Lectura ML sin confianza",
-    "no_verificable": "Sin lectura de apoyo",
-    "no_ejecutado": "Apoyo ML desactivado",
+    "no_verificable": "Sin lectura del verificador",
+    "no_ejecutado": "Verificador ML no ejecutado (descartado)",
     "alerta_omision_buscador": "Omisión de BI-RADS",
 }
 

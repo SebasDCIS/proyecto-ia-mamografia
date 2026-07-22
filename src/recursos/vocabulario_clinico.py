@@ -168,15 +168,22 @@ PATRONES_POR_CATEGORIA: Dict[str, List[str]] = {
         r"(mamografia|ecografia|mamografico|ecografico)\s+anual",
     ],
     "control_corto_plazo": [
-        r"control\s+semestral",
-        r"control\s+en\s+6\s+meses",
-        r"control\s+en\s+seis\s+meses",
-        r"control\s+a\s+los?\s+6\s+meses",
-        r"seguimiento\s+a\s+6\s+meses",
-        r"control\s+en\s+3\s+meses",
-        r"control\s+ecografico\s+semestral",
-        r"control\s+ecografico\s+en\s+(6|seis)\s+meses",
-        r"control\s+ecografico\s+y\s+mamografia.{0,30}en\s+(6|seis)\s+meses",
+        # NOTA: se acepta la forma verbal ("controlar", "controlarse") además del
+        # sustantivo. Un informe chileno real decía "se sugiere CONTROLAR en seis
+        # meses" y ningún patrón lo reconocía, porque todos exigían "control" +
+        # espacio. El sufijo opcional (?:ar|arse|arla|arlo) cubre esas formas.
+        r"control(?:ar|arse|arla|arlo)?\s+semestral",
+        r"control(?:ar|arse|arla|arlo)?\s+(?:en|a)\s+(?:los?\s+)?(?:6|seis)\s+meses",
+        r"control(?:ar|arse|arla|arlo)?\s+(?:en|a)\s+(?:los?\s+)?(?:3|tres)\s+meses",
+        r"control(?:ar|arse|arla|arlo)?\s+(?:en|a)\s+(?:los?\s+)?(?:4|cuatro)\s+meses",
+        r"seguimiento\s+(?:a|en)\s+(?:6|seis)\s+meses",
+        r"seguimiento\s+semestral",
+        r"control(?:ar|arse)?\s+ecografico\s+semestral",
+        r"control\s+ecografico\s+(?:en|a)\s+(?:6|seis)\s+meses",
+        r"control\s+ecografico\s+y\s+mamografia.{0,30}(?:en|a)\s+(?:6|seis)\s+meses",
+        # Formas donde el intervalo precede al verbo
+        r"(?:6|seis)\s+meses.{0,15}control",
+        r"a\s+corto\s+plazo",
     ],
     "biopsia_histologia": [
         r"caracterizacion\s+histologica",

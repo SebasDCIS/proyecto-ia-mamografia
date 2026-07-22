@@ -71,14 +71,16 @@ with col1:
 
         ### Pipeline de módulos
 
-        1. **Extractor BI-RADS** (regex + buscador híbrido sobre la conclusión)
-        2. **Apoyo de lectura ML** (DistilBETO relee y refuerza la extracción del BI-RADS)
-        3. **Extractor de recomendaciones** (reglas clínicas + sinónimos, con **extractor NER** —DistilBETO— como respaldo para redacciones no vistas)
-        4. **Motor de cotejo ACR** (tabla normativa según estándar BI-RADS/ACR)
+        0. **Limpieza** (retira descargo legal, firma y datos del paciente)
+        1. **Extractor BI-RADS** (búsqueda híbrida en 4 fases sobre el informe completo, solo reglas)
+        2. **Extractor de recomendaciones** (reglas clínicas + sinónimos, con **extractor NER** —DistilBETO— como respaldo para redacciones no vistas)
+        3. **Motor de cotejo ACR** (tabla normativa según estándar BI-RADS/ACR)
 
-        La arquitectura es **híbrida**: las reglas, transparentes y auditables, son
-        la vía primaria; la IA (NER) aporta robustez ante redacciones nuevas cuando
-        las reglas no localizan la recomendación. Cuando ninguno resuelve con
+        Las reglas, transparentes y auditables, son la vía primaria. La IA se usa
+        en un solo módulo: el **NER**, que localiza la recomendación cuando las
+        reglas no la encuentran, porque ahí la variación es semántica y no se puede
+        enumerar. En cambio, los formatos de un número sí se enumeran, y por eso el
+        extractor de BI-RADS opera solo con reglas. Cuando ninguna vía resuelve con
         confianza, el caso se deriva a **revisión humana**.
 
         ### Filosofía Human-on-the-Loop
@@ -171,6 +173,6 @@ st.divider()
 st.caption(
     "Desarrollado por Sebastián Inostroza Hurtado · "
     "Doctorado en Ciencias e Ingeniería para la Salud · "
-    "Universidad de Valparaíso · Junio 2026 · "
+    "Universidad de Valparaíso · Julio 2026 · "
     "[Repositorio en GitHub](https://github.com/SebasDCIS/proyecto-ia-mamografia)"
 )

@@ -391,7 +391,30 @@ def cotejar_birads_vs_recomendacion(
     sin_recomendacion = (not categorias) or (categoria_principal in (None, "ambigua"))
     if sin_recomendacion:
         criticidad = _CRITICIDAD_BIRADS.get(birads, "bajo")
-        prioridad = "alta" if criticidad == "critico" else "media"
+        # Escalamiento por ausencia de conducta ante sospecha.
+        #
+        # Un BI-RADS 4, 5 o 6 sin recomendación declarada es la contraparte de la
+        # alerta de omisión del Módulo 1: allá falta la categoría, aquí falta la
+        # conducta. En un informe altamente sospechoso de malignidad, la ausencia
+        # de conducta declarada es el vacío de documentación más grave posible, y
+        # no puede tratarse igual que la misma ausencia en un BI-RADS 1.
+        #
+        # Detectado sobre un informe chileno real: BI-RADS 5 con neoplasia y
+        # adenopatías de aspecto metastásico, sin ninguna recomendación en el
+        # texto. El sistema lo marcaba con severidad "alta", igual que un caso
+        # benigno sin recomendación.
+        if birads in (4, 5, 6):
+            prioridad = "critica"
+            regla = "regla_sospecha_sin_recomendacion_declarada"
+            mensaje_extra = (
+                f" ATENCIÓN: un BI-RADS {birads} exige una conducta explícita "
+                f"según la norma ACR y este informe no la declara. Verificar "
+                f"antes de la entrega del estudio."
+            )
+        elif criticidad == "critico":
+            prioridad, regla, mensaje_extra = "alta", "revision_por_extraccion", ""
+        else:
+            prioridad, regla, mensaje_extra = "media", "revision_por_extraccion", ""
         return {
             "estado": "revision_extraccion",
             "severidad": prioridad,
@@ -408,10 +431,10 @@ def cotejar_birads_vs_recomendacion(
                 f"recomendación para este informe (BI-RADS {birads}). Puede ser "
                 f"una omisión de la recomendación o un formato no reconocido por "
                 f"el sistema. No se emite juicio de coherencia; se recomienda "
-                f"revisión."
+                f"revisión.{mensaje_extra}"
             ),
             "trazabilidad": {
-                "regla_aplicada": "revision_por_extraccion",
+                "regla_aplicada": regla,
                 "razon": "recomendacion_no_detectada_o_ambigua",
             },
         }

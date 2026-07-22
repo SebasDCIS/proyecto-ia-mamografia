@@ -331,14 +331,41 @@ def _distancia_edicion(a: str, b: str) -> int:
     return d[m][n]
 
 
+# Palabras del español clínico que están a distancia de edición 1 de un verbo
+# gatillo pero NO son typos: son formas descriptivas legítimas, frecuentes en
+# informes radiológicos. Sin esta lista, la capa difusa las confunde y empieza a
+# extraer la "recomendación" desde el lugar equivocado.
+#
+# Caso real detectado en un informe chileno:
+#   "No se observan imágenes que SUGIERAN extravasación del material protésico"
+# "sugieran" (subjuntivo descriptivo) está a distancia 1 de "sugieren" (gatillo),
+# y la extracción arrancaba desde ahí en vez de desde "Se sugiere control anual".
+_NO_SON_TYPOS = {
+    # formas descriptivas de "sugerir": describen un hallazgo, no una conducta
+    "sugieran", "sugiera", "sugerente", "sugerentes", "sugerido", "sugerida",
+    "sugestivo", "sugestiva", "sugestivos", "sugestivas",
+    # descriptivas de "indicar"
+    "indicativo", "indicativa", "indicativos", "indicativas", "indicado",
+    "indicada", "indicados", "indicadas",
+    # otras formas verbales descriptivas
+    "requerido", "requerida", "solicitado", "solicitada", "derivado", "derivada",
+    "aconsejado", "aconsejada", "recomendado", "recomendada", "recomendable",
+}
+
+
 def _detectar_gatillo_difuso(segmento: str) -> Optional[Dict[str, str]]:
     """Busca un verbo gatillo con un typo (distancia de edición 1).
+
+    Excluye las palabras de _NO_SON_TYPOS: son español válido y describen un
+    hallazgo en lugar de indicar una conducta.
 
     Returns:
         Dict {palabra, gatillo, distancia} si encuentra un match difuso, o None.
     """
     for palabra in re.findall(r"[a-zñ]+", segmento.lower()):
         if len(palabra) < _FUZZY_MIN_LEN:
+            continue
+        if palabra in _NO_SON_TYPOS:
             continue
         for kw in _TRIGGERS_FUZZY:
             if abs(len(palabra) - len(kw)) > _FUZZY_MAX_DIST:
@@ -347,6 +374,17 @@ def _detectar_gatillo_difuso(segmento: str) -> Optional[Dict[str, str]]:
             if 1 <= d <= _FUZZY_MAX_DIST:  # d>=1: solo typos, no matches exactos
                 return {"palabra": palabra, "gatillo": kw, "distancia": str(d)}
     return None
+
+
+# Un segmento que menciona un año o un mes concreto describe un estudio PREVIO
+# ("ecotomografía de febrero de 2025"), no una conducta a seguir. Sin esta guarda,
+# la regla de "directiva pelada" lo toma por una recomendación.
+_RE_REFERENCIA_TEMPORAL = re.compile(
+    r"\b(19|20)\d{2}\b|"
+    r"\b(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|setiembre|"
+    r"octubre|noviembre|diciembre)\b",
+    re.IGNORECASE,
+)
 
 
 def _extraer_recomendacion_por_frases_gatillo(
@@ -385,8 +423,25 @@ def _extraer_recomendacion_por_frases_gatillo(
             oraciones_recomendacion.append(seg_limpio)
             continue
         # 2) Directiva "pelada": el segmento comienza con un sustantivo de acción
-        #    ("Control en 3 meses", "Biopsia", "Ecografía mamaria")
+        #    ("Control en 3 meses", "Biopsia", "Ecografía mamaria").
+        #
+        #    Dos guardas, ambas motivadas por un informe chileno real cuyo título
+        #    era "Ecotomografía Mamaria" y que mencionaba "ecotomografía de
+        #    febrero de 2025" como estudio previo. Sin ellas, la extracción
+        #    arrancaba desde el título en vez de desde "Se sugiere control anual".
+        #
+        #    a) Referencia temporal: si el segmento nombra un año o un mes, habla
+        #       de un estudio PREVIO, no de una conducta futura.
+        #    b) Posición: el título del examen vive al inicio del informe y la
+        #       recomendación al final. Una directiva sin verbo solo se acepta en
+        #       la segunda mitad del texto. Es el mismo criterio posicional que
+        #       usa el buscador de BI-RADS.
         if _SUSTANTIVO_DIRECTIVA.search(seg_norm):
+            if _RE_REFERENCIA_TEMPORAL.search(seg_norm):
+                continue
+            pos_rel = full_report.find(seg_limpio) / max(len(full_report), 1)
+            if pos_rel < 0.5:
+                continue
             oraciones_recomendacion.append(seg_limpio)
             continue
         # 3) Fallback difuso: ¿algún verbo gatillo con un typo (distancia 1)?
