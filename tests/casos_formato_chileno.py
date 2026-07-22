@@ -276,6 +276,27 @@ CASOS: List[Dict[str, Any]] = [
         "espera": {"birads": 0, "categoria": None, "estado": None},
     },
 
+    {
+        "id": "rec_03_intervalo_en_anios",
+        "variante": "Intervalo anual expresado en años, no con la palabra 'anual'",
+        "texto": (
+            _encabezado("Reyes Campos, Fernanda Ines", "45A 4M", "19191919-9", "17-01-2026") +
+            "Mamografía Bilateral\n"
+            "Hallazgos:\n"
+            "Nódulo circunscrito de 9 mm en mama derecha, de aspecto probablemente benigno.\n\n"
+            "Conclusión:\n"
+            "Nódulo probablemente benigno.\n"
+            "Birads 3.\n"
+            "Se suguiere control en 1 año.\n\n" +
+            _firma("Tomas Andres Miranda Cortes") + _DESCARGO
+        ),
+        # Un BI-RADS 3 espera control a corto plazo. Un control anual se queda
+        # corto y debe generar alerta. Antes de este caso, "control en 1 año" se
+        # clasificaba como control_corto_plazo por similitud léxica con "control
+        # en 6 meses", y el sistema declaraba coherente un informe que no lo es.
+        "espera": {"birads": 3, "categoria": "control_anual", "estado": "incoherente"},
+    },
+
     # -----------------------------------------------------------------------
     # Grupo 4: comportamiento seguro ante información faltante
     # -----------------------------------------------------------------------

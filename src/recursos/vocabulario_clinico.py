@@ -156,6 +156,19 @@ PATRONES_POR_CATEGORIA: Dict[str, List[str]] = {
         r"para\s+apreciar\s+evolucion",
     ],
     "control_anual": [
+        # NOTA: no basta con exigir la palabra "anual". Un informe real decía
+        # "se sugiere control en 1 año" y ningún patrón lo reconocía, así que la
+        # clasificación caía al fallback por TF-IDF, que lo asignaba a
+        # control_corto_plazo por similitud léxica con "control en 6 meses".
+        # El error es clínicamente relevante: para un BI-RADS 3 la conducta
+        # esperada es control a 6 meses, de modo que un control anual debe
+        # generar alerta y con el error no la generaba.
+        r"control(?:ar|arse)?\s+(?:en|a|dentro\s+de)\s+(?:el\s+|un\s+|1\s+)?a[nñ]o\b",
+        r"control(?:ar|arse)?\s+(?:en|a)\s+(?:los?\s+)?(?:12|doce)\s+meses",
+        r"(?:12|doce)\s+meses.{0,15}control",
+        r"seguimiento\s+(?:en|a)\s+(?:un\s+|1\s+)?a[nñ]o",
+        r"seguimiento\s+(?:en|a)\s+(?:los?\s+)?(?:12|doce)\s+meses",
+        r"pr[oó]ximo\s+control\s+(?:en|a)\s+(?:un\s+|1\s+)?a[nñ]o",
         r"control\s+mamografico\s+anual",
         r"control\s+anual",
         r"mamografia\s+de\s+control\s+anual",
