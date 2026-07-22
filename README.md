@@ -81,23 +81,107 @@ docs/
   Guia_Fundamentos_IA         Guía de conceptos de IA aplicados al proyecto
 ```
 
-## Uso
+## Requisitos
+
+- **Python 3.9** o superior
+- Sistema operativo: probado en macOS (Apple Silicon, aceleración MPS) y Linux
+- Espacio en disco: ~1 GB si se descarga el modelo NER entrenado
+
+Las dependencias están en [`requirements.txt`](requirements.txt). El núcleo del
+sistema (extracción y cotejo por reglas) solo necesita `numpy` y `scikit-learn`;
+`torch` y `transformers` se requieren únicamente para el extractor NER y los
+notebooks de experimentación, y `streamlit` para la interfaz.
+
+## Instalación
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/SebasDCIS/proyecto-ia-mamografia.git
+cd proyecto-ia-mamografia
 
-# Pipeline por línea de comandos (suites de prueba de cada módulo)
+python3 -m venv .venv
+source .venv/bin/activate          # en Windows: .venv\Scripts\activate
+
+pip install -r requirements.txt
+```
+
+## Obtención de los datos
+
+El corpus **no se incluye en el repositorio** (está en `.gitignore`). Es público y
+se descarga desde Zenodo:
+
+- **Corpus:** *Mammography reporting dataset with BI-RADS system for natural
+  language processing applications*, Vázquez Noguera et al. (2025)
+- **Zenodo:** [10.5281/zenodo.14827680](https://doi.org/10.5281/zenodo.14827680)
+- **Artículo:** [10.1016/j.dib.2025.111761](https://doi.org/10.1016/j.dib.2025.111761)
+- **Contenido:** 4 357 informes mamográficos en español, con la categoría BI-RADS
+  y la recomendación clínica en columnas separadas
+
+Tras descargarlo, colocar el CSV en:
+
+```
+data/processed/reports_cleaned.csv
+```
+
+Los notebooks que preparan el corpus a partir del archivo original son
+`notebooks/00_exploracion_informes.ipynb` y `notebooks/01_limpieza.ipynb`.
+
+## Ejecución
+
+**Sin necesidad de descargar datos** (usa casos de prueba incorporados):
+
+```bash
+# Suite de pruebas del pipeline completo: 8 casos
 python -m src.predict
 
-# Interfaz web
+# Batería de cobertura de formatos: 16 casos sintéticos
+python -m tests.casos_formato_chileno
+```
+
+**Procesar un informe concreto:**
+
+```bash
+python -m src.predict --input ruta/al/informe.txt
+python -m src.predict --input ruta/al/informe.pdf --type pdf
+python -m src.predict --input informe.txt --output resultado.json
+```
+
+**Interfaz web:**
+
+```bash
 streamlit run dashboard/app.py
 ```
 
 El extractor NER requiere el modelo entrenado en `models/ner_recomendacion_final`
-(ver `notebooks/11_extractor_ner_recomendacion.ipynb`). Si el modelo no está
-presente, el sistema opera solo con reglas sin interrumpirse.
+(se genera con `notebooks/11_extractor_ner_recomendacion.ipynb`). Si el modelo no
+está presente, el sistema opera solo con reglas sin interrumpirse.
 
-## Datos y limitación
+## Reproducir los experimentos
+
+Los notebooks están numerados en el orden en que se ejecutaron. Requieren el
+corpus descargado.
+
+| Notebook | Qué reproduce | Requiere GPU |
+|---|---|---|
+| `00`, `01` | Exploración del corpus y limpieza | no |
+| `02_baseline_tfidf` | Líneas base clásicas (LinearSVC, NB, LogReg) | no |
+| `03_transformers` | DistilBERT en inglés: Macro F1 = 0,471 | recomendada |
+| `04_distilbeto` | Mismo experimento en español: 0,9386 | recomendada |
+| `04b_cv_distilbeto` | Validación cruzada. Revela la fuga por aumentación | recomendada |
+| `04c_cv_ventana_local` | CV del verificador sobre su ventana real de inferencia | recomendada |
+| `05_extractor_birads` | Extractor reglado: Macro F1 = 0,9995 | no |
+| `07_validacion_cotejo_acr` | Validación end-to-end del cotejo | no |
+| `08_verificador_birads_ml` | Verificador Transformer (después retirado) | recomendada |
+| `11_extractor_ner` | Entrenamiento del NER: F1 de span = 0,9991 | recomendada |
+| `11b_ablacion_ner` | Ablación: ¿el NER lee el encabezado o el contenido? | recomendada |
+| `11c_estres_ner` | Prueba de estrés con redacciones no anticipadas | recomendada |
+| `*_Colab` | Embeddings y predicción de BI-RADS (ejecutados en Colab) | sí |
+
+**Reproducción mínima sin GPU ni descarga de datos:** las dos suites de la
+sección anterior (`src.predict` y `tests.casos_formato_chileno`) verifican el
+pipeline reglado completo y la cobertura de formatos, que son las vías que operan
+en producción.
+
+## Limitación del corpus
 
 Corpus de entrenamiento: 4 357 informes en español (Vázquez Noguera et al., 2025),
 de **origen paraguayo**. El contexto de despliegue previsto es chileno. Esta

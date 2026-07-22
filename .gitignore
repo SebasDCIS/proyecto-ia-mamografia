@@ -43,7 +43,6 @@ runs/
 *.aux
 *.log
 *.out
-*.bbl
 *.blg
 *.synctex.gz
 *.fls
