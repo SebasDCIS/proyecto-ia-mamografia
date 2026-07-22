@@ -30,6 +30,7 @@ trabajo.
 | 27-jun-2026 | Informe v8.1: se reporta el 0,8877 de CV como métrica honesta |
 | — | Entrenamiento del NER (nb 11) y rediseño del buscador tras los informes chilenos |
 | **21-jul-2026** | **El Módulo 1 pasa a solo reglas.** Se retira el verificador tras cuatro mediciones. El NER se somete al mismo estándar (nb 11b, nb 11c) |
+| **21-jul-2026** | **Validación con 19 informes chilenos reales.** Seis fallos encontrados y corregidos: fuga de datos personales, texto crudo en el dashboard, dos falsos positivos de extracción, la forma verbal de "control", y una concordancia regex/NER que mentía. Escalamiento a severidad crítica por conducta ausente |
 
 ---
 
@@ -299,8 +300,8 @@ que aprendió la tarea.
 **La ablación** (nb 11b). Enmascarando el encabezado `RECOMENDACIONES` y
 reevaluando el modelo ya entrenado: 1,0000 → 1,0000. No dependía del encabezado.
 
-**La prueba de estrés** (nb 11c). Como la evidencia real eran tres informes
-chilenos, se simuló la brecha sobre los 565 informes de prueba: se quitó el
+**La prueba de estrés** (nb 11c). Como la evidencia real eran entonces tres
+informes chilenos (la validación con 19 vino después, ese mismo día), se simuló la brecha sobre los 565 informes de prueba: se quitó el
 encabezado y se reemplazó el verbo gatillo por formas verificadas una a una como
 ausentes de `_FRASES_GATILLO_RECOMENDACION`. La regla evaluada es el módulo de
 producción en su segunda vía, la que corre ante un PDF sin columna de
@@ -354,6 +355,115 @@ sobre un experimento roto.
 `id2label`. No afecta sus métricas, porque el notebook decodifica con su propio
 diccionario, pero cualquiera que cargue el modelo desde fuera obtiene etiquetas sin
 significado. La corrección es pasar `id2label` y `label2id` al crear el modelo.
+
+---
+
+## Validación con 19 informes chilenos reales · 21-jul-2026
+
+Hasta esta fecha la validación externa se apoyaba en tres informes chilenos. Se
+incorporaron 19 informes reales de Bupa Clínica Reñaca (mamografías y
+ecotomografías, marzo de 2026), y cada uno destapó algo que el corpus paraguayo
+no mostraba.
+
+### Resultado del pipeline
+
+| Métrica | Resultado |
+|---|---|
+| BI-RADS extraído | 19/19, todos con confianza alta |
+| Recomendación clasificada | 14/19 |
+| Sin recomendación en el informe | 5/19 (correctamente marcados para revisión) |
+| Alertas | 4 de severidad media, 1 crítica |
+
+Los cinco informes sin clasificar no son fallos: esos informes efectivamente no
+declaran ninguna recomendación.
+
+### Los numerales romanos existen en la práctica chilena
+
+El corpus paraguayo contiene **0 %** de numerales romanos. Dos de los informes
+chilenos escriben la categoría así:
+
+```
+"Birads -us III"  ->  BI-RADS 3
+"Birads -us II"   ->  BI-RADS 2
+```
+
+El soporte para romanos se había programado sin disponer de un solo ejemplo, como
+cobertura preventiva. Aquí demostró su valor. Un modelo entrenado sobre el corpus
+no habría podido: nunca vio esa forma.
+
+### Seis fallos encontrados y corregidos
+
+**1. Fuga de datos personales pegados al texto clínico.** La limpieza operaba por
+líneas, así que un nombre de radiólogo o un RUT en su propia línea se eliminaban,
+pero pegados a la conclusión sobrevivían: borrar esa línea se habría llevado el
+BI-RADS, y el fail-safe del 60 % lo impedía. La protección de contenido clínico
+anulaba la de privacidad.
+
+Solución: una segunda capa que **redacta dentro de la línea** en lugar de
+borrarla, sustituyendo por `[MEDICO]`, `[RUT]` o `[DATO_PACIENTE]`. Se aplica
+también cuando el fail-safe se dispara, que era el hueco real.
+
+**2. El dashboard mostraba el texto crudo.** El panel de depuración y las vistas
+previas de archivo enseñaban la entrada original, exponiendo en pantalla lo que la
+limpieza sí redactaba. Detectado al compartir una captura de pantalla que
+contenía el nombre de una radióloga. Corregido en las tres vistas.
+
+**3. Un subjuntivo confundido con un verbo gatillo.** La capa de tolerancia a
+typos veía `sugieran` en *"imágenes que sugieran extravasación"* y lo tomaba por
+`sugieren` (distancia de edición 1). Pero `sugieran` no es un typo: es español
+válido con sentido descriptivo. Se añadió una lista de formas clínicas que nunca
+deben tratarse como errores de tipeo.
+
+**4. El título del examen leído como recomendación.** La regla de "directiva sin
+verbo" tomaba `Ecotomografía Mamaria` (el título) y `ecotomografía de febrero de
+2025` (un estudio previo) como conductas a seguir. Dos guardas: se descarta el
+segmento si menciona un año o un mes, y una directiva sin verbo solo se acepta en
+la segunda mitad del informe, mismo criterio posicional que usa el buscador de
+BI-RADS.
+
+**5. La forma verbal de "control".** Un informe decía *"se sugiere **controlar**
+en seis meses"* y ningún patrón lo reconocía: todos exigían el sustantivo
+`control` seguido de espacio. Ampliado a `control(?:ar|arse|arla|arlo)?`.
+
+**6. La concordancia regex/NER mentía.** La comparación usaba contención de
+subcadena, así que un span sobre-extraído que contenía dentro al span correcto se
+reportaba como "concuerdan". Eso ocultaba un fallo justo donde el contraste
+debería revelarlo. Ahora exige equivalencia de largo (≥75 %) y añade el estado
+`contenido_parcial`.
+
+### Escalamiento de severidad por conducta ausente
+
+Uno de los informes es un **BI-RADS 5** con neoplasia mamaria y adenopatías
+axilares de aspecto metastásico, y **no declara ninguna recomendación**. El
+sistema lo marcaba con severidad *alta*, la misma que un BI-RADS 1 sin
+recomendación.
+
+Se añadió el escalamiento: cuando el BI-RADS es 4, 5 o 6 y no hay recomendación
+clasificable, la severidad pasa a **crítica** con la regla
+`regla_sospecha_sin_recomendacion_declarada`. Es la contraparte de la alerta de
+omisión del Módulo 1: allá falta la categoría, aquí falta la conducta.
+
+### El NER acertó donde las reglas fallaron
+
+En el informe cuyo título confundía a la regla, el NER extrajo correctamente
+*"Se sugiere control anual con mamografía y ecografía."* Es el rol que se le midió
+en el notebook 11c, ocurriendo sobre un informe real y no sobre una perturbación
+sintética.
+
+### Verificación
+
+Ninguna de las seis correcciones produjo regresión: 8/8 tests del pipeline, y
+800 informes del corpus paraguayo mantienen la misma distribución de estados. La
+capa de redacción no genera falsos positivos sobre los 4 357 del corpus, que ya
+venía anonimizado.
+
+### Lección
+
+Todos estos fallos eran invisibles desde dentro del corpus de entrenamiento. El
+corpus paraguayo es homogéneo: encabezados consistentes, sin romanos, ya
+anonimizado, con la recomendación siempre en la misma posición. Cada informe real
+que entró al sistema reveló un supuesto que el corpus permitía sostener sin
+costo.
 
 ---
 
@@ -443,4 +553,6 @@ pueden enumerar y las redacciones de una recomendación clínica no.
 - Integrar la tolerancia a errores de tipeo (`proto_typos_birads.py`) como fase
   del buscador, o mantenerla como módulo separado.
 - Validación clínica formal de la tabla ACR por radiólogos.
-- Corpus chileno anotado. Es la limitación de fondo del trabajo.
+- Corpus chileno anotado. Es la limitación de fondo del trabajo. Los 19 informes
+  de validación permiten detectar fallos, pero no medir desempeño: no están
+  anotados y son una muestra pequeña de un solo centro.

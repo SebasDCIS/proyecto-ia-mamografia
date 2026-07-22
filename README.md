@@ -103,8 +103,9 @@ Corpus de entrenamiento: 4 357 informes en español (Vázquez Noguera et al., 20
 de **origen paraguayo**. El contexto de despliegue previsto es chileno. Esta
 diferencia es una limitación explícita: el corpus es homogéneo y no contiene los
 formatos, descargos ni variantes léxicas de los informes chilenos, que se
-abordaron mediante preprocesamiento, sinónimos y el extractor NER. La mejora de
-fondo requiere un corpus del contexto de despliegue.
+abordaron mediante preprocesamiento, sinónimos y el extractor NER, y se validaron
+contra 19 informes reales (ver más abajo). La mejora de fondo sigue requiriendo un
+corpus anotado del contexto de despliegue.
 
 ## Privacidad
 
@@ -143,7 +144,7 @@ final.
 La diferencia está en el **rol**. El verificador actuaba dentro del corpus, así
 que la métrica del corpus era la relevante y mostró que no servía. El NER es un
 respaldo para casos **fuera** del corpus, de modo que esa métrica no evalúa su
-función. Como la evidencia real eran tres informes chilenos, se simuló la brecha
+función. Como la evidencia externa era acotada, se simuló la brecha
 sobre los 565 informes de prueba: se quitó el encabezado y se reemplazó el verbo
 gatillo por formas verificadas como ausentes de la lista cerrada del módulo.
 
@@ -168,6 +169,39 @@ El contraste bajo la misma prueba resume la decisión de diseño:
 El experimento es **sintético**: opera sobre el corpus paraguayo perturbado, no
 sobre informes chilenos reales. Mide el rol que el componente cumple, no su
 desempeño en Chile.
+
+## Validación con informes reales
+
+El sistema se probó sobre **19 informes chilenos reales** (Bupa Clínica Reñaca,
+marzo de 2026), distintos en formato al corpus de entrenamiento.
+
+| | |
+|---|---|
+| BI-RADS extraído | 19/19, todos con confianza alta |
+| Recomendación clasificada | 14/19 (los otros 5 no la declaran) |
+| Fugas de datos personales | 0 en todas las vistas |
+| Alertas generadas | 4 de severidad media, 1 crítica |
+
+Dos de esos informes escriben la categoría con **numerales romanos**
+(`Birads -us III`), forma que el corpus paraguayo no contiene en absoluto. El
+soporte para romanos se había programado como cobertura preventiva, sin disponer
+de un solo ejemplo, y aquí demostró su valor.
+
+La validación destapó seis fallos que el corpus no revelaba: datos personales
+pegados al texto clínico que sobrevivían a la limpieza, el dashboard mostrando el
+texto crudo, un subjuntivo descriptivo confundido con un verbo gatillo, el título
+del examen leído como recomendación, la forma verbal de "control" no reconocida, y
+una comparación regex/NER que reportaba concordancia donde no la había. Todos
+corregidos y verificados sin regresión. El detalle está en
+[`docs/BITACORA.md`](docs/BITACORA.md).
+
+Uno de los informes es un BI-RADS 5 con neoplasia y adenopatías metastásicas que
+**no declara ninguna recomendación**. A raíz de ese caso, la severidad escala a
+crítica cuando el BI-RADS es 4, 5 o 6 y falta la conducta: es la contraparte de la
+alerta de omisión del Módulo 1.
+
+Estos 19 informes permiten **detectar fallos**, no medir desempeño: no están
+anotados y provienen de un solo centro.
 
 ## Resultados
 
