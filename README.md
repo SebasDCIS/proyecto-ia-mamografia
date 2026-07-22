@@ -103,8 +103,8 @@ Corpus de entrenamiento: 4 357 informes en español (Vázquez Noguera et al., 20
 de **origen paraguayo**. El contexto de despliegue previsto es chileno. Esta
 diferencia es una limitación explícita: el corpus es homogéneo y no contiene los
 formatos, descargos ni variantes léxicas de los informes chilenos, que se
-abordaron mediante preprocesamiento, sinónimos y el extractor NER, y se validaron
-contra 19 informes reales (ver más abajo). La mejora de fondo sigue requiriendo un
+abordaron mediante preprocesamiento, sinónimos y el extractor NER, con una batería
+de casos de prueba que cubre esas variantes (ver más abajo). La mejora de fondo sigue requiriendo un
 corpus anotado del contexto de despliegue.
 
 ## Privacidad
@@ -170,38 +170,41 @@ El experimento es **sintético**: opera sobre el corpus paraguayo perturbado, no
 sobre informes chilenos reales. Mide el rol que el componente cumple, no su
 desempeño en Chile.
 
-## Validación con informes reales
+## Validación de cobertura de formatos
 
-El sistema se probó sobre **19 informes chilenos reales** (Bupa Clínica Reñaca,
-marzo de 2026), distintos en formato al corpus de entrenamiento.
+El corpus de entrenamiento es homogéneo: encabezados consistentes, sin numerales
+romanos, ya anonimizado, con la recomendación siempre en la misma posición. Esa
+homogeneidad permite que el sistema sostenga supuestos sin costo aparente.
 
-| | |
+Para verificar la cobertura sobre variantes que el corpus no contiene se construyó
+una **batería de 16 casos de prueba sintéticos**
+([`tests/casos_formato_chileno.py`](tests/casos_formato_chileno.py)). Son informes
+ficticios: nombres, identificadores y fechas inventados. Cubren variantes de
+redacción y estructura documentadas en la práctica clínica local.
+
+| Grupo | Variantes cubiertas |
 |---|---|
-| BI-RADS extraído | 19/19, todos con confianza alta |
-| Recomendación clasificada | 14/19 (los otros 5 no la declaran) |
-| Fugas de datos personales | 0 en todas las vistas |
-| Alertas generadas | 4 de severidad media, 1 crítica |
+| Escritura del BI-RADS | Arábigo, numeral romano (`Birads -us III`), modalidad antepuesta (`US BIRADS 1`) y pospuesta (`Birads 2 US`), error de tipeo (`bi-radas`) |
+| Estructura | `Impresión mamográfica` en vez de `Conclusión`, sin encabezado, descargo legal reubicado al inicio, mención histórica previa a la definitiva |
+| Recomendación | Forma verbal (`controlar` en vez de `control`), sinónimos de técnica (`ultrasonido`) |
+| Comportamiento seguro | Hallazgos sin categoría, sospecha sin conducta declarada, incoherencia crítica |
+| Privacidad | Nombre e identificador pegados al texto clínico |
 
-Dos de esos informes escriben la categoría con **numerales romanos**
-(`Birads -us III`), forma que el corpus paraguayo no contiene en absoluto. El
-soporte para romanos se había programado como cobertura preventiva, sin disponer
-de un solo ejemplo, y aquí demostró su valor.
+Resultado: **16/16** en las cuatro dimensiones evaluadas (categoría extraída,
+recomendación clasificada, estado del cotejo, ausencia de identificadores tras la
+limpieza). La batería es ejecutable sin acceso a datos clínicos:
 
-La validación destapó seis fallos que el corpus no revelaba: datos personales
-pegados al texto clínico que sobrevivían a la limpieza, el dashboard mostrando el
-texto crudo, un subjuntivo descriptivo confundido con un verbo gatillo, el título
-del examen leído como recomendación, la forma verbal de "control" no reconocida, y
-una comparación regex/NER que reportaba concordancia donde no la había. Todos
-corregidos y verificados sin regresión. El detalle está en
-[`docs/BITACORA.md`](docs/BITACORA.md).
+```bash
+python -m tests.casos_formato_chileno
+```
 
-Uno de los informes es un BI-RADS 5 con neoplasia y adenopatías metastásicas que
-**no declara ninguna recomendación**. A raíz de ese caso, la severidad escala a
-crítica cuando el BI-RADS es 4, 5 o 6 y falta la conducta: es la contraparte de la
-alerta de omisión del Módulo 1.
+Uno de los casos es un BI-RADS 5 que no declara ninguna recomendación. A raíz de
+ese escenario, la severidad escala a crítica cuando el BI-RADS es 4, 5 o 6 y falta
+la conducta: es la contraparte de la alerta de omisión del Módulo 1.
 
-Estos 19 informes permiten **detectar fallos**, no medir desempeño: no están
-anotados y provienen de un solo centro.
+Estos casos verifican **cobertura de formatos**, no desempeño poblacional. La
+validación con un corpus clínico anotado del contexto de despliegue sigue siendo
+la limitación de fondo del trabajo.
 
 ## Resultados
 
