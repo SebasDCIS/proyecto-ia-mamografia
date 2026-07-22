@@ -61,6 +61,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from src.recursos.vocabulario_clinico import (
     CATEGORIAS_CLINICAS,
+    SINONIMOS_CLINICOS,
     ENCABEZADOS_RECOMENDACIONES,
     FRASES_REFERENCIA_TFIDF,
     JERARQUIA_CLINICA,
@@ -160,6 +161,20 @@ def _normalizar_texto(texto: str) -> Tuple[str, List[Dict[str, str]]]:
             })
             texto = re.sub(typo_pattern, correcto, texto)
 
+    # Nivel 3: normalizar sinónimos clínicos a su forma canónica.
+    # Da flexibilidad léxica (seguimiento->control, "en un año"->anual, etc.)
+    # sin recurrir a embeddings. Se registra cada cambio para auditoría.
+    for sin_pattern, canonico in SINONIMOS_CLINICOS.items():
+        match = re.search(sin_pattern, texto)
+        if match:
+            typos_corregidos.append({
+                "original": match.group(0),
+                "corregido": canonico,
+                "patron": sin_pattern,
+                "tipo": "sinonimo",
+            })
+            texto = re.sub(sin_pattern, canonico, texto)
+
     return texto, typos_corregidos
 
 
@@ -205,6 +220,193 @@ def _extraer_bloque_recomendaciones_de_full_report(
         "inicio": inicio_bloque,
         "fin": fin_bloque,
         "encabezado": encabezado,
+    }
+
+
+# Frases que introducen una recomendación clínica en prosa (sin encabezado).
+# Se usan como fallback (Vía 2.5) cuando no existe un bloque RECOMENDACIONES.
+# NOTA: se matchean sobre texto SIN acentos y en minúsculas (ver _quita_acentos),
+# por eso basta con las formas sin tilde ("correlacion", "seria", "debera").
+_FRASES_GATILLO_RECOMENDACION = re.compile(
+    r"\b("
+    # Impersonales "se + verbo"
+    r"se\s+sugiere[n]?|se\s+recomienda[n]?|se\s+aconseja[n]?|se\s+indica[n]?|"
+    r"se\s+solicita[n]?|se\s+deriva[n]?|se\s+requiere[n]?|se\s+recomiendan|"
+    # Primera persona plural
+    r"sugerimos|recomendamos|solicitamos|indicamos|aconsejamos|derivamos|requerimos|"
+    # Primera persona singular
+    r"sugiero|recomiendo|solicito|indico|aconsejo|derivo|"
+    # Verbos sueltos de necesidad / conducta
+    r"amerita[n]?|ameritar|requiere[n]?|necesita[n]?|"
+    # Perífrasis impersonales de recomendación
+    r"es\s+necesario|es\s+recomendable|es\s+conveniente|es\s+aconsejable|es\s+ideal|"
+    r"seria\s+ideal|seria\s+conveniente|seria\s+recomendable|seria\s+aconsejable|"
+    r"convendria|convendra|conviene|amerita\s+realizar|"
+    r"idealmente|"
+    # Correlación / comparación como directiva
+    r"correlacion\s+con|correlacionar\s+con|comparar\s+con|"
+    # Infinitivos de conducta sueltos (informes que redactan en infinitivo)
+    r"derivar|realizar|efectuar|completar|repetir|solicitar|tomar\s+muestra|"
+    # Deber + infinitivo (incluye forma reflexiva -se) y formas sueltas
+    r"deber[ai]\s+\w+|debe\s+(?:tomar|realizar|realizarse|efectuar|efectuarse|"
+    r"acudir|repetir|derivarse|completar|complementar|puncionar|biopsiar|"
+    r"derivar|referir|controlar|correlacionar|comparar|caracterizar|confirmar)|"
+    r"debe\s+realizarse|debera|deberia"
+    r")\b",
+    re.IGNORECASE,
+)
+
+# Directivas "peladas": conducta escrita como sustantivo de acción sin verbo
+# gatillo (p. ej. "Control en 3 meses", "Biopsia", "Ecografía mamaria"). Se
+# detectan cuando el segmento COMIENZA con uno de estos sustantivos.
+_SUSTANTIVO_DIRECTIVA = re.compile(
+    r"^\s*(?:[-•*]\s*)?("
+    # sustantivos de acción
+    r"control|biopsia|ecografia|ecotomografia|resonancia|derivacion|"
+    r"correlacion|seguimiento|puncion|incidencias|magnificacion|marcacion|"
+    r"comparacion|"
+    # verbos en infinitivo/imperativo que inician una conducta
+    r"complementar|realizar|referir|derivar|controlar|correlacionar|"
+    r"comparar|cotejar|puncionar|biopsiar|caracterizar|confirmar|"
+    r"mantener|continuar|proseguir|proponer|proponemos|reevaluar|reevaluacion"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def _quita_acentos(texto: str) -> str:
+    """Devuelve el texto en minúsculas y sin tildes (para matcheo robusto)."""
+    t = unicodedata.normalize("NFKD", texto)
+    return "".join(c for c in t if not unicodedata.combining(c)).lower()
+
+
+# -----------------------------------------------------------------------------
+# Tolerancia difusa (fuzzy) a errores ortográficos en los verbos gatillo.
+# Cuando el match exacto falla, se acepta una palabra que esté a distancia de
+# edición <= 1 de un verbo gatillo distintivo (p. ej. "suguiere" -> "sugiere").
+# CRITERIO CONSERVADOR (alta precisión):
+#   - Solo verbos LARGOS y distintivos (>= 6 letras); los cortos o ambiguos se
+#     dejan solo con match exacto para no sobre-corregir.
+#   - Distancia máxima 1 (un solo error de tipeo).
+#   - NUNCA se aplica a números ni a la categoría BI-RADS: esos se leen literales.
+# -----------------------------------------------------------------------------
+_TRIGGERS_FUZZY = [
+    "sugiere", "sugieren", "sugerimos", "recomienda", "recomendamos",
+    "recomiendo", "aconseja", "aconsejo", "ameritar", "amerita", "solicita",
+    "solicitamos", "derivar", "correlacion", "correlacionar",
+]
+_FUZZY_MIN_LEN = 6      # no aplicar fuzzy a palabras cortas
+_FUZZY_MAX_DIST = 1     # umbral conservador (un solo error)
+
+
+def _distancia_edicion(a: str, b: str) -> int:
+    """Distancia de Damerau-Levenshtein (OSA) entre dos strings.
+
+    Cuenta como 1 operación: inserción, borrado, sustitución Y transposición de
+    letras adyacentes (p. ej. "recomendia" -> "recomienda"), que son de los
+    typos más frecuentes.
+    """
+    if a == b:
+        return 0
+    m, n = len(a), len(b)
+    if abs(m - n) > _FUZZY_MAX_DIST:
+        return max(m, n)  # atajo: no pueden estar a distancia <= umbral
+    d = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1):
+        d[i][0] = i
+    for j in range(n + 1):
+        d[0][j] = j
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            costo = 0 if a[i - 1] == b[j - 1] else 1
+            d[i][j] = min(
+                d[i - 1][j] + 1,      # borrado
+                d[i][j - 1] + 1,      # inserción
+                d[i - 1][j - 1] + costo,  # sustitución
+            )
+            # Transposición de letras adyacentes
+            if (i > 1 and j > 1
+                    and a[i - 1] == b[j - 2] and a[i - 2] == b[j - 1]):
+                d[i][j] = min(d[i][j], d[i - 2][j - 2] + 1)
+    return d[m][n]
+
+
+def _detectar_gatillo_difuso(segmento: str) -> Optional[Dict[str, str]]:
+    """Busca un verbo gatillo con un typo (distancia de edición 1).
+
+    Returns:
+        Dict {palabra, gatillo, distancia} si encuentra un match difuso, o None.
+    """
+    for palabra in re.findall(r"[a-zñ]+", segmento.lower()):
+        if len(palabra) < _FUZZY_MIN_LEN:
+            continue
+        for kw in _TRIGGERS_FUZZY:
+            if abs(len(palabra) - len(kw)) > _FUZZY_MAX_DIST:
+                continue
+            d = _distancia_edicion(palabra, kw)
+            if 1 <= d <= _FUZZY_MAX_DIST:  # d>=1: solo typos, no matches exactos
+                return {"palabra": palabra, "gatillo": kw, "distancia": str(d)}
+    return None
+
+
+def _extraer_recomendacion_por_frases_gatillo(
+    full_report: str,
+) -> Optional[Dict[str, Any]]:
+    """Vía 2.5: extrae la recomendación desde prosa sin encabezado explícito.
+
+    Cuando el informe no tiene un bloque 'RECOMENDACIONES:' pero sí redacta la
+    conducta en prosa (p. ej. 'Se sugiere estudio histológico... biopsia'),
+    este fallback localiza las oraciones que contienen una frase gatillo de
+    recomendación y las devuelve como texto de recomendación.
+
+    Args:
+        full_report: texto completo del informe.
+
+    Returns:
+        Dict con texto e info de trazabilidad, o None si no hay frases gatillo.
+    """
+    if not isinstance(full_report, str) or not full_report.strip():
+        return None
+
+    # Segmentar en oraciones aproximadas: por punto, salto de línea o guion
+    # separador (" - ", " – ", " — "), común en informes tipo "Birads I - Control...".
+    segmentos = re.split(r"(?<=[.\n])\s+|\n|\s+[-–—]\s+", full_report)
+
+    oraciones_recomendacion: List[str] = []
+    correcciones_difusas: List[Dict[str, str]] = []
+    for seg in segmentos:
+        seg_limpio = seg.strip()
+        if not seg_limpio:
+            continue
+        # Versión sin tildes y en minúsculas para matcheo robusto
+        seg_norm = _quita_acentos(seg_limpio)
+        # 1) Match exacto de frase gatillo (verbo/perífrasis de recomendación)
+        if _FRASES_GATILLO_RECOMENDACION.search(seg_norm):
+            oraciones_recomendacion.append(seg_limpio)
+            continue
+        # 2) Directiva "pelada": el segmento comienza con un sustantivo de acción
+        #    ("Control en 3 meses", "Biopsia", "Ecografía mamaria")
+        if _SUSTANTIVO_DIRECTIVA.search(seg_norm):
+            oraciones_recomendacion.append(seg_limpio)
+            continue
+        # 3) Fallback difuso: ¿algún verbo gatillo con un typo (distancia 1)?
+        difuso = _detectar_gatillo_difuso(seg_norm)
+        if difuso:
+            oraciones_recomendacion.append(seg_limpio)
+            correcciones_difusas.append(difuso)
+
+    if not oraciones_recomendacion:
+        return None
+
+    texto_bloque = " ".join(oraciones_recomendacion).strip()
+
+    return {
+        "texto": texto_bloque,
+        "inicio": None,
+        "fin": None,
+        "encabezado": None,
+        "n_oraciones": len(oraciones_recomendacion),
+        "correcciones_difusas": correcciones_difusas,
     }
 
 
@@ -308,6 +510,7 @@ def _aplicar_jerarquia(
 def extraer_texto_recomendacion(
     recommendations_col: Optional[str],
     full_report: Optional[str] = None,
+    usar_ner: bool = False,
 ) -> Dict[str, Any]:
     """Obtiene el texto de la recomendación con trazabilidad de origen.
 
@@ -368,7 +571,41 @@ def extraer_texto_recomendacion(
             resultado["typos_corregidos"] = typos
             return resultado
 
-    # Vía 3: no encontrado
+        # Vía 2.5: sin encabezado, buscar recomendación en prosa (frases gatillo)
+        bloque_prosa = _extraer_recomendacion_por_frases_gatillo(full_report)
+        if bloque_prosa:
+            resultado["texto"] = bloque_prosa["texto"]
+            resultado["fuente"] = "regex_frases_gatillo"
+            resultado["encontrado"] = True
+            resultado["encabezado_detectado"] = None
+            normalizado, typos = _normalizar_texto(bloque_prosa["texto"])
+            resultado["texto_normalizado"] = normalizado
+            resultado["typos_corregidos"] = typos
+            # Trazabilidad: correcciones ortográficas difusas (fuzzy) aplicadas
+            # para detectar la frase gatillo (p. ej. "suguiere" -> "sugiere").
+            if bloque_prosa.get("correcciones_difusas"):
+                resultado["correcciones_difusas"] = bloque_prosa["correcciones_difusas"]
+            return resultado
+
+    # Vía 3: no encontrado por reglas -> intentar con el modelo NER (si se pidió)
+    if usar_ner and isinstance(full_report, str) and full_report.strip():
+        try:
+            from src.extractor_ner import extraer_recomendacion_ner
+            ner = extraer_recomendacion_ner(full_report)
+        except Exception:
+            ner = {"encontrado": False}
+        if ner.get("encontrado"):
+            span = ner["texto"]
+            resultado["texto"] = span
+            resultado["fuente"] = "ner_distilbeto"
+            resultado["encontrado"] = True
+            resultado["encabezado_detectado"] = None
+            normalizado, typos = _normalizar_texto(span)
+            resultado["texto_normalizado"] = normalizado
+            resultado["typos_corregidos"] = typos
+            return resultado
+
+    # Vía 4: no encontrado por ningún método
     return resultado
 
 
@@ -664,10 +901,10 @@ def _ejecutar_tests() -> None:
             "esperado_metodo": "regex",
         },
         {
-            "nombre": "T9: Fallback TF-IDF (frase no en patrones)",
+            "nombre": "T9: Sinonimo puncion->biopsia captado por regla",
             "texto": "- favor coordinar punción con aguja gruesa de la lesión",
             "esperado_principal": "biopsia_histologia",
-            "esperado_metodo": "tf_idf_similitud",
+            "esperado_metodo": "regex",
         },
         {
             "nombre": "T10: Frase atípica que cae como ambigua",
@@ -744,9 +981,55 @@ def _ejecutar_tests() -> None:
                 if not ok:
                     print(f"         {msg}")
 
-    print(f"\nResumen: {n_pasados}/{len(casos)} tests pasados")
+    # -------------------------------------------------------------------------
+    # Tests de EXTRACCIÓN con tolerancia difusa (Vía 2.5 fuzzy)
+    # -------------------------------------------------------------------------
+    casos_fuzzy = [
+        {
+            "nombre": "F1: typo 'suguiere' se detecta como frase gatillo",
+            "full_report": "Mamografia sin hallazgos.\nse suguiere biopsia Birads 4",
+            "espera_encontrado": True,
+            "espera_difuso": True,
+        },
+        {
+            "nombre": "F2: transposición 'sugeire' se detecta",
+            "full_report": "Nodulo sospechoso.\nse sugeire biopsia core.",
+            "espera_encontrado": True,
+            "espera_difuso": True,
+        },
+        {
+            "nombre": "F3: texto sin gatillo NO se detecta (no sobre-dispara)",
+            "full_report": "Mama densa heterogenea. Ganglio intramamario benigno.",
+            "espera_encontrado": False,
+            "espera_difuso": False,
+        },
+        {
+            "nombre": "F4: ortografía correcta sigue funcionando (exacto)",
+            "full_report": "Hallazgo sospechoso.\nse sugiere biopsia.",
+            "espera_encontrado": True,
+            "espera_difuso": False,  # match exacto, sin fuzzy
+        },
+    ]
 
-    if n_pasados == len(casos):
+    for caso in casos_fuzzy:
+        res = extraer_texto_recomendacion(None, full_report=caso["full_report"])
+        tiene_difuso = bool(res.get("correcciones_difusas"))
+        ok = (
+            res["encontrado"] == caso["espera_encontrado"]
+            and tiene_difuso == caso["espera_difuso"]
+        )
+        estado = "PASA" if ok else "FALLA"
+        print(f"  [{estado}] {caso['nombre']}")
+        if not ok:
+            print(f"         encontrado={res['encontrado']} (esp {caso['espera_encontrado']}), "
+                  f"difuso={tiene_difuso} (esp {caso['espera_difuso']})")
+        if ok:
+            n_pasados += 1
+
+    total_casos = len(casos) + len(casos_fuzzy)
+    print(f"\nResumen: {n_pasados}/{total_casos} tests pasados")
+
+    if n_pasados == total_casos:
         print("Estado: OK — el extractor está listo para uso en producción.")
     else:
         print("Estado: FALLA — revisar los casos que no pasaron.")

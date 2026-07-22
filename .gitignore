@@ -1,86 +1,81 @@
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
-._*
+# ---------------------------------------------------------------
+# Datos clínicos — NUNCA deben subirse (Ley 19.628)
+# ---------------------------------------------------------------
+data/
+*.csv
+*.xlsx
+informe_real.txt
+informe_omision.txt
+*.pdf.txt
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-*.egg
-*.egg-info/
-build/
-dist/
-.eggs/
+# ---------------------------------------------------------------
+# Modelos entrenados — pesan ~250 MB, GitHub rechaza >100 MB
+# ---------------------------------------------------------------
+models/
+*.safetensors
+*.bin
+*.pt
+*.pth
+checkpoint-*/
 
-# Entornos virtuales
+# ---------------------------------------------------------------
+# Entorno y cachés
+# ---------------------------------------------------------------
 .venv/
 venv/
 env/
-ENV/
-.python-version
-
-# Jupyter
+__pycache__/
+*.py[cod]
+*.egg-info/
 .ipynb_checkpoints/
-*/.ipynb_checkpoints/*
-profile_default/
-ipython_config.py
 
-# IDEs
+# ---------------------------------------------------------------
+# Salidas de experimentos (se regeneran corriendo los notebooks)
+# ---------------------------------------------------------------
+resultados/
+_tmp_*/
+wandb/
+runs/
+
+# ---------------------------------------------------------------
+# LaTeX: archivos intermedios
+# ---------------------------------------------------------------
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.toc
+
+# ---------------------------------------------------------------
+# Sistema
+# ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
 
-# Modelos entrenados y checkpoints
-results_distilbert/
-notebooks/results_distilbert/
-results_distilbeto/
-notebooks/results_distilbeto/
+# ---------------------------------------------------------------
+# EXCEPCIONES: estos sí se suben
+# ---------------------------------------------------------------
+!report/*.pdf
+!docs/*.pdf
+!docs/*.pptx
+
+# Salidas de entrenamiento
 notebooks/results_*/
-**/checkpoint-*/
-runs/
-logs/
-wandb/
-
-# Artefactos serializados
-*.pkl
-*.pickle
-*.joblib
-*.h5
-*.pt
-*.pth
-*.bin
-*.safetensors
-*.onnx
-
-# Datos duplicados
-notebooks/data/
-
-# OneDrive placeholders
-.tmp.driveupload/
-.tmp.drivedownload/
-
-# Outputs sueltos
+results/
+results_*/
 output.png
-*.log
+resultado_*.json
 
-# Audit logs generados por src/cotejo_acr.py (outputs regenerables del nb07)
-notebooks/anexos/audit_logs/*.json
+# Logs de auditoria (pueden contener texto de informes)
+notebooks/anexos/audit_logs/
 
-# Backups locales del proyecto
-src/cotejo_acr_backup_*.py
-
-# Archivos comprimidos del informe (solo para Overleaf)
-informe_v8/*.zip
-
-# Backups locales del informe LaTeX
-informe_v8/*_backup.tex
-informe_v8/*.aux
-informe_v8/*.log
-informe_v8/*.out
-informe_v8/*.synctex.gz
+# Respaldos locales
+*_backup*.py
+*_backup*.tex
+informe_v8/

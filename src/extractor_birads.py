@@ -40,21 +40,21 @@ from typing import Any, Dict, List, Optional
 
 ENCABEZADOS_CONCLUSION: List[str] = [
     r"conclusi[oó]n\s+e?\s*impresi[oó]n\s+diagn[oó]stica",
-    r"hallazgos\s+y\s+conclusi[oó]n",
+    r"hallazgos\s+y\s+conclusi[oó]n(?:es)?",
     r"impresi[oó]n\s+diagn[oó]stica\s+y?\s*recomendaciones?",
     r"impresi[oó]n\s+diagn[oó]stica",
     r"impresi[oó]n\s+final",
     r"diagn[oó]stico\s+presuntivo",
     r"diagn[oó]stico\s+radiol[oó]gico",
     r"opini[oó]n\s+del\s+radi[oó]logo",
-    r"conclusi[oó]n",
-    r"valoraci[oó]n",
-    r"impresi[oó]n",
-    r"diagn[oó]stico",
+    r"conclusi[oó]n(?:es)?",
+    r"valoraci[oó]n(?:es)?",
+    r"impresi[oó]n(?:es)?",
+    r"diagn[oó]stico(?:s)?",
 ]
 
 PATRON_ENCABEZADO_CONCLUSION = re.compile(
-    r"\b(" + "|".join(ENCABEZADOS_CONCLUSION) + r")\s*:?",
+    r"\b(" + "|".join(ENCABEZADOS_CONCLUSION) + r")\b\s*:?",
     re.IGNORECASE,
 )
 
@@ -66,8 +66,9 @@ PATRON_INICIO_RECOMENDACIONES = re.compile(
 
 PATRON_BIRADS_PRINCIPAL = re.compile(
     r'\bbi\s*[-*.]?\s*rad[s]?'
-    r'\s*®?\s*'
-    r':?\s*'
+    r'[\s®\-]*'                              # separadores: espacios, ®, guiones
+    r'(?:us|mg|mmg|rm|rmn|mri|eco|tc)?'      # etiqueta de modalidad opcional
+    r'[\s\-]*:?\s*'
     r'\(?\s*'
     r'('
     r'0?[0-6](?:\s*-\s*[0-6])?'

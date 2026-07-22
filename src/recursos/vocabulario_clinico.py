@@ -116,7 +116,7 @@ PATRONES_POR_CATEGORIA: Dict[str, List[str]] = {
         r"(?<!correlacion\scon\s)ecografia\s+mamaria\s+(actualizada\s+)?(debido\s+al|por\s+el)\s+patron",
         # FIX T4: "actualizada" solo se considera estudio complementario si NO está precedido por "correlacion con"
         r"(?<!correlacion\scon\s)ecografia\s+mamaria\s+actualizada(?!\s+y\s+control)",
-        r"complementar\s+(el\s+estudio\s+)?con\s+(una\s+)?ecografia",
+        r"complementar\s+(el\s+|un\s+)?(estudio|examen)?\s*con\s+(una\s+)?ecograf",
         r"(?<!correlacion\scon\s)ecografia\s+mamaria\s+y\s+(de\s+la\s+region\s+)?axilar",
         r"sugerimos\s+ecografia\s+mamaria",
         r"(?<!correlacion\scon\s)ecografia\s+mamaria\s+bilateral",
@@ -129,10 +129,24 @@ PATRONES_POR_CATEGORIA: Dict[str, List[str]] = {
         r"complementar\s+con\s+(ecografia|rm)",
         r"\brm\b|resonancia\s+magnetica",
         r"magnificacion(es)?",
+        # Pistas de INTENCIÓN "incompleto" (estudio aún no concluyente) — señales
+        # textuales robustas, ciegas al BI-RADS. Refuerzan la categoría ante
+        # informes externos que expresen la misma intención con otras palabras.
+        r"(?<!correlacion\scon\s)ecograf\w*\s+.*?para\s+(poder\s+)?concluir",
+        r"(?<!correlacion\scon\s)ecograf\w*\s+.*?para\s+caracterizar",
+        r"(?<!correlacion\scon\s)ecograf\w*\s+.*?(hallazgo|nodulo|imagen)\s+indetermina",
+        r"(?<!correlacion\scon\s)ecograf\w*\s+.*?para\s+definir",
+        r"para\s+(poder\s+)?concluir\s+.*?ecograf",
+        r"caracterizar\s+.*?con\s+ecograf",
     ],
     "correlacion_ecografica": [
         r"correlacion\s+(con\s+)?ecograf",
         r"correlacionar\s+(este\s+estudio\s+)?con\s+ecograf",
+        # Pistas de INTENCIÓN "confirmado" (diagnóstico ya hecho, la ecografía
+        # solo confirma) — señales textuales, ciegas al BI-RADS.
+        r"confirmar\s+(con\s+)?ecograf",
+        r"confirmar\s+.*?hallazgo\s+.*?con\s+ecograf",
+        r"ecograf\w*\s+.*?para\s+confirmar",
     ],
     "comparacion_estudios_previos": [
         r"comparacion\s+con\s+estudios?\s+(anteriores?|previos?)",
@@ -150,6 +164,8 @@ PATRONES_POR_CATEGORIA: Dict[str, List[str]] = {
         r"control\s+ecografico\s+y\s+mamografico\s+anual",
         r"controles?\s+mamografico[s]?\s+y\s+ecografico[s]?\s+anuales?",
         r"controles?\s+ecografico[s]?\s+y\s+mamografico[s]?\s+anuales?",
+        # "mamografia anual" / "ecografia anual" (estudio anual = control anual)
+        r"(mamografia|ecografia|mamografico|ecografico)\s+anual",
     ],
     "control_corto_plazo": [
         r"control\s+semestral",
@@ -274,3 +290,100 @@ ENCABEZADOS_RECOMENDACIONES: List[str] = [
 # =============================================================================
 
 UMBRAL_SIMILITUD_TFIDF: float = 0.55  # validado experimentalmente
+
+
+# =============================================================================
+# 8. SINÓNIMOS CLÍNICOS (normalización semántica ligera)
+# =============================================================================
+#
+# Mapea términos equivalentes a una FORMA CANÓNICA antes de aplicar las reglas.
+# Objetivo: dar flexibilidad léxica sin recurrir a embeddings (probados y
+# descartados por colapsar distinciones clínicas). Solo se normalizan sinónimos
+# de significado clínico EQUIVALENTE y no ambiguos.
+#
+# El patrón es una regex (con \b para límites de palabra) y el valor es el
+# término canónico que las reglas ya reconocen. Se aplica sobre texto ya en
+# minúsculas y sin tildes.
+
+SINONIMOS_CLINICOS: Dict[str, str] = {
+    # --- Modalidad ecográfica: ultrasonido/US/sonografía -> ecografia ---
+    r"\bultrasonido\b":            "ecografia",
+    r"\bultrasonografia\b":        "ecografia",
+    r"\bsonografia\b":             "ecografia",
+    r"\becotomografia\b":          "ecografia",
+    r"\becotomografico\b":         "ecografico",
+    r"\bus\s+mamari":              "ecografia mamari",   # "US mamario/a"
+    r"\bus\s+de\s+mama":           "ecografia de mama",
+    r"\beco\s+mamari":             "ecografia mamari",   # "eco mamaria"
+    r"\beco\s+de\s+mama":          "ecografia de mama",
+    r"\becodoppler\b":             "ecografia doppler",
+
+    # --- Resonancia magnética: RM/RMN/MRI -> resonancia magnetica ---
+    r"\brmn\b":                    "resonancia magnetica",
+    r"\bmri\b":                    "resonancia magnetica",
+    r"\brm\s+mamari":              "resonancia magnetica mamari",
+    r"\brm\s+de\s+mama":           "resonancia magnetica de mama",
+
+    # --- Biopsia / confirmación tisular: siglas y variantes -> biopsia ---
+    r"\bbacaf\b":                  "biopsia",   # biopsia por aspiración con aguja fina
+    r"\bpaaf\b":                   "biopsia",   # punción aspiración con aguja fina
+    r"\bcore\s*biops":             "biopsia",   # core biopsy
+    r"\btru[\s\-]?cut\b":          "biopsia",   # tru-cut
+    r"\bpuncion\s+con\s+aguja":    "biopsia",
+    r"\bpuncion\s+aspiraci":       "biopsia",
+    r"\bbiopsia\s+percutanea\b":   "biopsia",
+    r"\bmicrobiopsia\b":           "biopsia",
+    r"\bestudio\s+citolog":        "biopsia",   # estudio citológico (confirmación)
+    r"\bestudio\s+anatomo":        "biopsia",   # estudio anatomopatológico
+
+    # --- Proyecciones/técnicas mamográficas adicionales -> estudio compl. ---
+    r"\bincidencias?\s+adicional": "magnificacion",
+    r"\bproyecciones?\s+adicional":"magnificacion",
+    r"\bcompresion\s+localizada\b":"compresion focalizada",
+    r"\bcompresion\s+puntual\b":   "compresion focalizada",
+    r"\btomosintesis\b":           "magnificacion",   # técnica complementaria
+
+    # --- Verbos/perífrasis de recomendación -> "se sugiere" ---
+    r"\bse aconseja\b":            "se sugiere",
+    r"\bse indica\b":              "se sugiere",
+    r"\bse solicita\b":            "se sugiere",
+    r"\bse propone\b":             "se sugiere",
+    r"\bconviene\b":               "se sugiere",
+    r"\bameritaria\b":             "amerita",
+
+    # --- Seguimiento / vigilancia -> "control" ---
+    r"\bseguimiento\b":            "control",
+    r"\bvigilancia\b":             "control",
+    r"\bmonitoreo\b":              "control",
+    r"\bmonitorizacion\b":         "control",
+
+    # --- Periodicidad anual -> "anual" ---
+    r"\ben un ano\b":              "anual",
+    r"\bcada ano\b":               "anual",
+    r"\banualmente\b":             "anual",
+    r"\bcada 12 meses\b":          "anual",
+    r"\bcada doce meses\b":        "anual",
+
+    # --- Corto plazo / semestral -> "semestral" (control_corto_plazo) ---
+    r"\ben seis meses\b":          "semestral",
+    r"\ben 6 meses\b":             "semestral",
+    r"\bcada seis meses\b":        "semestral",
+    r"\bcada 6 meses\b":           "semestral",
+    r"\bsemestralmente\b":         "semestral",
+
+    # --- Biopsia / punción -> "biopsia" ---
+    r"\bpuncionar\b":              "biopsia",
+    r"\bpuncion\b":                "biopsia",
+    r"\bnucleobiopsia\b":          "biopsia",
+    r"\bcore\s+biopsy\b":          "biopsia",
+    r"\bmuestra\s+de\s+tejido\b":  "biopsia",
+
+    # --- Derivación / especialista -> "derivacion a oncologia" ---
+    r"\bderivar\s+a\s+oncolog":    "derivacion a oncolog",
+    r"\breferir\s+a\s+oncolog":    "derivacion a oncolog",
+    r"\breferencia\s+a\s+oncolog": "derivacion a oncolog",
+
+    # --- Comparación con previos ---
+    r"\bcomparar\s+con\s+(estudios\s+)?(previos|anteriores)": "comparacion con estudios previos",
+    r"\bcotejar\s+con\s+(estudios\s+)?(previos|anteriores)":  "comparacion con estudios previos",
+}

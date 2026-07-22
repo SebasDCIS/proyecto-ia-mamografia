@@ -69,12 +69,17 @@ with col1:
         pero recomienda solo *control anual*, el sistema genera una **alerta crítica**
         para revisión humana.
 
-        ### Pipeline de 4 módulos
+        ### Pipeline de módulos
 
-        1. **Extractor BI-RADS** (regex sobre el bloque de conclusión)
-        2. **Verificador ML** (DistilBETO como segunda opinión técnica)
-        3. **Extractor de recomendaciones** (reglas clínicas + TF-IDF)
-        4. **Motor de cotejo ACR** (tabla normativa adaptada a práctica chilena)
+        1. **Extractor BI-RADS** (regex + buscador híbrido sobre la conclusión)
+        2. **Apoyo de lectura ML** (DistilBETO relee y refuerza la extracción del BI-RADS)
+        3. **Extractor de recomendaciones** (reglas clínicas + sinónimos, con **extractor NER** —DistilBETO— como respaldo para redacciones no vistas)
+        4. **Motor de cotejo ACR** (tabla normativa según estándar BI-RADS/ACR)
+
+        La arquitectura es **híbrida**: las reglas, transparentes y auditables, son
+        la vía primaria; la IA (NER) aporta robustez ante redacciones nuevas cuando
+        las reglas no localizan la recomendación. Cuando ninguno resuelve con
+        confianza, el caso se deriva a **revisión humana**.
 
         ### Filosofía Human-on-the-Loop
 
@@ -95,7 +100,8 @@ with col2:
 
     st.success(
         "**Validado sobre 4 357 informes** \n\n"
-        "Corpus público en español (Vázquez Noguera et al., 2025).",
+        "Corpus público en español (Vázquez Noguera et al., 2025, origen "
+        "paraguayo). Despliegue orientado al contexto chileno.",
         icon="✅"
     )
 
@@ -116,20 +122,26 @@ st.markdown("### Métricas del sistema")
 m1, m2, m3, m4 = st.columns(4)
 
 with m1:
-    st.metric("Macro F1 extractor BI-RADS", "0.9995")
+    # Medido vs. la etiqueta BI-RADS del corpus.
+    st.metric("Exactitud extracción BI-RADS", "99.9%")
 
 with m2:
-    st.metric("Macro F1 DistilBETO", "0.9386")
+    # NER de recomendación (test deduplicado, notebook 11). Extracción de span.
+    st.metric("Extractor NER recomendación (F1)", "0.999")
 
 with m3:
-    st.metric("Tasa de alertas clínicas", "1.33%")
+    # Cifra medida sobre el corpus completo con el pipeline actual: 50/4357.
+    st.metric("Tasa de incoherencias", "1.15%")
 
 with m4:
-    st.metric("Tiempo por informe", "~12 ms")
+    st.metric("Procesamiento", "local")
 
 st.caption(
-    "Métricas evaluadas sobre el corpus completo de 4 357 informes "
-    "(Vázquez Noguera et al., 2025)."
+    "Exactitud de extracción de BI-RADS medida contra la etiqueta del corpus "
+    "(Vázquez Noguera et al., 2025). El extractor NER de recomendaciones alcanza "
+    "F1≈0.999 en test deduplicado; nota: el corpus es homogéneo, por lo que la "
+    "generalización real se evalúa con informes externos. La arquitectura híbrida "
+    "combina reglas transparentes con IA de respaldo, manteniendo al humano en el bucle."
 )
 
 st.divider()

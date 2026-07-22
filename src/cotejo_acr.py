@@ -134,6 +134,57 @@ def _es_mas_urgente(categoria_a: str, categoria_b: str) -> bool:
         return False
 
 
+# Criticidad clínica de cada categoría BI-RADS: qué tan grave es que la
+# recomendación se quede corta. Deriva del estándar ACR, no del corpus.
+#   crítico  = sospecha de malignidad (un retraso puede ser grave)
+#   medio    = estudio incompleto o malignidad ya en manejo
+#   bajo     = hallazgo benigno o normal
+_CRITICIDAD_BIRADS = {
+    5: "critico", 4: "critico",
+    0: "medio", 6: "medio",
+    3: "bajo", 2: "bajo", 1: "bajo",
+}
+
+# Conductas que constituyen una acción diagnóstica/definitiva ante sospecha.
+_ACCION_DIAGNOSTICA = {"biopsia_histologia", "derivacion_oncologica"}
+
+
+def _nivel_por_impacto(birads, principal, esperada):
+    """Clasifica una recomendación menos urgente que la esperada (incoherencia).
+    La incoherencia siempre genera alerta; lo que varía es su severidad, según
+    la criticidad del BI-RADS y cuánto se queda corta la recomendación.
+
+    Returns: (estado, severidad, regla_aplicada)
+        estado: siempre 'incoherente'
+        severidad: 'baja' | 'media' | 'alta' | 'critica'
+    """
+    # Regla central (validada): sospecha de malignidad (BI-RADS 4/5) cuya
+    # recomendación NO incluye acción diagnóstica -> siempre ALERTA CRÍTICA.
+    if birads in (4, 5) and principal not in _ACCION_DIAGNOSTICA:
+        return "incoherente", "critica", "regla_sospecha_sin_accion_diagnostica"
+
+    # Magnitud: cuántos niveles de urgencia por debajo de lo esperado queda la
+    # recomendación (en la jerarquía, índice mayor = menos urgente).
+    try:
+        gap = (JERARQUIA_URGENCIA.index(principal)
+               - JERARQUIA_URGENCIA.index(esperada))
+    except (ValueError, TypeError):
+        gap = 1
+    desvio_grande = gap >= 2
+
+    criticidad = _CRITICIDAD_BIRADS.get(birads, "bajo")
+    if criticidad == "critico":
+        # (cubierto arriba, pero por completitud)
+        severidad = "critica" if desvio_grande else "alta"
+    elif criticidad == "medio":
+        # incoherencia relevante -> alta; menor -> baja (sin riesgo)
+        severidad = "alta" if desvio_grande else "baja"
+    else:  # criticidad baja
+        # incoherencia relevante -> media; menor -> baja (sin riesgo)
+        severidad = "media" if desvio_grande else "baja"
+    return "incoherente", severidad, "regla_recomendacion_insuficiente"
+
+
 def _aplicar_reglas_cotejo(
     birads: int,
     categorias_detectadas: List[str],
@@ -197,16 +248,17 @@ def _aplicar_reglas_cotejo(
             "detalle_verificacion": detalle,
         }
 
-    # Regla 3: ¿alguna equivalente con notificación está?
+    # Regla 3: ¿alguna equivalente con notificación está? -> INCOHERENCIA BAJA
+    # (conducta que se queda corta, sin riesgo para la paciente: alerta leve).
     notificacion_match = next(
         (e for e in con_notificacion if e in categorias_detectadas), None
     )
     detalle["notificacion_presente"] = notificacion_match
     if notificacion_match:
         return {
-            "estado": "notificacion",
+            "estado": "incoherente",
             "severidad": "baja",
-            "regla_aplicada": "regla_3_equivalente_notificacion",
+            "regla_aplicada": "regla_3_incoherencia_leve",
             "detalle_verificacion": detalle,
         }
 
@@ -218,6 +270,20 @@ def _aplicar_reglas_cotejo(
         )
         if principal and _es_mas_urgente(principal, esperada):
             detalle["principal_es_mas_urgente"] = principal
+            # Regla 4b (dirigida por la tabla): ciertas conductas más agresivas se
+            # marcan para revisión según el campo 'marcar_revision' de la categoría.
+            # Esto captura casos como un BI-RADS benigno con acción invasiva, sin
+            # hardcodear la lógica: toda la decisión vive en la tabla ACR.
+            marcar = config.get("marcar_revision", {})
+            if principal in marcar:
+                # Toda conducta marcada es una incoherencia; la severidad viene
+                # de la tabla (baja, media, ...). La 'baja' es la alerta más leve.
+                return {
+                    "estado": "incoherente",
+                    "severidad": marcar[principal],
+                    "regla_aplicada": "regla_4b_marcar_revision",
+                    "detalle_verificacion": detalle,
+                }
             return {
                 "estado": "coherente_con_precaucion",
                 "severidad": severidad_base,
@@ -225,11 +291,22 @@ def _aplicar_reglas_cotejo(
                 "detalle_verificacion": detalle,
             }
 
-    # Ninguna regla aplica: alerta real
+    # Ninguna regla previa aplica: la recomendación se queda corta frente a lo
+    # esperado. El desenlace (ALERTA graduada u OBSERVACIÓN) se calcula por
+    # impacto en salud, con regla nombrada para trazabilidad completa.
+    principal_detectada = None
+    if categorias_detectadas:
+        unicas = set(categorias_detectadas)
+        principal_detectada = next(
+            (c for c in JERARQUIA_URGENCIA if c in unicas), None
+        )
+    estado_nivel, severidad_nivel, regla_nivel = _nivel_por_impacto(
+        birads, principal_detectada, esperada
+    )
     return {
-        "estado": "incoherente",
-        "severidad": severidad_base,
-        "regla_aplicada": "ninguna",
+        "estado": estado_nivel,
+        "severidad": severidad_nivel,
+        "regla_aplicada": regla_nivel,
         "detalle_verificacion": detalle,
     }
 
@@ -305,6 +382,40 @@ def cotejar_birads_vs_recomendacion(
             },
         }
 
+    # Chequeo de extracción: si no se detectó o no se pudo clasificar la
+    # recomendación, el sistema no puede cotejar coherencia. En lugar de asumir
+    # una incoherencia clínica, se marca REVISIÓN POR EXTRACCIÓN (abstención
+    # honesta): puede ser una omisión clínica real o un formato que el sistema
+    # no supo leer. Para BI-RADS de sospecha (4/5) la prioridad es alta, por si
+    # se tratara de una omisión peligrosa.
+    sin_recomendacion = (not categorias) or (categoria_principal in (None, "ambigua"))
+    if sin_recomendacion:
+        criticidad = _CRITICIDAD_BIRADS.get(birads, "bajo")
+        prioridad = "alta" if criticidad == "critico" else "media"
+        return {
+            "estado": "revision_extraccion",
+            "severidad": prioridad,
+            "requiere_alerta": True,
+            "birads": birads,
+            "recomendacion_esperada": TABLA_ACR.get(birads, {}).get("esperada"),
+            "recomendacion_detectada_principal": categoria_principal,
+            "categorias_detectadas": categorias,
+            "menciones_adicionales_birads": menciones_adicionales,
+            "confiabilidad_tecnica": "baja",
+            "verificacion_ml": verificacion_ml,
+            "mensaje": (
+                f"Revisión manual: no se pudo extraer ni clasificar una "
+                f"recomendación para este informe (BI-RADS {birads}). Puede ser "
+                f"una omisión de la recomendación o un formato no reconocido por "
+                f"el sistema. No se emite juicio de coherencia; se recomienda "
+                f"revisión."
+            ),
+            "trazabilidad": {
+                "regla_aplicada": "revision_por_extraccion",
+                "razon": "recomendacion_no_detectada_o_ambigua",
+            },
+        }
+
     # Aplicar reglas de cotejo
     resultado_reglas = _aplicar_reglas_cotejo(birads, categorias)
 
@@ -318,16 +429,34 @@ def cotejar_birads_vs_recomendacion(
 
     # Construir mensaje clínico
     if requiere_alerta:
-        mensaje = MENSAJES_INCONSISTENCIA.get(
-            birads, "Inconsistencia detectada entre BI-RADS y recomendación."
-        )
-    elif resultado_reglas["estado"] == "notificacion":
-        mensaje = (
-            f"Notificación suave: BI-RADS {birads} con recomendación "
-            f"de '{resultado_reglas['detalle_verificacion']['notificacion_presente']}'. "
-            "Conducta no estándar pero no clínicamente peligrosa. "
-            "Revisar si corresponde."
-        )
+        if resultado_reglas.get("regla_aplicada") == "regla_4b_marcar_revision":
+            principal = resultado_reglas["detalle_verificacion"].get(
+                "principal_es_mas_urgente", "una conducta más agresiva"
+            )
+            desc_cat = ("estudio sin hallazgos" if birads == 1
+                        else "hallazgo benigno definitivo")
+            mensaje = (
+                f"BI-RADS {birads} ({desc_cat}) corresponde a control anual "
+                f"rutinario según ACR, pero la recomendación detectada "
+                f"('{principal}') implica una conducta más agresiva. Esta desviación "
+                f"del protocolo puede indicar que la categoría BI-RADS o la "
+                f"recomendación no reflejan bien los hallazgos. Se sugiere revisión."
+            )
+        elif resultado_reglas.get("severidad") == "baja":
+            det = resultado_reglas["detalle_verificacion"]
+            conducta = (det.get("notificacion_presente")
+                        or det.get("principal_es_mas_urgente")
+                        or "la conducta indicada")
+            mensaje = (
+                f"Incoherencia leve: en el BI-RADS {birads}, la recomendación "
+                f"('{conducta}') se aparta de la esperada por ACR, pero de forma "
+                "menor y sin riesgo aparente para la paciente. Alerta de baja "
+                "prioridad; revisar cuando sea posible."
+            )
+        else:
+            mensaje = MENSAJES_INCONSISTENCIA.get(
+                birads, "Inconsistencia detectada entre BI-RADS y recomendación."
+            )
     elif resultado_reglas["estado"] == "coherente_con_precaucion":
         mensaje = (
             f"Coherente con precaución: el radiólogo optó por una conducta "
@@ -799,9 +928,9 @@ def _ejecutar_tests() -> None:
         },
     }
     casos.append({
-        "nombre": "C2: BI-RADS 4 + criterio_medico → alerta ALTA",
+        "nombre": "C2: BI-RADS 4 + criterio_medico → alerta CRÍTICA (sospecha sin acción diagnóstica)",
         "resultado": cotejar_birads_vs_recomendacion(r_birads, r_rec),
-        "esperado": {"estado": "incoherente", "severidad": "alta", "requiere_alerta": True},
+        "esperado": {"estado": "incoherente", "severidad": "critica", "requiere_alerta": True},
     })
 
     # Caso 3: BI-RADS 5 sin biopsia = ALERTA CRÍTICA
@@ -853,9 +982,9 @@ def _ejecutar_tests() -> None:
         },
     }
     casos.append({
-        "nombre": "C5: BI-RADS 2 + control_corto_plazo → notificación suave",
+        "nombre": "C5: BI-RADS 2 + control_corto_plazo → incoherencia leve (alerta baja)",
         "resultado": cotejar_birads_vs_recomendacion(r_birads, r_rec),
-        "esperado": {"estado": "notificacion", "requiere_alerta": False},
+        "esperado": {"estado": "incoherente", "severidad": "baja", "requiere_alerta": True},
     })
 
     # Caso 6: BI-RADS 3 + biopsia = COHERENTE EQUIVALENTE (más agresivo)

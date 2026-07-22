@@ -60,9 +60,19 @@ TABLA_ACR: Dict[int, Dict] = {
     1: {
         "esperada": "control_anual",
         "equivalentes_aceptables": [
-            "criterio_medico",  # delegación válida en hallazgo normal
+            "criterio_medico",                 # delegación válida en hallazgo normal
+            "correlacion_ecografica",          # ecografía por mamas densas: práctica estándar
+            "estudio_complementario_imagen",   # imagen complementaria por densidad: aceptable
         ],
         "equivalentes_con_notificacion": [],
+        # Conductas que, pese a ser "más agresivas" que el control anual, se marcan
+        # para revisión: un estudio SIN hallazgos no debería motivar vigilancia
+        # estrecha ni acción invasiva (posible inconsistencia con la categoría).
+        "marcar_revision": {
+            "control_corto_plazo": "baja",
+            "biopsia_histologia": "media",
+            "derivacion_oncologica": "media",
+        },
         "severidad": "baja",
         "descripcion": (
             "Sin hallazgos. Seguimiento rutinario en 12 meses."
@@ -71,12 +81,20 @@ TABLA_ACR: Dict[int, Dict] = {
     2: {
         "esperada": "control_anual",
         "equivalentes_aceptables": [
-            "correlacion_ecografica",  # precaución adicional, no inadecuada
+            "correlacion_ecografica",          # precaución adicional, no inadecuada
+            "estudio_complementario_imagen",   # imagen complementaria por densidad: aceptable
             "criterio_medico",
         ],
         "equivalentes_con_notificacion": [
             "control_corto_plazo",  # excesivo para benigno definitivo, pero no peligroso
         ],
+        # Simetría con BI-RADS 1: acciones invasivas sobre un hallazgo benigno
+        # definitivo se marcan para revisión (posible inconsistencia). Se corrobora
+        # con 2 casos reales de BI-RADS 2 + biopsia en el corpus.
+        "marcar_revision": {
+            "biopsia_histologia": "media",
+            "derivacion_oncologica": "media",
+        },
         "severidad": "baja",
         "descripcion": (
             "Hallazgos benignos definitivos. Seguimiento rutinario en 12 meses."
@@ -108,12 +126,15 @@ TABLA_ACR: Dict[int, Dict] = {
     },
     5: {
         "esperada": "biopsia_histologia",
-        "equivalentes_aceptables": [],  # estricto: BI-RADS 5 no admite sustitutos
+        "equivalentes_aceptables": [
+            "derivacion_oncologica",  # derivar al especialista que ordenará biopsia y manejo
+        ],
         "equivalentes_con_notificacion": [],
         "severidad": "critica",
         "descripcion": (
             "Altamente sospechoso de malignidad (VPP >95%). Requiere biopsia "
-            "urgente. Recomendaciones alternativas generan alerta crítica "
+            "urgente o derivación a especialista para su manejo. Recomendaciones "
+            "que no impliquen acción diagnóstica/derivación generan alerta crítica "
             "por riesgo de retraso diagnóstico grave."
         ),
     },
