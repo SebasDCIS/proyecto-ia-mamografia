@@ -175,12 +175,13 @@ def _construir_resultado_consolidado(
         "menciones_adicionales": r_birads.get("menciones_adicionales", []),
     }
 
-    # Sub-dict: apoyo de lectura del BI-RADS (ML). Puede ser None si se desactivó.
-    # El ML NO es un juez clínico: es un apoyo de lectura que refuerza o cuestiona
-    # la extracción literal (regex + buscador), que es la autoridad.
+    # Sub-dict: verificador ML (Módulo 4). DESACTIVADO por defecto.
+    # Se midió por cuatro vías que no aporta sobre la extracción reglada, que es
+    # la única autoridad del sistema. Se conserva para reproducir su evaluación
+    # (ver docs/BITACORA.md).
     if verificacion_ml is not None:
         bloque_verif = {
-            "rol": "apoyo_lectura_birads",
+            "rol": "verificador_descartado_ver_bitacora",
             "estado": verificacion_ml.get("estado_verificacion"),
             "birads_ml": verificacion_ml.get("birads_predicho_ml"),
             "confianza_ml": verificacion_ml.get("confianza_ml"),
@@ -193,7 +194,8 @@ def _construir_resultado_consolidado(
         if "alerta_omision" in verificacion_ml:
             bloque_verif["alerta_omision"] = verificacion_ml["alerta_omision"]
     else:
-        bloque_verif = {"rol": "apoyo_lectura_birads", "estado": "no_ejecutado", "birads_ml": None}
+        bloque_verif = {"rol": "verificador_descartado_ver_bitacora",
+                        "estado": "no_ejecutado", "birads_ml": None}
 
     # Sub-dict: recomendacion
     bloque_rec = {
@@ -634,9 +636,16 @@ def _build_argparser() -> argparse.ArgumentParser:
         help="Identificador opcional del informe (para auditoría).",
     )
     parser.add_argument(
+        "--con-ml",
+        action="store_true",
+        help="Activa el verificador ML del Módulo 4. DESACTIVADO por defecto: "
+             "se midió que no aporta sobre la vía reglada (ver docs/BITACORA.md). "
+             "Se conserva para reproducir su evaluación.",
+    )
+    parser.add_argument(
         "--no-ml",
         action="store_true",
-        help="Desactiva el verificador ML (más rápido).",
+        help=argparse.SUPPRESS,   # obsoleto: el ML ya viene desactivado
     )
     parser.add_argument(
         "--sin-buscador",
@@ -684,7 +693,7 @@ def _ejecutar_cli(argv: Optional[list] = None) -> int:
     resultado = procesar_informe(
         full_report=full_report,
         informe_id=args.id,
-        usar_verificador_ml=not args.no_ml,
+        usar_verificador_ml=args.con_ml,
         usar_buscador_hibrido=not args.sin_buscador,
     )
 
