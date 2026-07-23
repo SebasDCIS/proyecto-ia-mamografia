@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Diagnóstico del modelo ML (apoyo de lectura del BI-RADS).
+Diagnóstico del verificador DistilBETO del Módulo 4, retirado del pipeline.
 
 Responde dos preguntas:
   1. ¿El mapeo de etiquetas del modelo es correcto? (posible bug de índices)

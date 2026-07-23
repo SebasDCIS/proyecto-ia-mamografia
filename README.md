@@ -68,6 +68,8 @@ src/
     limpieza_informe.py       M0: limpieza de descargo/firma/datos del paciente
     tabla_acr.py              Tabla normativa BI-RADS/ACR
 dashboard/                    Interfaz Streamlit
+tests/                        Bateria de 17 casos sinteticos de formato
+scripts/                      Utilidades de diagnostico (ablacion, informes de prueba)
 notebooks/                    Exploración, entrenamiento y evaluación (19 notebooks)
   04c_cv_ventana_local        CV del verificador sobre su ventana real de producción
   11_extractor_ner            Entrenamiento del NER
