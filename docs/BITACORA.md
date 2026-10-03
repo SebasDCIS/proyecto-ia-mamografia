@@ -30,7 +30,7 @@ trabajo.
 | 27-jun-2026 | Informe v8.1: se reporta el 0,8877 de CV como métrica honesta |
 | — | Entrenamiento del NER (nb 11) y rediseño del buscador tras los informes chilenos |
 | **21-jul-2026** | **El Módulo 1 pasa a solo reglas.** Se retira el verificador tras cuatro mediciones. El NER se somete al mismo estándar (nb 11b, nb 11c) |
-| **21-jul-2026** | **Batería de 16 casos de formato.** Seis correcciones: redacción intra-línea de identificadores, texto crudo en el dashboard, dos falsos positivos de extracción, la forma verbal de "control", y una concordancia regex/NER que mentía. Escalamiento a severidad crítica por conducta ausente |
+| **21-jul-2026** | **Batería de 17 casos de formato.** Seis correcciones: redacción intra-línea de identificadores, texto crudo en el dashboard, dos falsos positivos de extracción, la forma verbal de "control", y una concordancia regex/NER que mentía. Escalamiento a severidad crítica por conducta ausente |
 
 ---
 
@@ -365,7 +365,7 @@ El corpus paraguayo es homogéneo: encabezados consistentes, sin numerales roman
 ya anonimizado, con la recomendación siempre al final. Esa uniformidad permite que
 el sistema sostenga supuestos sin que nada los cuestione.
 
-Se construyó una batería de **16 casos de prueba sintéticos**
+Se construyó una batería de **17 casos de prueba sintéticos**
 (`tests/casos_formato_chileno.py`) que reproducen variantes de redacción y
 estructura documentadas en la práctica clínica local. Son informes ficticios:
 nombres, identificadores y fechas inventados, ejecutables sin acceso a datos
@@ -381,7 +381,7 @@ clínicos.
 | Comportamiento seguro | Hallazgos sin categoría, sospecha sin conducta, incoherencia crítica |
 | Privacidad | Nombre e identificador pegados al texto clínico |
 
-**Resultado: 16/16** en las cuatro dimensiones (categoría extraída, recomendación
+**Resultado: 17/17** en las cuatro dimensiones (categoría extraída, recomendación
 clasificada, estado del cotejo, ausencia de identificadores tras la limpieza).
 
 ### Los numerales romanos
@@ -445,7 +445,7 @@ omisión del Módulo 1: allá falta la categoría, aquí falta la conducta.
 
 ### Verificación
 
-Ninguna corrección produjo regresión: 8/8 tests del pipeline, 16/16 de la batería,
+Ninguna corrección produjo regresión: 8/8 tests del pipeline, 17/17 de la batería,
 y 800 informes del corpus mantienen la misma distribución de estados. La capa de
 redacción no genera falsos positivos sobre los 4 357 del corpus, que ya venía
 anonimizado.
@@ -532,7 +532,7 @@ ejemplos de las clases críticas con validación clínica.
 |---|---|---|
 | M0 · Limpieza | Reglas por línea, con salvaguarda | — |
 | M1 · BI-RADS | Solo reglas, búsqueda híbrida en 4 fases | Macro F1 = 0,9995 |
-| M2 · Recomendación | Reglas + NER DistilBETO de respaldo | Cobertura 99,82 % · NER F1 = 0,9991 · prueba de estrés: regla 0,5314 vs NER 0,9956 |
+| M2 · Recomendación | Reglas + NER DistilBETO de respaldo | Cobertura 99,77 % · NER F1 = 0,9991 · prueba de estrés: regla 0,5314 vs NER 0,9956 |
 | M3 · Cotejo ACR | Tabla normativa auditable | 1,15 % de alertas (50 de 4 357) |
 
 La IA quedó en el módulo donde la variación es semántica. El módulo donde la

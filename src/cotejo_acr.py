@@ -36,9 +36,9 @@ Diseño en capas (todas las funciones devuelven datos, no imprimen):
         - resumen_para_dataframe()             → pd.DataFrame para CSV
 
 Validado sobre Vázquez Noguera et al. (2025):
-    - 4 347 informes procesados (vía simulación con clasificaciones del nb06)
-    - 44 alertas reales (1.0% del corpus)
-    - 2 alertas críticas, 34 altas, 8 medias
+    - 4 357 informes procesados con el pipeline actual (recuento: scripts/recuento_cifras.py)
+    - 50 alertas de incoherencia (1,15 % del corpus) y 8 revisiones por extracción
+    - 19 críticas, 18 altas, 9 medias, 4 bajas
 
 Autor: Sebastián Inostroza Hurtado
 Fecha: Junio 2026

@@ -8,6 +8,7 @@ pero que producen mediciones citadas en el informe.
 | `ablacion_leakage_birads.py` | Estudio de ablación del verificador DistilBETO. Enmascara la mención textual del número BI-RADS y reevalúa el modelo ya entrenado. Produce la caída de 0,939 a 0,544 que motivó retirar el Módulo 4. |
 | `diagnostico_ml.py` | Diagnóstico del verificador DistilBETO: distribución de estados y comportamiento por nivel de confianza de la regla. Corresponde al módulo retirado; se conserva para reproducir su evaluación. |
 | `crear_informes_prueba.py` | Genera informes de prueba en disco para validar el orquestador `predict.py` desde la línea de comandos. |
+| `recuento_cifras.py` | Recuenta con el pipeline actual las cifras citadas en README, informe y bitácora: confianza de M1, cobertura de recomendación, alertas por severidad y revisiones. Requiere el corpus en `data/processed/`. |
 
 ## Requisitos
 

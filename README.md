@@ -135,7 +135,7 @@ Los notebooks que preparan el corpus a partir del archivo original son
 # Suite de pruebas del pipeline completo: 8 casos
 python -m src.predict
 
-# Batería de cobertura de formatos: 16 casos sintéticos
+# Batería de cobertura de formatos: 17 casos sintéticos
 python -m tests.casos_formato_chileno
 ```
 
@@ -263,7 +263,7 @@ romanos, ya anonimizado, con la recomendación siempre en la misma posición. Es
 homogeneidad permite que el sistema sostenga supuestos sin costo aparente.
 
 Para verificar la cobertura sobre variantes que el corpus no contiene se construyó
-una **batería de 16 casos de prueba sintéticos**
+una **batería de 17 casos de prueba sintéticos**
 ([`tests/casos_formato_chileno.py`](tests/casos_formato_chileno.py)). Son informes
 ficticios: nombres, identificadores y fechas inventados. Cubren variantes de
 redacción y estructura documentadas en la práctica clínica local.
@@ -276,7 +276,7 @@ redacción y estructura documentadas en la práctica clínica local.
 | Comportamiento seguro | Hallazgos sin categoría, sospecha sin conducta declarada, incoherencia crítica |
 | Privacidad | Nombre e identificador pegados al texto clínico |
 
-Resultado: **16/16** en las cuatro dimensiones evaluadas (categoría extraída,
+Resultado: **17/17** en las cuatro dimensiones evaluadas (categoría extraída,
 recomendación clasificada, estado del cotejo, ausencia de identificadores tras la
 limpieza). La batería es ejecutable sin acceso a datos clínicos:
 
@@ -297,8 +297,8 @@ la limitación de fondo del trabajo.
 | Componente | Métrica | Valor |
 |---|---|---|
 | M1 · Extracción BI-RADS | Macro F1 | **0,9995** |
-| M1 · Confianza alta | % del corpus | 98,58 % |
-| M2 · Cobertura de recomendación | % del corpus | 99,82 % |
+| M1 · Confianza alta | % del corpus | 99,95 % |
+| M2 · Cobertura de recomendación | % del corpus | 99,77 % |
 | M2 · NER | F1 de span (test deduplicado) | **0,9991** |
 | M3 · Alertas de incoherencia | sobre 4 357 informes | 50 (1,15 %), 19 críticas |
 

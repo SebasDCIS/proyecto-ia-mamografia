@@ -130,7 +130,7 @@ La primera versi\'on (\codename{extractor\_birads.py}) localiza el bloque de con
 
 La versi\'on en uso (\codename{buscador\_birads.py}) elimina esa dependencia con una b\'usqueda en cuatro fases, resumida en el Algoritmo~\ref{alg:buscador}. La primera recorre el informe completo y recoge todas las menciones. La segunda descarta por contexto las hist\'oricas, las comparativas, las educacionales y las negadas, atendiendo a las palabras que las preceden. La tercera pondera las restantes por su posici\'on relativa: la categor\'ia definitiva aparece al final del informe, y sobre el corpus la \'ultima menci\'on se ubica en el percentil 0,85 del texto en el 100\,\% de los casos. La cuarta reserva un arbitraje para los empates, que sobre 4\,357 informes no llegan a producirse porque el 99,9\,\% declara una sola menci\'on.
 
-Cada extracci\'on queda etiquetada con un nivel de confianza (alta en el 98,58\,\% de los informes, baja en el 1,38\,\%) seg\'un el patr\'on que la produjo, de modo que los m\'odulos siguientes puedan ponderarla. Si el informe presenta hallazgos radiol\'ogicos o recomendaciones pero no declara ninguna categor\'ia, el m\'odulo genera una alerta de omisi\'on: un estudio con hallazgos deber\'ia concluir siempre en un BI-RADS, y su ausencia apunta a un problema de documentaci\'on que corresponde resolver a una persona y no a una imputaci\'on autom\'atica.
+Cada extracci\'on queda etiquetada con un nivel de confianza (alta en el 99,95\,\% de los informes y media en el 0,05\,\%) seg\'un el patr\'on que la produjo, de modo que los m\'odulos siguientes puedan ponderarla. Si el informe presenta hallazgos radiol\'ogicos o recomendaciones pero no declara ninguna categor\'ia, el m\'odulo genera una alerta de omisi\'on: un estudio con hallazgos deber\'ia concluir siempre en un BI-RADS, y su ausencia apunta a un problema de documentaci\'on que corresponde resolver a una persona y no a una imputaci\'on autom\'atica.
 
 \begin{algorithm}[!t]
 \caption{B\'usqueda h\'ibrida de la categor\'ia BI-RADS}
@@ -305,7 +305,7 @@ Para el clasificador Transformer, la Tabla~\ref{tab:folds} detalla los resultado
 M\'odulo & M\'etrica & Valor \\
 \midrule
 Extracci\'on BI-RADS (reglas) & Macro F1 / cobertura & 0,9995 / 100\,\% \\
-Clasificaci\'on de la recomendaci\'on & Cobertura & 99,82\,\% \\
+Clasificaci\'on de la recomendaci\'on & Cobertura & 99,77\,\% \\
 Extractor NER & F1 de span (test dedup.) & 0,9991 \\
 Cotejo BI-RADS/ACR & Tasa de incoherencias & 1,15\,\% \\
 Verificador DistilBETO \emph{(descartado)} & Macro F1 (CV 5-fold) & 0,8877 $\pm$ 0,0501 \\
@@ -475,7 +475,7 @@ Este experimento es sint\'etico: opera sobre el corpus paraguayo perturbado y no
 \subsection{Cobertura ante variantes de formato}\label{sec:robustez}
 El corpus de entrenamiento es homog\'eneo. Todos sus informes traen encabezado de conclusi\'on, ninguno escribe la categor\'ia con numerales romanos, la recomendaci\'on ocupa siempre la posici\'on final y los datos del paciente ya vienen retirados. Esa uniformidad permite que un sistema sostenga supuestos sin que nada los ponga a prueba, y fue el origen de varias fragilidades descritas en las secciones anteriores.
 
-Para verificar la cobertura sobre variantes que el corpus no contiene se construy\'o una bater\'ia de 16 casos de prueba sint\'eticos. Son informes ficticios, con nombres, identificadores y fechas inventados, que reproducen formas de redacci\'on y estructura documentadas en la pr\'actica cl\'inica local. Cada caso declara el resultado esperado, de modo que la bater\'ia funciona tambi\'en como prueba de regresi\'on y puede ejecutarse sin acceso a datos cl\'inicos.
+Para verificar la cobertura sobre variantes que el corpus no contiene se construy\'o una bater\'ia de 17 casos de prueba sint\'eticos. Son informes ficticios, con nombres, identificadores y fechas inventados, que reproducen formas de redacci\'on y estructura documentadas en la pr\'actica cl\'inica local. Cada caso declara el resultado esperado, de modo que la bater\'ia funciona tambi\'en como prueba de regresi\'on y puede ejecutarse sin acceso a datos cl\'inicos.
 
 \begin{table}[!t]
 \caption{Bater\'ia de casos sint\'eticos: variantes cubiertas.}
@@ -494,7 +494,7 @@ Privacidad & Nombre e identificador adheridos al texto cl\'inico \\
 \end{tabular}
 \end{table}
 
-El sistema resuelve correctamente los 16 casos en las cuatro dimensiones evaluadas: categor\'ia extra\'ida, recomendaci\'on clasificada, estado del cotejo y ausencia de identificadores tras la limpieza. La Tabla~\ref{tab:formatos} resume los grupos cubiertos.
+El sistema resuelve correctamente los 17 casos en las cuatro dimensiones evaluadas: categor\'ia extra\'ida, recomendaci\'on clasificada, estado del cotejo y ausencia de identificadores tras la limpieza. La Tabla~\ref{tab:formatos} resume los grupos cubiertos.
 
 Dos resultados merecen comentario. El primero es que el corpus no contiene ni un solo numeral romano, mientras que la pr\'actica local s\'i los emplea. El soporte para esa variante se program\'o como cobertura preventiva, sin disponer de un ejemplo que lo justificara, y la bater\'ia lo verifica. Un modelo entrenado sobre el corpus no podr\'ia cubrirla, porque nunca la vio: es un argumento concreto a favor de las reglas en una tarea donde la variaci\'on es tipogr\'afica y enumerable.
 

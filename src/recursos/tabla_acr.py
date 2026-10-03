@@ -10,11 +10,11 @@ Tabla construida con base en:
 - Validación clínica del proyecto BME513 (Universidad de Valparaíso)
 - Análisis empírico sobre corpus de Vázquez Noguera et al. (2025)
 
-Validado sobre 4 347 informes:
-- 44 alertas reales (1.0% del corpus)
-- 2 alertas críticas (BI-RADS 5 sin biopsia ni derivación)
-- 34 alertas altas (BI-RADS 0 y BI-RADS 4)
-- 8 alertas medias (BI-RADS 3)
+Validado sobre 4 357 informes (recuento: scripts/recuento_cifras.py):
+- 50 alertas de incoherencia (1,15 % del corpus) y 8 revisiones por extracción
+- 19 críticas
+- 18 altas
+- 9 medias y 4 bajas
 
 Autor: Sebastián Inostroza Hurtado
 Fecha: Junio 2026
