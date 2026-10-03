@@ -28,7 +28,7 @@ trabajo.
 | 19-jun-2026 | **nb 08: el modelo pasa a verificador secundario** (Módulo 4, lógica v2.1) |
 | 20-jun-2026 | Integración del verificador al cotejo (v2), orquestador `predict.py`, dashboard Streamlit, informe LaTeX v8 |
 | 27-jun-2026 | Informe v8.1: se reporta el 0,8877 de CV como métrica honesta |
-| — | Entrenamiento del NER (nb 11) y rediseño del buscador tras los informes chilenos |
+| — | Entrenamiento del NER (nb 11) y rediseño del buscador tras contrastarlo con variantes de formato de la práctica local |
 | **21-jul-2026** | **El Módulo 1 pasa a solo reglas.** Se retira el verificador tras cuatro mediciones. El NER se somete al mismo estándar (nb 11b, nb 11c) |
 | **21-jul-2026** | **Batería de 17 casos de formato.** Seis correcciones: redacción intra-línea de identificadores, texto crudo en el dashboard, dos falsos positivos de extracción, la forma verbal de "control", y una concordancia regex/NER que mentía. Escalamiento a severidad crítica por conducta ausente |
 
@@ -197,9 +197,8 @@ eliminaron 580 de 4 345 (13,3 %).
 
 Esa cifra mide la facilidad del corpus más que la capacidad de generalizar: la
 recomendación está al final del informe en el 99 % de los casos y existen solo
-221 recomendaciones distintas, una de ellas repetida 784 veces. La prueba real
-fueron los informes chilenos, donde el NER localizó recomendaciones que las
-reglas no anticiparon.
+221 recomendaciones distintas, una de ellas repetida 784 veces. La prueba
+relevante son las redacciones fuera del corpus, que se simulan en el nb 11c.
 
 ---
 
@@ -301,8 +300,8 @@ que aprendió la tarea.
 **La ablación** (nb 11b). Enmascarando el encabezado `RECOMENDACIONES` y
 reevaluando el modelo ya entrenado: 1,0000 → 1,0000. No dependía del encabezado.
 
-**La prueba de estrés** (nb 11c). Como la evidencia real eran entonces tres
-informes chilenos, se simuló la brecha sobre los 565 informes de prueba: se quitó el
+**La prueba de estrés** (nb 11c). Como no se dispone de informes chilenos
+anotados, se simuló la brecha sobre los 565 informes de prueba: se quitó el
 encabezado y se reemplazó el verbo gatillo por formas verificadas una a una como
 ausentes de `_FRASES_GATILLO_RECOMENDACION`. La regla evaluada es el módulo de
 producción en su segunda vía, la que corre ante un PDF sin columna de
