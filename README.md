@@ -79,6 +79,7 @@ notebooks/                    Exploración, entrenamiento y evaluación (19 note
 report/                       Informe LaTeX + figuras + PDF
 docs/
   BITACORA.md                 Cronología del proyecto y las mediciones que lo guiaron
+  REPRODUCIBILIDAD.md         Protocolo para repetir cada cifra: entorno, datos, parámetros
   Presentacion_BME513         Presentación de defensa
   Guia_Fundamentos_IA         Guía de conceptos de IA aplicados al proyecto
 ```
@@ -182,6 +183,16 @@ corpus descargado.
 sección anterior (`src.predict` y `tests.casos_formato_chileno`) verifican el
 pipeline reglado completo y la cobertura de formatos, que son las vías que operan
 en producción.
+
+**Protocolo completo.** [`docs/REPRODUCIBILIDAD.md`](docs/REPRODUCIBILIDAD.md)
+reúne el entorno, las comprobaciones del corpus, los parámetros de cada
+experimento (particiones, hiperparámetros, semilla 42), el resultado esperado de
+cada notebook y el origen de cada cifra del informe. Para recontar las cifras del
+pipeline reglado sobre el corpus completo:
+
+```bash
+python scripts/recuento_cifras.py
+```
 
 ## Limitación del corpus
 
